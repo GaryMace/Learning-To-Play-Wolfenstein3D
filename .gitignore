@@ -42,6 +42,11 @@
 *.bat
 *.1
 *.swp
+*.DAT
+*.SHR
+*.DIZ
+*.BAT
+*.SWP
 
 vgafiles/
 BORLANDC/
