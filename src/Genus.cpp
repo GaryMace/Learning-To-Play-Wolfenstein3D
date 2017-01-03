@@ -3,6 +3,8 @@
 //
 #include "Genus.h"
 
+int Genus::innovation = OUTPUTS;
+
 int Genus::newInnovation() {
     return ++innovation;
 }

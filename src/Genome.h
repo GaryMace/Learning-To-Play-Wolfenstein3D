@@ -2,7 +2,6 @@
 #include <vector>
 #include <map>
 
-#include "Gene.h"
 #include "Neuron.h"
 #include "Genus.h"
 using namespace std;
@@ -22,7 +21,7 @@ private:
     double fitness;
     int maxNeuron;
     int globalRank;
-    double mutationRates[] =
+    double mutationRates[7] =
             { MUTATE_CONNECTIONS_CHANCE, MUTATE_LINK_CHANCE, MUTATE_BIAS_CHANCE,
             MUTATE_NODE_CHANCE, MUTATE_ENABLE_CHANCE, MUTATE_DISABLE_CHANCE,
             STEP_SIZE };

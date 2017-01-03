@@ -29,7 +29,7 @@
 
 class Genus {
 private:
-    static int innovation = OUTPUTS;
+    static int innovation;
 
 public:
     static int newInnovation();
