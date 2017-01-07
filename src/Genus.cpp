@@ -10,5 +10,5 @@ int Genus::newInnovation() {
 }
 
 double Genus::nextDouble() {
-    return ((double)rand() / RAND_MAX) + 1;
+    return ((double)rand() / RAND_MAX);
 }

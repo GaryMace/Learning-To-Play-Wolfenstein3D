@@ -117,12 +117,13 @@ void Genome::nodeMutate() {
 void Genome::pointMutate() {
     double r;
     double step = mutationRates[6];
+
     for (Gene gene : genes) {
-        r = ((double) rand() / RAND_MAX) + 1;
+        r = Genus::nextDouble();    //TODO: why are we rerandomising again?
         if (r < PERTURBATION_CHANCE)
-            gene.weight += (((double) rand() / RAND_MAX) + 1) * step * 2.0 - step;
+            gene.weight += Genus::nextDouble() * step * 2.0 - step;
         else
-            gene.weight = (((double) rand() / RAND_MAX) + 1) * 4.0 - 2.0;
+            gene.weight = Genus::nextDouble() * 4.0 - 2.0;
     }
 }
 
@@ -141,13 +142,13 @@ void Genome::linkMutate(bool forceBias) {
         return;
 
     newLink.innovation = Genus::newInnovation();
-    newLink.weight = rand() * 4 - 2;
+    newLink.weight = rand() * 4 - 2;    //TODO: Rand here should be modded to something
     genes.push_back(newLink);
 }
 
 void Genome::mutate() {
     for (int i = 0; i < sizeof(mutationRates); i++) {
-        if (rand() % 2 == 0) {
+        if (rand() % 2 == 1) {  //if true
             mutationRates[i] *= 0.95;
         } else {
             mutationRates[i] *= 1.05263;

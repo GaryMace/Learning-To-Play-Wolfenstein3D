@@ -3,8 +3,9 @@
 //
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
+#include "Species.h"
 
-#define POPULATION 300
+#define POPULATION 300  //TODO: refactor
 #define STALE_SPECIES 15
 #define TIMEOUT 20
 #define MUTATION_TYPES 7    //consider moving later
@@ -27,11 +28,17 @@
 
 #define MAX_NODES 10000
 
+
+
 class Genus {
 private:
-    static int innovation;
+    static int innovation;  //instantiating static field here would cause multiple instantiation
 
 public:
+    vector<Species> species;
+    int generation = 0;
+
+
     static int newInnovation();
     static double nextDouble();
 };

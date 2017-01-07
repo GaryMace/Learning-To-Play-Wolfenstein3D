@@ -4,6 +4,7 @@
 
 #include "Neuron.h"
 #include "Genus.h"
+
 using namespace std;
 //
 // Created by gary on 31/12/16.
@@ -16,17 +17,17 @@ using namespace std;
 #define DISABLE  5
 
 class Genome {
-private:
+public:
+    double mutationRates[7] =
+            {MUTATE_CONNECTIONS_CHANCE, MUTATE_LINK_CHANCE, MUTATE_BIAS_CHANCE,
+             MUTATE_NODE_CHANCE, MUTATE_ENABLE_CHANCE, MUTATE_DISABLE_CHANCE,
+             STEP_SIZE};
+    map<int, Neuron> network;
     vector<Gene> genes;
-    double fitness;
     int maxNeuron;
     int globalRank;
-    double mutationRates[7] =
-            { MUTATE_CONNECTIONS_CHANCE, MUTATE_LINK_CHANCE, MUTATE_BIAS_CHANCE,
-            MUTATE_NODE_CHANCE, MUTATE_ENABLE_CHANCE, MUTATE_DISABLE_CHANCE,
-            STEP_SIZE };
-    map<int, Neuron> network;
-public:
+    double fitness;
+
     Genome clone();
     void generateNetwork(); //has Genome param in marIO
     vector<double> evaluateNetwork(vector<double> inputs);  //Has network, inputs param in MarIO
