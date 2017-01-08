@@ -1,3 +1,7 @@
+//
+// Created by gary on 07/01/17.
+//
+
 class Gene {
 public:
     int input;  //in-node

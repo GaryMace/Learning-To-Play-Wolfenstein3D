@@ -1,3 +1,9 @@
+//
+// Created by gary on 31/12/16.
+//
+#ifndef TESTBENCH_GENOME_H
+#define TESTBENCH_GENOME_H
+
 #include <list>
 #include <vector>
 #include <map>
@@ -6,9 +12,9 @@
 #include "Genus.h"
 
 using namespace std;
-//
-// Created by gary on 31/12/16.
-//
+
+#endif  //TESTBENCH_GENOME_H
+
 #define CONNECTIONS 0
 #define LINK 1
 #define BIAS  2
@@ -29,6 +35,8 @@ public:
     double fitness;
 
     Genome clone();
+    static int compare(const Genome &o1, const Genome &o2);
+
     void generateNetwork(); //has Genome param in marIO
     vector<double> evaluateNetwork(vector<double> inputs);  //Has network, inputs param in MarIO
     void nodeMutate();  //MarIO: genome

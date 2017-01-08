@@ -1,9 +1,15 @@
 //
 // Created by gary on 02/01/17.
 //
+#ifndef TESTBENCH_GENUS_H
+#define TESTBENCH_GENUS_H
+
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 #include "Species.h"
+#include "Genome.h"
+
+#endif  //TESTBENCH_GENUS_H
 
 #define POPULATION 300  //TODO: refactor
 #define STALE_SPECIES 15
@@ -28,20 +34,23 @@
 
 #define MAX_NODES 10000
 
-
-
 class Genus {
 private:
     static int innovation;  //instantiating static field here would cause multiple instantiation
 
 public:
-    vector<Species> species;
-    int generation = 0;
-
+    static vector<Species> species;
+    static int generation;
+    static double maxFitness;
 
     static int newInnovation();
     static double nextDouble();
+    static void addToSpecies(Genome child);
+    static void cullSpecies(bool cutToOne);
+    static void initializeGenus();
+    static void newGeneration();
+    static void rankGlobally();
+    static void removeStaleSpecies();
+    static void removeWeakSpecies();
+    static double totalAverageFitness();
 };
-
-
-

@@ -1,11 +1,15 @@
 //
 // Created by gary on 16/11/16.
 //
+#ifndef TESTBENCH_NEURON_H
+#define TESTBENCH_NEURON_H
+
 #include <cmath>
 #include <vector>
 #include "Gene.h"
-
 using namespace std;
+
+#endif  //TESTBENCH_NEURON_H
 
 class Neuron {
 public:

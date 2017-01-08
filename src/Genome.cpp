@@ -17,6 +17,11 @@ Genome Genome::clone() {
     return genome;
 }
 
+int Genome::compare(const Genome &o1, const Genome &o2) {
+    double cmp = o2.fitness - o1.fitness;
+    return cmp == 0.0 ? 0 : cmp > 0.0 ? 1 : -1;
+}
+
 void Genome::generateNetwork() {
     for (int i = 0; i < INPUTS; i++) {
         Neuron n;

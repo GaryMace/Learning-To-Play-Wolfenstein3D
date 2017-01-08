@@ -1,15 +1,20 @@
 //
 // Created by gary on 07/01/17.
 //
+#ifndef TESTBENCH_SPECIES_H
+#define TESTBENCH_SPECIES_H
 
 #include "Genome.h"
+#include "Genus.h"
+
+#endif  //TESTBENCH_SPECIES_H
 
 class Species {
 public:
     vector<Genome> genomes;
     double topFitness = 0.0;
     double averageFitness = 0.0;
-    int staleSpecies = 0;
+    int staleness = 0;
 
     Genome breedChild();
     void calculateAverageFitness();
