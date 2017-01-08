@@ -4,16 +4,11 @@
 #ifndef TESTBENCH_GENOME_H
 #define TESTBENCH_GENOME_H
 
-#include <list>
 #include <vector>
 #include <map>
 
 #include "Neuron.h"
-#include "Genus.h"
-
-using namespace std;
-
-#endif  //TESTBENCH_GENOME_H
+#include "Def.h"
 
 #define CONNECTIONS 0
 #define LINK 1
@@ -24,21 +19,21 @@ using namespace std;
 
 class Genome {
 public:
-    double mutationRates[7] =
-            {MUTATE_CONNECTIONS_CHANCE, MUTATE_LINK_CHANCE, MUTATE_BIAS_CHANCE,
-             MUTATE_NODE_CHANCE, MUTATE_ENABLE_CHANCE, MUTATE_DISABLE_CHANCE,
-             STEP_SIZE};
-    map<int, Neuron> network;
-    vector<Gene> genes;
-    int maxNeuron;
-    int globalRank;
-    double fitness;
+    double mutationRates[MUTATION_TYPES] = {
+            MUTATE_CONNECTIONS_CHANCE, MUTATE_LINK_CHANCE, MUTATE_BIAS_CHANCE,
+            MUTATE_NODE_CHANCE, MUTATE_ENABLE_CHANCE, MUTATE_DISABLE_CHANCE,
+            STEP_SIZE };
+    std::map<int, Neuron> network;
+    std::vector<Gene> genes;
+    int maxNeuron = 0;
+    int globalRank = 0;
+    double fitness = 0.0;
 
     Genome clone();
     static int compare(const Genome &o1, const Genome &o2);
 
     void generateNetwork(); //has Genome param in marIO
-    vector<double> evaluateNetwork(vector<double> inputs);  //Has network, inputs param in MarIO
+    std::vector<double> evaluateNetwork(std::vector<double> inputs);  //Has network, inputs param in MarIO
     void nodeMutate();  //MarIO: genome
     void linkMutate(bool forceBias);  //MarIO: genome, forceBias(bool)
     void pointMutate(); //MarIO: genome
@@ -50,3 +45,4 @@ public:
     double weights(Genome genome);   //MarIO: genes1[], genes2[]
     bool sameSpecies(Genome genome);    //MarIO: genome1, genome2
 };
+#endif  //TESTBENCH_GENOME_H

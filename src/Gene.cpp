@@ -1,7 +1,8 @@
 //
-// Created by gary on 29/12/16.
+// Created by gary on 08/01/17.
 //
 #include "Gene.h"
+
 Gene Gene::clone() {
     Gene copy;
     copy.enabled = this->enabled;

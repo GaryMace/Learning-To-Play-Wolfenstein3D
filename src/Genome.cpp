@@ -3,6 +3,7 @@
 //
 #include <algorithm>
 #include "Genome.h"
+#include "Genus.h"
 
 Genome Genome::clone() {
     Genome genome;
@@ -35,7 +36,7 @@ void Genome::generateNetwork() {
 
     for (Gene gene : genes) {
         if (gene.enabled) {
-            map<int, Neuron>::iterator it = network.find(gene.output);
+            std::map<int, Neuron>::iterator it = network.find(gene.output);
             if (it != network.end()) {
                 Neuron n;
                 network.insert(std::make_pair(gene.output, n));
@@ -43,7 +44,7 @@ void Genome::generateNetwork() {
             Neuron n = network[gene.output];
             n.inputs.push_back(gene);
 
-            map<int, Neuron>::iterator it2 = network.find(gene.input);
+            std::map<int, Neuron>::iterator it2 = network.find(gene.input);
             if (it != network.end()) {
                 Neuron n;
                 network.insert(std::make_pair(gene.input, n));
@@ -52,11 +53,11 @@ void Genome::generateNetwork() {
     }
 }
 
-vector<double> Genome::evaluateNetwork(vector<double> input) {
+std::vector<double> Genome::evaluateNetwork(std::vector<double> input) {
     for (int i = 0; i < INPUTS; i++)
         network[i].value = input[i];
 
-    for (map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
+    for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
         int key = it->first;
         if (key < INPUTS + OUTPUTS)
             continue;
@@ -72,7 +73,7 @@ vector<double> Genome::evaluateNetwork(vector<double> input) {
             n1.value = Neuron::sigmoid(sum);
     }
 
-    for (map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
+    for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
         int key = it->first;
         if (key < INPUTS || key >= INPUTS + OUTPUTS)
             continue;
@@ -88,7 +89,7 @@ vector<double> Genome::evaluateNetwork(vector<double> input) {
             n1.value = Neuron::sigmoid(sum);
     }
 
-    vector<double> output;
+    std::vector<double> output;
     for (int i = 0; i < OUTPUTS; i++)
         output.push_back(network[INPUTS + i].value);
 
@@ -200,7 +201,7 @@ void Genome::mutate() {
 }
 
 void Genome::muateEnableDisable(bool enable) {
-    vector<Gene> candidates;
+    std::vector<Gene> candidates;
 
     for (Gene gene : genes)
         if (gene.enabled != enable)
@@ -232,11 +233,11 @@ double Genome::disjoint(Genome genome) {
         }
     }
 
-    return disjointGenes / max(sizeof(genes), sizeof(genome.genes));
+    return disjointGenes / std::max(sizeof(genes), sizeof(genome.genes));
 }
 
 int Genome::randomNeuron(bool nonInput, bool nonOutput) {
-    vector<int> neurons;    //since list is a doubly linked list, can't access nth item easy
+    std::vector<int> neurons;    //since list is a doubly linked list, can't access nth item easy
     srand(time(NULL));
 
     if (!nonInput)

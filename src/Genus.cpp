@@ -3,11 +3,12 @@
 //
 #include "Genus.h"
 #include <algorithm>
-using namespace std;
 
+// instantiate static members ///////
 int Genus::innovation = OUTPUTS;
 int Genus::generation = 0;
 double Genus::maxFitness = 0.0;
+std::vector<Species> Genus::species;
 
 
 int Genus::newInnovation() {
@@ -63,7 +64,7 @@ void Genus::newGeneration() {
     removeWeakSpecies();
 
     double sum = totalAverageFitness();
-    vector<Genome> children;
+    std::vector<Genome> children;
     for (Species species : Genus::species) {
         double breed = floor(species.averageFitness / sum * POPULATION) - 1.0;
         for (int i = 0; i < breed; i++)
@@ -81,22 +82,22 @@ void Genus::newGeneration() {
 }
 
 void Genus::rankGlobally() {
-    vector<Genome> global;
+    std::vector<Genome> global;
     for (Species species : Genus::species)
         for (Genome genome : species.genomes)
             global.push_back(genome);
 
-    sort(global.begin(), global.end(), Genome::compare);
+    std::sort(global.begin(), global.end(), Genome::compare);
 
     for (int i = 0; i < global.size(); i++)
         global[i].globalRank = i;
 }
 
 void Genus::removeStaleSpecies() {
-    vector<Species> survivers;
+    std::vector<Species> survivers;
 
     for (Species species : Genus::species) {
-        sort(species.genomes.begin(), species.genomes.end(), Genome::compare);
+        std::sort(species.genomes.begin(), species.genomes.end(), Genome::compare);
 
         if (species.genomes[0].fitness > species.topFitness) {
             species.topFitness = species.genomes[0].fitness;
@@ -113,7 +114,7 @@ void Genus::removeStaleSpecies() {
 }
 
 void Genus::removeWeakSpecies() {
-    vector<Species> survivers;
+    std::vector<Species> survivers;
 
     double sum = totalAverageFitness();
     for (Species species : Genus::species) {
