@@ -110,5 +110,7 @@ int main() {
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::sameSpecies()" << std::endl;
     std::cout << "g1 same species as g2 (expected 0): " << g1.sameSpecies(g2) << std::endl;
+
+    std::cout << g1.backup() << std::endl;
     return 0;
 }

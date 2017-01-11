@@ -17,6 +17,7 @@
 #define NODE  3
 #define ENABLE  4
 #define DISABLE  5
+#define STEP 6
 
 class Genome {
 public:

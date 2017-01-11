@@ -6,6 +6,9 @@
 #include "Genome.h"
 #include "Genus.h"
 
+/*
+ * Outputs string representation of the Genome class
+ */
 std::string Genome::backup() {
     std::string out = "\n\tGenome{";
 
@@ -43,6 +46,7 @@ std::string Genome::backup() {
     return out;
 }
 
+//Duplicate this Genome into a new identical one that has a different reference
 Genome Genome::clone() {
     Genome genome;
 
@@ -56,6 +60,7 @@ Genome Genome::clone() {
     return genome;
 }
 
+//returns 0 if cmp == 0, 1 if cmp > 0 and -1 if cmp < 0
 int Genome::compare(const Genome &o1, const Genome &o2) {
     double cmp = o2.fitness - o1.fitness;
     return cmp == 0.0 ? 0 : cmp > 0.0 ? 1 : -1;
@@ -68,22 +73,22 @@ void Genome::generateNetwork() {
     }
     for (int i = 0; i < OUTPUTS; i++) { //Make Neurons for all outputs
         Neuron n;
-        network.insert(std::make_pair(INPUTS + i, n));
+        network.insert(std::make_pair(INPUTS + i, n));  //notice output neurons start right after input neurons here
     }
     std::sort(genes.begin(), genes.end(), Gene::compare);   //Order genes based on output
 
-    for (Gene gene : genes) {   //TODO: be careful, do we want copies or pointers?
-        if (gene.enabled) {
+    for (Gene gene : genes) {
+        if (gene.enabled) { //If this Gene is enabled
             std::map<int, Neuron>::iterator it = network.find(gene.output);
-            if (it != network.end()) {
+            if (it != network.end()) {  //If key gene.output doesn't exist
                 Neuron n;
-                network.insert(std::make_pair(gene.output, n));
+                network.insert(std::make_pair(gene.output, n)); //make new entry
             }
-            Neuron n = network[gene.output];
+            Neuron& n = network[gene.output];   //add this Gene to entry
             n.inputs.push_back(gene);
 
             std::map<int, Neuron>::iterator it2 = network.find(gene.input);
-            if (it != network.end()) {
+            if (it != network.end()) {  //If key gene.input doesn't exist
                 Neuron n2;
                 network.insert(std::make_pair(gene.input, n2));
             }
@@ -93,18 +98,17 @@ void Genome::generateNetwork() {
 
 std::vector<double> Genome::evaluateNetwork(std::vector<double> input) {
     for (int i = 0; i < INPUTS; i++)
-        network[i].value = input[i];
+        network[i].value = input[i];    //Change input values to network
 
     for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
-        int key = it->first;
-        if (key < INPUTS + OUTPUTS)
+        if (it->first < INPUTS + OUTPUTS) //Neuron val > (inputs + outputs)
             continue;
 
         Neuron& n1 = it->second;    //Neuron& grabs the address of the value from the hashmap
         double sum = 0.0;
-        for (Gene incoming : n1.inputs) {
+        for (Gene incoming : n1.inputs) {   //for each Gene of Neurons inputs
             Neuron n2 = network[incoming.input];
-            sum += incoming.weight * n2.value;
+            sum += incoming.weight * n2.value;  //Get sum on Neuron
         }
         if (!n1.inputs.empty())
             n1.value = Neuron::sigmoid(sum);    //which is needed for this step! i.e. in-place map edit
@@ -117,7 +121,7 @@ std::vector<double> Genome::evaluateNetwork(std::vector<double> input) {
 
         Neuron& n1 = it->second;
         double sum = 0.0;
-        for (Gene incoming : n1.inputs) {
+        for (Gene incoming : n1.inputs) {   //for each input Gene of Neuron
             Neuron n2 = network[incoming.input];
             sum += incoming.weight * n2.value;
         }
@@ -129,8 +133,6 @@ std::vector<double> Genome::evaluateNetwork(std::vector<double> input) {
     std::vector<double> output;
     for (int i = 0; i < OUTPUTS; i++)
         output.push_back(network[INPUTS + i].value);
-
-    std::cout << backup() << std::endl;
     return output;
 }
 
@@ -141,6 +143,7 @@ void Genome::nodeMutate() {
     Gene &gene = genes[rand() % genes.size()];
     if (!gene.enabled)
         return;
+
     gene.enabled = false;
     maxNeuron++;
 
@@ -159,12 +162,10 @@ void Genome::nodeMutate() {
 }
 
 void Genome::pointMutate() {
-    double r;
-    double step = mutationRates[6];
+    double step = mutationRates[STEP];
 
     for (Gene& gene : genes) {
-        r = Genus::nextDouble();    //TODO: why are we rerandomising again?
-        if (r < PERTURBATION_CHANCE)
+        if (Genus::nextDouble() < PERTURBATION_CHANCE)
             gene.weight += Genus::nextDouble() * step * 2.0 - step;
         else
             gene.weight = Genus::nextDouble() * 4.0 - 2.0;
@@ -175,25 +176,33 @@ void Genome::linkMutate(bool forceBias) {
     int neuron1 = randomNeuron(false, true);
     int neuron2 = randomNeuron(true, false);
 
+    if (neuron1 <= INPUTS && neuron2 <= INPUTS) //Both input nodes, exit
+        return;
+    if (neuron2 <= INPUTS) {    //swap output and input
+        int tempNeuron = neuron1;
+        neuron1 = neuron2;
+        neuron2 = tempNeuron;
+    }
+
     Gene newLink;
     newLink.input = neuron1;
     newLink.output = neuron2;
 
     if (forceBias)
-        newLink.input = INPUTS - 1; //TODO: Check back on this part
+        newLink.input = INPUTS; //TODO: Check back on this part,should be =INPUTS I think
 
     if (containsLink(newLink))
         return;
 
     newLink.innovation = Genus::newInnovation();
-    newLink.weight = rand() * 4 - 2;    //TODO: Rand here should be modded to something
+    newLink.weight = Genus::nextDouble() * 4.0 - 2.0;
     genes.push_back(newLink);
 }
 
 void Genome::mutate() {
     for (int i = 0; i < MUTATION_TYPES; i++) {
         if (rand() % 2 == 1)   //if true
-            mutationRates[i] *= 0.95;
+            mutationRates[i] *= 0.95;   //TODO: validation of these values?
         else
             mutationRates[i] *= 1.05263;
     }
@@ -300,7 +309,7 @@ int Genome::randomNeuron(bool nonInput, bool nonOutput) {
             neurons.push_back(gene.output);
     }
 
-    return neurons[rand() % neurons.size()];
+    return neurons[rand() % neurons.size()];    //Does this need to be a pointer or just the val?
 }
 
 double Genome::weights(Genome genome) {
@@ -310,7 +319,7 @@ double Genome::weights(Genome genome) {
     for (Gene gene1 : genes) {
         for (Gene gene2 : genome.genes) {
             if (gene1.innovation == gene2.innovation) {
-                sum += abs(gene1.weight - gene2.weight);    //TODO: what's with this warning?
+                sum += std::fabs(gene1.weight - gene2.weight); //std::fabs is abs() on a float
                 coincident++;
                 break;
             }
