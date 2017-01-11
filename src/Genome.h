@@ -30,6 +30,7 @@ public:
     double fitness = 0.0;
 
     Genome clone();
+    std::string backup();
     static int compare(const Genome &o1, const Genome &o2);
 
     void generateNetwork(); //has Genome param in marIO

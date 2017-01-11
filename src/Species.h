@@ -13,6 +13,8 @@ public:
     double averageFitness = 0.0;
     int staleness = 0;
 
+    std::string backup();
+
     Genome breedChild();
     void calculateAverageFitness();
     Genome crossover(Genome g1, Genome g2);

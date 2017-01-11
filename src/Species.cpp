@@ -1,8 +1,29 @@
 //
 // Created by gary on 08/01/17.
 //
+
 #include "Species.h"
 #include "Genus.h"
+
+std::string Species::backup() {
+    std::string out = "Species{";
+
+    out += "topFitness=" + std::to_string(topFitness) + ",";
+    out += "\n\taverageFitness=" + std::to_string(averageFitness) + ",";
+    out += "\n\tstaleness=" + std::to_string(staleness) + ",";
+
+    out += "\n\tgenomes={";
+    for (int i = 0; i < genomes.size(); i++) {
+        Genome genome = genomes[i];
+        if (i == genomes.size() - 1)
+            out += genome.backup();
+        else
+            out += genome.backup() + ",";
+    }
+    out += "}\n}";
+
+    return out;
+}
 
 Genome Species::breedChild() {
     Genome child;

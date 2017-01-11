@@ -2,8 +2,44 @@
 // Created by gary on 31/12/16.
 //
 #include <algorithm>
+#include <iostream>
 #include "Genome.h"
 #include "Genus.h"
+
+std::string Genome::backup() {
+    std::string out = "\n\tGenome{";
+
+    out += "fitness=" + std::to_string(fitness) + ",";
+    out += "\n\t\tglobalRank=" + std::to_string(globalRank) + ",";
+    out += "\n\t\tmaxNeuron=" + std::to_string(maxNeuron) + ",";
+    out += "\n\t\tmutationRates={";
+    for (int i = 0; i < MUTATION_TYPES; i++) {
+        double rate = mutationRates[i];
+
+        if ( i == MUTATION_TYPES - 1)
+            out += std::to_string(rate) + "},";
+        else
+            out += std::to_string(rate) + ",";
+    }
+
+    out += "\n\t\tgenes={";
+    for (int i = 0; i < genes.size(); i++) {
+        Gene gene = genes[i];
+        if (i == genes.size() - 1)
+            out += gene.backup();
+        else
+            out += gene.backup() + ",";
+    }
+    out += "},";
+
+    out += "\n\t\tnetwork={";
+    for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++)
+        out += "\n\t\t{key=" + std::to_string(it->first) + ",value=" + it->second.backup() + "\t\t},";
+    out = out.substr(0, out.length() - 1);
+    out += "}\n\t}";
+
+    return out;
+}
 
 Genome Genome::clone() {
     Genome genome;
@@ -62,7 +98,7 @@ std::vector<double> Genome::evaluateNetwork(std::vector<double> input) {
         if (key < INPUTS + OUTPUTS)
             continue;
 
-        Neuron n1 = it->second;
+        Neuron& n1 = it->second;    //Neuron& grabs the address of the value from the hashmap
         double sum = 0.0;
         for (Gene incoming : n1.inputs) {
             Neuron n2 = network[incoming.input];
@@ -70,7 +106,7 @@ std::vector<double> Genome::evaluateNetwork(std::vector<double> input) {
         }
 
         if (!n1.inputs.empty())
-            n1.value = Neuron::sigmoid(sum);
+            n1.value = Neuron::sigmoid(sum);    //which is needed for this step! i.e. in-place map edit
     }
 
     for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
@@ -78,7 +114,7 @@ std::vector<double> Genome::evaluateNetwork(std::vector<double> input) {
         if (key < INPUTS || key >= INPUTS + OUTPUTS)
             continue;
 
-        Neuron n1 = it->second;
+        Neuron& n1 = it->second;
         double sum = 0.0;
         for (Gene incoming : n1.inputs) {
             Neuron n2 = network[incoming.input];
@@ -100,7 +136,7 @@ void Genome::nodeMutate() {
     if (genes.empty())
         return;
 
-    Gene gene = genes[rand() % genes.size()];
+    Gene& gene = genes[rand() % genes.size()];
     if (!gene.enabled)
         return;
     gene.enabled = false;
@@ -210,7 +246,7 @@ void Genome::muateEnableDisable(bool enable) {
     if (candidates.empty())
         return;
 
-    Gene gene = candidates[rand() % candidates.size()];
+    Gene& gene = candidates[rand() % candidates.size()]; //in-place vector edit
     gene.enabled = !gene.enabled;
 }
 

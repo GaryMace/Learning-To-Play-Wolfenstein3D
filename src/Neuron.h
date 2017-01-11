@@ -12,6 +12,7 @@ public:
     double value = 0.0;
     std::vector<Gene> inputs;
 
+    std::string backup();
     static double sigmoid(double x);
 };
 #endif  //TESTBENCH_NEURON_H
