@@ -4,7 +4,7 @@
 #include "Genus.h"
 #include <algorithm>
 
-// instantiate static members ///////
+// instantiate static members
 int Genus::innovation = OUTPUTS;
 int Genus::generation = 0;
 double Genus::maxFitness = 0.0;
@@ -34,22 +34,22 @@ void Genus::addToSpecies(Genome child) {
 
 void Genus::cullSpecies(bool cutToOne) {
     for (Species species : Genus::species) {
-        sort(species.genomes.begin(), species.genomes.end(), Genome::compare);
+        sort(species.genomes.begin(), species.genomes.end(), Genome::compare);  //sort based on fitness function
 
-        double remaining  = ceil(species.genomes.size() / 2.0);
+        double remaining  = std::ceil(species.genomes.size() / 2.0); //TODO: why does this need to be a double?
         if (cutToOne)
             remaining = 1.0;
 
         while (species.genomes.size() > remaining)
-            species.genomes.erase(species.genomes.end());
+            species.genomes.erase(species.genomes.end());   //Remove weak species from end
     }
 }
 
 void Genus::initializeGenus() {
-    for (int i = 0; i < POPULATION; i++) {
+    for (int i = 0; i < POPULATION; i++) {  //initial population
         Genome basic;
-        basic.maxNeuron = INPUTS;
-        basic.mutate();
+        basic.maxNeuron = INPUTS;   //inputs is dynamic in our case ? maybe not..
+        basic.mutate();             //TODO: figure out input size, if deterministic
         addToSpecies(basic);
     }
 }
@@ -66,7 +66,7 @@ void Genus::newGeneration() {
     double sum = totalAverageFitness();
     std::vector<Genome> children;
     for (Species species : Genus::species) {
-        double breed = floor(species.averageFitness / sum * POPULATION) - 1.0;
+        double breed = std::floor(species.averageFitness / sum * POPULATION) - 1.0;
         for (int i = 0; i < breed; i++)
             children.push_back(species.breedChild());
     }
@@ -94,7 +94,7 @@ void Genus::rankGlobally() {
 }
 
 void Genus::removeStaleSpecies() {
-    std::vector<Species> survivers;
+    std::vector<Species> survivors;
 
     for (Species species : Genus::species) {
         std::sort(species.genomes.begin(), species.genomes.end(), Genome::compare);
@@ -106,25 +106,25 @@ void Genus::removeStaleSpecies() {
             species.staleness++;
 
         if (species.staleness < STALE_SPECIES || species.topFitness >= maxFitness)
-            survivers.push_back(species);
+            survivors.push_back(species);
     }
 
     species.clear();
-    species.insert(species.begin(), survivers.begin(), survivers.end());    //Copy list B into list A
+    species.insert(species.begin(), survivors.begin(), survivors.end());    //Copy list B into list A
 }
 
 void Genus::removeWeakSpecies() {
-    std::vector<Species> survivers;
+    std::vector<Species> survivors;
 
     double sum = totalAverageFitness();
     for (Species species : Genus::species) {
-        double breed = floor(species.averageFitness / sum * POPULATION);
+        double breed = floor(species.averageFitness / sum * POPULATION);    // A/B * C or A/(B * C) ?
         if (breed >= 1.0)
-            survivers.push_back(species);
+            survivors.push_back(species);
     }
 
     species.clear();
-    species.insert(species.begin(), survivers.begin(), survivers.end());
+    species.insert(species.begin(), survivors.begin(), survivors.end());
 }
 
 double Genus::totalAverageFitness() {

@@ -9,13 +9,14 @@
 #define STALE_SPECIES 15
 #define TIMEOUT 20
 #define MUTATION_TYPES 7    //consider moving later
-#define INPUTS 4    //refactor
-#define OUTPUTS 8   //num buttons, refactor
+#define INPUTS 4    //refactor, not correct
+#define OUTPUTS 8   //num buttons, refactor not correct
 
 #define DELTA_DISJOINT 2.0
 #define DELTA_WEIGHTS  0.4
 #define DELTA_THRESHOLD 1.0
 
+// Validation for these values?
 #define MUTATE_CONNECTIONS_CHANCE 0.25
 #define MUTATE_LINK_CHANCE 2.0
 #define MUTATE_NODE_CHANCE 0.5
@@ -26,6 +27,6 @@
 #define PERTURBATION_CHANCE 0.9
 #define STEP_SIZE 0.1
 
-#define MAX_NODES 10000
+#define MAX_NODES 10000 //useful later maybe?
 
 #endif //TESTBENCH_DEF_H

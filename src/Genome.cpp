@@ -12,11 +12,11 @@ std::string Genome::backup() {
     out += "fitness=" + std::to_string(fitness) + ",";
     out += "\n\t\tglobalRank=" + std::to_string(globalRank) + ",";
     out += "\n\t\tmaxNeuron=" + std::to_string(maxNeuron) + ",";
+
     out += "\n\t\tmutationRates={";
     for (int i = 0; i < MUTATION_TYPES; i++) {
         double rate = mutationRates[i];
-
-        if ( i == MUTATION_TYPES - 1)
+        if (i == MUTATION_TYPES - 1)
             out += std::to_string(rate) + "},";
         else
             out += std::to_string(rate) + ",";
@@ -35,7 +35,9 @@ std::string Genome::backup() {
     out += "\n\t\tnetwork={";
     for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++)
         out += "\n\t\t{key=" + std::to_string(it->first) + ",value=" + it->second.backup() + "\t\t},";
-    out = out.substr(0, out.length() - 1);
+    if (!network.empty())
+        out = out.substr(0, out.length() - 1);  //Remove last ","
+
     out += "}\n\t}";
 
     return out;
@@ -60,17 +62,17 @@ int Genome::compare(const Genome &o1, const Genome &o2) {
 }
 
 void Genome::generateNetwork() {
-    for (int i = 0; i < INPUTS; i++) {
+    for (int i = 0; i < INPUTS; i++) {  //Make Neurons for all inputs
         Neuron n;
         network.insert(std::make_pair(i, n));
     }
-    for (int i = 0; i < OUTPUTS; i++) {
+    for (int i = 0; i < OUTPUTS; i++) { //Make Neurons for all outputs
         Neuron n;
         network.insert(std::make_pair(INPUTS + i, n));
     }
-    std::sort(genes.begin(), genes.end(), Gene::compare);
+    std::sort(genes.begin(), genes.end(), Gene::compare);   //Order genes based on output
 
-    for (Gene gene : genes) {
+    for (Gene gene : genes) {   //TODO: be careful, do we want copies or pointers?
         if (gene.enabled) {
             std::map<int, Neuron>::iterator it = network.find(gene.output);
             if (it != network.end()) {
@@ -82,8 +84,8 @@ void Genome::generateNetwork() {
 
             std::map<int, Neuron>::iterator it2 = network.find(gene.input);
             if (it != network.end()) {
-                Neuron n;
-                network.insert(std::make_pair(gene.input, n));
+                Neuron n2;
+                network.insert(std::make_pair(gene.input, n2));
             }
         }
     }
@@ -104,7 +106,6 @@ std::vector<double> Genome::evaluateNetwork(std::vector<double> input) {
             Neuron n2 = network[incoming.input];
             sum += incoming.weight * n2.value;
         }
-
         if (!n1.inputs.empty())
             n1.value = Neuron::sigmoid(sum);    //which is needed for this step! i.e. in-place map edit
     }
@@ -129,6 +130,7 @@ std::vector<double> Genome::evaluateNetwork(std::vector<double> input) {
     for (int i = 0; i < OUTPUTS; i++)
         output.push_back(network[INPUTS + i].value);
 
+    std::cout << backup() << std::endl;
     return output;
 }
 
@@ -136,13 +138,13 @@ void Genome::nodeMutate() {
     if (genes.empty())
         return;
 
-    Gene& gene = genes[rand() % genes.size()];
+    Gene &gene = genes[rand() % genes.size()];
     if (!gene.enabled)
         return;
     gene.enabled = false;
     maxNeuron++;
 
-    Gene gene1 = gene.clone();
+    Gene gene1 = gene.clone();  //TODO: is this not just making a copy and putting it at the end?
     gene1.output = maxNeuron;
     gene1.weight = 1.0;
     gene1.innovation = Genus::newInnovation();
@@ -160,7 +162,7 @@ void Genome::pointMutate() {
     double r;
     double step = mutationRates[6];
 
-    for (Gene gene : genes) {
+    for (Gene& gene : genes) {
         r = Genus::nextDouble();    //TODO: why are we rerandomising again?
         if (r < PERTURBATION_CHANCE)
             gene.weight += Genus::nextDouble() * step * 2.0 - step;
@@ -189,12 +191,11 @@ void Genome::linkMutate(bool forceBias) {
 }
 
 void Genome::mutate() {
-    for (int i = 0; i < sizeof(mutationRates); i++) {
-        if (rand() % 2 == 1) {  //if true
+    for (int i = 0; i < MUTATION_TYPES; i++) {
+        if (rand() % 2 == 1)   //if true
             mutationRates[i] *= 0.95;
-        } else {
+        else
             mutationRates[i] *= 1.05263;
-        }
     }
 
     if (Genus::nextDouble() < mutationRates[CONNECTIONS])
@@ -224,30 +225,31 @@ void Genome::mutate() {
     prob = mutationRates[ENABLE];
     while (prob > 0) {
         if (Genus::nextDouble() < prob)
-            muateEnableDisable(true);
+            mutateEnableDisable(true);
         prob--;
     }
 
     prob = mutationRates[DISABLE];
     while (prob > 0) {
         if (Genus::nextDouble() < prob)
-            muateEnableDisable(false);
+            mutateEnableDisable(false);
         prob--;
     }
 }
 
-void Genome::muateEnableDisable(bool enable) {
-    std::vector<Gene> candidates;
+void Genome::mutateEnableDisable(bool enable) {
+    std::vector<Gene*> candidates;  //vector of pointers
 
-    for (Gene gene : genes)
+    for (Gene& gene : genes)    //for each actual obj ref
         if (gene.enabled != enable)
-            candidates.push_back(gene);
+            candidates.push_back(&gene);    //store obj ref
 
     if (candidates.empty())
         return;
 
-    Gene& gene = candidates[rand() % candidates.size()]; //in-place vector edit
-    gene.enabled = !gene.enabled;
+    //pointer to obj ref from original vector
+    Gene *gene = candidates[rand() % candidates.size()]; //in-place vector edit
+    gene->enabled = !gene->enabled; //change value via pointer
 }
 
 bool Genome::containsLink(Gene link) {
@@ -259,22 +261,27 @@ bool Genome::containsLink(Gene link) {
 
 double Genome::disjoint(Genome genome) {
     double disjointGenes = 0.0;
+    bool isDisjoint = true;
 
     for (Gene gene1 : genes) {
         for (Gene gene2 : genome.genes) {
             if (gene1.innovation == gene2.innovation) {
+                isDisjoint = false;
                 break;
             }
+        }
+        if (isDisjoint) {
             disjointGenes++;
+            isDisjoint = true;
         }
     }
 
-    return disjointGenes / std::max(sizeof(genes), sizeof(genome.genes));
+    return disjointGenes / std::max(genes.size(), genome.genes.size());
 }
 
 int Genome::randomNeuron(bool nonInput, bool nonOutput) {
     std::vector<int> neurons;    //since list is a doubly linked list, can't access nth item easy
-    srand(time(NULL));
+    srand(time(NULL));  //TODO: is this necessary?
 
     if (!nonInput)
         for (int i = 0; i < INPUTS; ++i)
@@ -303,13 +310,16 @@ double Genome::weights(Genome genome) {
     for (Gene gene1 : genes) {
         for (Gene gene2 : genome.genes) {
             if (gene1.innovation == gene2.innovation) {
-                sum += abs(gene1.weight - gene2.weight);
+                sum += abs(gene1.weight - gene2.weight);    //TODO: what's with this warning?
                 coincident++;
                 break;
             }
         }
     }
-    return sum / coincident;
+    if (sum == 0 && coincident == 0)    //since  0.0/0.0 in C++ is -nan ...
+        return 0;
+    else
+        return sum / coincident;
 }
 
 bool Genome::sameSpecies(Genome genome) {
@@ -318,4 +328,3 @@ bool Genome::sameSpecies(Genome genome) {
 
     return dd + dw < DELTA_THRESHOLD;
 }
-

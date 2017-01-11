@@ -26,8 +26,89 @@ int main() {
         std::cout << outVal << " ";
     std::cout << std::endl;
 
-    std::cout << "g1 network size instantiated (expected 12): " << g1.network.size() << std::endl;
+    std::cout << "g1 network size instantiated (expected 12): " << g1.network.size() << "\n" << std::endl;
 
-    std::cout << g1.backup() << std::endl;
+    std::cout << "/////////////////////////////////////////" << std::endl;
+    std::cout << "// Genome::compare()" << std::endl;
+    g1.fitness = 5;
+    g2.fitness = 4;
+    std::cout << "Compare g1 & g2 (expected -1): " << Genome::compare(g1, g2) << "\n" << std::endl;
+
+    std::cout << "/////////////////////////////////////////" << std::endl;
+    std::cout << "// Genome::nodeMutate()" << std::endl;
+    Gene g;
+    g1.genes.push_back(g);
+
+    std::cout << std::endl;
+    std::cout << "g1 before node mutate: " << std::endl;
+    for (Gene gene : g1.genes)
+        std::cout << gene.backup() << std::endl;
+    std::cout << "g1 after node mutate: " << std::endl;
+    g1.nodeMutate();
+    for (Gene gene : g1.genes)
+        std::cout << gene.backup() << "\n" << std::endl;
+
+    std::cout << "/////////////////////////////////////////" << std::endl;
+    std::cout << "// Genome::randomNeuron()" << std::endl;
+    std::cout << "g1 random neuron: " << g1.randomNeuron(false, true) << "\n" << std::endl;
+
+    std::cout << "/////////////////////////////////////////" << std::endl;
+    std::cout << "// Genome::pointMutate()" << std::endl;
+    std::cout << "g1 before point mutate: " << std::endl;
+    for (Gene gene : g1.genes)
+        std::cout << gene.backup() << std::endl;
+    g1.pointMutate();
+    std::cout << "g1 after point mutate: " << std::endl;
+    for (Gene gene : g1.genes)
+        std::cout << gene.backup() << "\n" << std::endl;
+
+    std::cout << "/////////////////////////////////////////" << std::endl;
+    std::cout << "// Genome::linkMutate()" << std::endl;
+    std::cout << "g1 before link mutate(forceBias - false): " << std::endl;
+    for (Gene gene : g1.genes)
+        std::cout << gene.backup() << std::endl;
+    g1.linkMutate(false);
+    std::cout << "g1 after link mutate(forceBias - false): " << std::endl;
+    for (Gene gene : g1.genes)
+        std::cout << gene.backup() << std::endl;
+
+    std::cout << "g1 before link mutate(forceBias - true): " << std::endl;
+    for (Gene gene : g1.genes)
+        std::cout << gene.backup() << std::endl;
+    g1.linkMutate(true);
+    std::cout << "g1 after link mutate(forceBias - true): " << std::endl;
+    for (Gene gene : g1.genes)
+        std::cout << gene.backup() << std::endl;
+
+    std::cout << "/////////////////////////////////////////" << std::endl;
+    std::cout << "// Genome::mutateEnableDisable()" << std::endl;
+    g1.mutateEnableDisable(true);
+    for (Gene gene : g1.genes)
+        std::cout << gene.backup() << std::endl;
+
+    std::cout << "/////////////////////////////////////////" << std::endl;
+    std::cout << "// Genome::mutate()" << std::endl;
+    g1.mutate();
+    for (Gene gene : g1.genes)
+        std::cout << gene.backup() << std::endl;
+
+    std::cout << "/////////////////////////////////////////" << std::endl;
+    std::cout << "// Genome::containsLink()" << std::endl;
+    Gene testGene;
+    testGene.input = 1;
+    testGene.output = 0;
+    std::cout << "g1 contains testGene (expected 1): " << g1.containsLink(testGene) << "\n" << std::endl;
+
+    std::cout << "/////////////////////////////////////////" << std::endl;
+    std::cout << "// Genome::disjoint()" << std::endl;
+    std::cout << "g1 disjoint from g2 (expected 1): " << g1.disjoint(g2) << "\n" << std::endl;
+
+    std::cout << "/////////////////////////////////////////" << std::endl;
+    std::cout << "// Genome::weights()" << std::endl;
+    std::cout << "g1 weights to g2 (expected 0): " << g1.weights(g2) << "\n" << std::endl;
+
+    std::cout << "/////////////////////////////////////////" << std::endl;
+    std::cout << "// Genome::sameSpecies()" << std::endl;
+    std::cout << "g1 same species as g2 (expected 0): " << g1.sameSpecies(g2) << std::endl;
     return 0;
 }

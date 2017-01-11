@@ -11,7 +11,6 @@ std::string Neuron::backup() {
     out += "\n\t\t\tinputs={";
     for (int i = 0; i < inputs.size(); i++) {
         Gene gene = inputs[i];
-
         if (i == inputs.size() - 1)
             out += gene.backup() + "}";
         else

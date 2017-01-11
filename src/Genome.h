@@ -10,6 +10,7 @@
 #include "Neuron.h"
 #include "Def.h"
 
+//used as indexes to mutationRates arr
 #define CONNECTIONS 0
 #define LINK 1
 #define BIAS  2
@@ -39,7 +40,7 @@ public:
     void linkMutate(bool forceBias);  //MarIO: genome, forceBias(bool)
     void pointMutate(); //MarIO: genome
     void mutate();      //MarIO: genome
-    void muateEnableDisable(bool enable);  //MarIO: genome, enable
+    void mutateEnableDisable(bool enable);  //MarIO: genome, enable
     bool containsLink(Gene link);   //MarIO: genes[], link
     double disjoint(Genome genome); //MarIO: genes1[], genes2[]
     int randomNeuron(bool nonInput, bool nonOutput);    //MarIO: genes[], nonInput

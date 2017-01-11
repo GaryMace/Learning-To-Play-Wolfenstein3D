@@ -6,7 +6,7 @@
 
 #include <string>
 
-//TODO: set defualt values!
+//TODO: set default values!
 class Gene {
 public:
     int input;  //in-node
