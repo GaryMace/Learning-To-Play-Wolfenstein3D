@@ -24,5 +24,23 @@ int main() {
     s.genomes.push_back(g2);
 
     std::cout << s.backup() << std::endl;
+
+    std::cout << "/////////////////////////////////////////" << std::endl;
+    std::cout << "// Species::crossover()" << std::endl;
+    g2.fitness = 10;
+    Genome child = s.crossover(g1, g2);
+    std::cout << "Child generated: " << child.backup() << "\nEnd of child\n" << std::endl;
+
+    std::cout << "/////////////////////////////////////////" << std::endl;
+    std::cout << "// Species::breedChild()" << std::endl;
+    Genome offspring = s.breedChild();
+    std::cout << "Offspring generated: " << offspring.backup() << "\nEnd of Offspring\n" << std::endl;
+
+    std::cout << "/////////////////////////////////////////" << std::endl;
+    std::cout << "// Species::calculateAverageFitness()" << std::endl;
+    s.genomes[0].globalRank = 3;
+    s.genomes[1].globalRank = 5;
+    s.calculateAverageFitness();
+    std::cout << "Average fitness of Species (expected 4): " << s.averageFitness << std::endl;
     return 0;
 }

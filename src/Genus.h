@@ -20,6 +20,7 @@ public:
     static int generation;
     static double maxFitness;
 
+    static std::string backup();
     static int newInnovation();
     static double nextDouble();
     static void addToSpecies(Genome child);

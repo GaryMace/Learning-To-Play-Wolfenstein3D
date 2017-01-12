@@ -6,13 +6,13 @@
 #include "Genus.h"
 
 std::string Species::backup() {
-    std::string out = "Species{";
+    std::string out = "\n\t\tSpecies{";
 
     out += "topFitness=" + std::to_string(topFitness) + ",";
-    out += "\n\taverageFitness=" + std::to_string(averageFitness) + ",";
-    out += "\n\tstaleness=" + std::to_string(staleness) + ",";
+    out += "\n\t\t\taverageFitness=" + std::to_string(averageFitness) + ",";
+    out += "\n\t\t\tstaleness=" + std::to_string(staleness) + ",";
 
-    out += "\n\tgenomes={";
+    out += "\n\t\t\tgenomes={";
     for (int i = 0; i < genomes.size(); i++) {
         Genome genome = genomes[i];
         if (i == genomes.size() - 1)
@@ -20,7 +20,7 @@ std::string Species::backup() {
         else
             out += genome.backup() + ",";
     }
-    out += "}\n}";
+    out += "\n\t\t\t}\n\t\t}";  //close genomes{} then Species brackets
 
     return out;
 }

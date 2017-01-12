@@ -5,10 +5,10 @@
 #include <cmath>
 
 std::string Neuron::backup() {
-    std::string out = "\n\t\tNeuron{";
+    std::string out = "\n\t\t\tNeuron{";
 
     out += "value=" + std::to_string(value) + ",";
-    out += "\n\t\t\tinputs={";
+    out += "\n\t\t\t\tinputs={";
     for (int i = 0; i < inputs.size(); i++) {
         Gene gene = inputs[i];
         if (i == inputs.size() - 1)

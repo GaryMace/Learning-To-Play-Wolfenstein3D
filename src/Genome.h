@@ -34,6 +34,7 @@ public:
     Genome clone();
     std::string backup();
     static int compare(const Genome &o1, const Genome &o2);
+    static int compareByPointer(const Genome *o1, const Genome *o2);
 
     void generateNetwork(); //has Genome param in marIO
     std::vector<double> evaluateNetwork(std::vector<double> inputs);  //Has network, inputs param in MarIO

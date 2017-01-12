@@ -10,13 +10,13 @@
  * Outputs string representation of the Genome class
  */
 std::string Genome::backup() {
-    std::string out = "\n\tGenome{";
+    std::string out = "\n\t\t\t\tGenome{";
 
     out += "fitness=" + std::to_string(fitness) + ",";
-    out += "\n\t\tglobalRank=" + std::to_string(globalRank) + ",";
-    out += "\n\t\tmaxNeuron=" + std::to_string(maxNeuron) + ",";
+    out += "\n\t\t\t\t\tglobalRank=" + std::to_string(globalRank) + ",";
+    out += "\n\t\t\t\t\tmaxNeuron=" + std::to_string(maxNeuron) + ",";
 
-    out += "\n\t\tmutationRates={";
+    out += "\n\t\t\t\t\tmutationRates={";
     for (int i = 0; i < MUTATION_TYPES; i++) {
         double rate = mutationRates[i];
         if (i == MUTATION_TYPES - 1)
@@ -25,7 +25,7 @@ std::string Genome::backup() {
             out += std::to_string(rate) + ",";
     }
 
-    out += "\n\t\tgenes={";
+    out += "\n\t\t\t\t\tgenes={";
     for (int i = 0; i < genes.size(); i++) {
         Gene gene = genes[i];
         if (i == genes.size() - 1)
@@ -33,15 +33,15 @@ std::string Genome::backup() {
         else
             out += gene.backup() + ",";
     }
-    out += "},";
+    out += "\n\t\t\t\t\t},";
 
-    out += "\n\t\tnetwork={";
+    out += "\n\t\t\t\t\tnetwork={";
     for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++)
-        out += "\n\t\t{key=" + std::to_string(it->first) + ",value=" + it->second.backup() + "\t\t},";
+        out += "\n\t\t\t\t\t{key=" + std::to_string(it->first) + ",value=" + it->second.backup() + "\t\t},";
     if (!network.empty())
         out = out.substr(0, out.length() - 1);  //Remove last ","
 
-    out += "}\n\t}";
+    out += "}\n\t\t\t\t}";  //close network then Genome brackets
 
     return out;
 }
@@ -63,6 +63,11 @@ Genome Genome::clone() {
 //returns 0 if cmp == 0, 1 if cmp > 0 and -1 if cmp < 0
 int Genome::compare(const Genome &o1, const Genome &o2) {
     double cmp = o2.fitness - o1.fitness;
+    return cmp == 0.0 ? 0 : cmp > 0.0 ? 1 : -1;
+}
+
+int Genome::compareByPointer(const Genome *o1, const Genome *o2) {
+    double cmp = o2->fitness - o1->fitness;
     return cmp == 0.0 ? 0 : cmp > 0.0 ? 1 : -1;
 }
 
