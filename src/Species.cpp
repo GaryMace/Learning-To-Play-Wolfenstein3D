@@ -2,15 +2,20 @@
 // Created by gary on 08/01/17.
 //
 
+#include <sstream>
 #include "Species.h"
 #include "Genus.h"
 
 std::string Species::backup() {
     std::string out = "\n\t\tSpecies{";
+    std::string str;
 
-    out += "topFitness=" + std::to_string(topFitness) + ",";
-    out += "\n\t\t\taverageFitness=" + std::to_string(averageFitness) + ",";
-    out += "\n\t\t\tstaleness=" + std::to_string(staleness) + ",";
+    str = static_cast<std::ostringstream*>(&(std::ostringstream() << topFitness))->str();
+    out += "topFitness=" + str + ",";
+    str = static_cast<std::ostringstream*>(&(std::ostringstream() << averageFitness))->str();
+    out += "\n\t\t\taverageFitness=" + str + ",";
+    str = static_cast<std::ostringstream*>(&(std::ostringstream() << staleness))->str();
+    out += "\n\t\t\tstaleness=" + str + ",";
 
     out += "\n\t\t\tgenomes={";
     for (int i = 0; i < genomes.size(); i++) {

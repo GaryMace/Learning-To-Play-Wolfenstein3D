@@ -21,6 +21,8 @@ public:
     static double maxFitness;
 
     static std::string backup();
+    static void loadSaveState(std::string saveState);
+
     static int newInnovation();
     static double nextDouble();
     static void addToSpecies(Genome child);

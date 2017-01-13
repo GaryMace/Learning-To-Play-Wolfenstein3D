@@ -2,6 +2,7 @@
 // Created by gary on 31/12/16.
 //
 #include <algorithm>
+#include <sstream>
 #include <iostream>
 #include "Genome.h"
 #include "Genus.h"
@@ -11,18 +12,23 @@
  */
 std::string Genome::backup() {
     std::string out = "\n\t\t\t\tGenome{";
+    std::string str;
 
-    out += "fitness=" + std::to_string(fitness) + ",";
-    out += "\n\t\t\t\t\tglobalRank=" + std::to_string(globalRank) + ",";
-    out += "\n\t\t\t\t\tmaxNeuron=" + std::to_string(maxNeuron) + ",";
+    str = static_cast<std::ostringstream*>(&(std::ostringstream() << fitness))->str();
+    out += "fitness=" + str + ",";
+    str = static_cast<std::ostringstream*>(&(std::ostringstream() << globalRank))->str();
+    out += "\n\t\t\t\t\tglobalRank=" + str + ",";
+    str = static_cast<std::ostringstream*>(&(std::ostringstream() << maxNeuron))->str();
+    out += "\n\t\t\t\t\tmaxNeuron=" + str + ",";
 
     out += "\n\t\t\t\t\tmutationRates={";
     for (int i = 0; i < MUTATION_TYPES; i++) {
         double rate = mutationRates[i];
+        str = static_cast<std::ostringstream*>(&(std::ostringstream() << rate))->str();
         if (i == MUTATION_TYPES - 1)
-            out += std::to_string(rate) + "},";
+            out += str + "},";
         else
-            out += std::to_string(rate) + ",";
+            out += str + ",";
     }
 
     out += "\n\t\t\t\t\tgenes={";
@@ -36,8 +42,10 @@ std::string Genome::backup() {
     out += "\n\t\t\t\t\t},";
 
     out += "\n\t\t\t\t\tnetwork={";
-    for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++)
-        out += "\n\t\t\t\t\t{key=" + std::to_string(it->first) + ",value=" + it->second.backup() + "\t\t},";
+    for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
+        str = static_cast<std::ostringstream*>(&(std::ostringstream() << it->first))->str();
+        out += "\n\t\t\t\t\t{key=" + str + ",value=" + it->second.backup() + "\t\t},";
+    }
     if (!network.empty())
         out = out.substr(0, out.length() - 1);  //Remove last ","
 

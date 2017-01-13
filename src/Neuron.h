@@ -9,7 +9,7 @@
 
 class Neuron {
 public:
-    double value = 0.0;
+    double value;
     std::vector<Gene> inputs;
 
     std::string backup();

@@ -3,11 +3,16 @@
 //
 #include "Neuron.h"
 #include <cmath>
+#include <sstream>
+
+double value = 0.0;
 
 std::string Neuron::backup() {
     std::string out = "\n\t\t\tNeuron{";
 
-    out += "value=" + std::to_string(value) + ",";
+    std::string str =
+            static_cast<std::ostringstream*>(&(std::ostringstream() << value))->str();
+    out += "value=" + str + ",";
     out += "\n\t\t\t\tinputs={";
     for (int i = 0; i < inputs.size(); i++) {
         Gene gene = inputs[i];

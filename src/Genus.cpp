@@ -4,6 +4,7 @@
 #include "Genus.h"
 #include <algorithm>
 #include <iostream>
+#include <sstream>
 
 // instantiate static members
 int Genus::innovation = OUTPUTS;
@@ -11,11 +12,18 @@ int Genus::generation = 0;
 double Genus::maxFitness = 0.0;
 std::vector<Species> Genus::species;
 
+void Genus::loadSaveState(std::string saveState) {
+
+}
+
 std::string Genus::backup() {
     std::string out = "Genus{";
+    std::string str;
 
-    out += "generation=" + std::to_string(generation) + ",\n";
-    out += "\tmaxFitness=" + std::to_string(maxFitness) + ",\n";
+    str = static_cast<std::ostringstream*>(&(std::ostringstream() << generation))->str();
+    out += "generation=" + str + ",\n";
+    str = static_cast<std::ostringstream*>(&(std::ostringstream() << maxFitness))->str();
+    out += "\tmaxFitness=" + str + ",\n";
     out += "\tspecies={";
     for (int i = 0; i < Genus::species.size(); i++) {
         Species species = Genus::species[i];
@@ -96,6 +104,7 @@ void Genus::newGeneration() {
     for (Genome child : children)
         addToSpecies(child);
     generation++;
+    //initialiseRun() ????
 }
 
 void Genus::rankGlobally() {

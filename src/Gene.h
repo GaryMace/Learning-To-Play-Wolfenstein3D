@@ -12,7 +12,7 @@ public:
     int input;  //in-node
     int output; //out-node
     double weight;  //connection weight
-    bool enabled = true;    //enable-bit
+    bool enabled;    //enable-bit
     int innovation; //connection ID
 
     Gene clone();
