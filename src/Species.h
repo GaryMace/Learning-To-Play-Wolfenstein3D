@@ -9,14 +9,15 @@
 class Species {
 public:
     std::vector<Genome> genomes;
-    double topFitness = 0.0;
-    double averageFitness = 0.0;
-    int staleness = 0;
+    double topFitness;
+    double averageFitness;
+    int staleness;
 
     std::string backup();
 
     Genome breedChild();
     void calculateAverageFitness();
     Genome crossover(Genome g1, Genome g2);
+    Species() : topFitness(0.0), averageFitness(0.0), staleness(0) {}
 };
 #endif  //TESTBENCH_SPECIES_H

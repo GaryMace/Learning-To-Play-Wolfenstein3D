@@ -14,5 +14,7 @@ public:
 
     std::string backup();
     static double sigmoid(double x);
+
+    Neuron() : value(0.0) {}
 };
 #endif  //TESTBENCH_NEURON_H

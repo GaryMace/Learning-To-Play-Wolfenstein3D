@@ -5,7 +5,6 @@
 #include <cmath>
 #include <sstream>
 
-double value = 0.0;
 
 std::string Neuron::backup() {
     std::string out = "\n\t\t\tNeuron{";

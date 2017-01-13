@@ -21,15 +21,12 @@
 
 class Genome {
 public:
-    double mutationRates[MUTATION_TYPES] = {
-            MUTATE_CONNECTIONS_CHANCE, MUTATE_LINK_CHANCE, MUTATE_BIAS_CHANCE,
-            MUTATE_NODE_CHANCE, MUTATE_ENABLE_CHANCE, MUTATE_DISABLE_CHANCE,
-            STEP_SIZE };
+    double mutationRates[MUTATION_TYPES];
     std::map<int, Neuron> network;
     std::vector<Gene> genes;
-    int maxNeuron = 0;
-    int globalRank = 0;
-    double fitness = 0.0;
+    int maxNeuron;
+    int globalRank;
+    double fitness;
 
     Genome clone();
     std::string backup();
@@ -48,5 +45,10 @@ public:
     int randomNeuron(bool nonInput, bool nonOutput);    //MarIO: genes[], nonInput
     double weights(Genome genome);   //MarIO: genes1[], genes2[]
     bool sameSpecies(Genome genome);    //MarIO: genome1, genome2
+
+    Genome() : mutationRates {
+        MUTATE_CONNECTIONS_CHANCE, MUTATE_LINK_CHANCE, MUTATE_BIAS_CHANCE,
+                MUTATE_NODE_CHANCE, MUTATE_ENABLE_CHANCE, MUTATE_DISABLE_CHANCE,
+                STEP_SIZE }, maxNeuron(0), globalRank(0), fitness(0.0) {}
 };
 #endif  //TESTBENCH_GENOME_H

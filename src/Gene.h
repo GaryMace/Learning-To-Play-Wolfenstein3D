@@ -18,6 +18,8 @@ public:
     Gene clone();
     std::string backup();
     static bool compare(const Gene &g1, const Gene &g2);
+
+    Gene() : enabled(true), innovation(-1) {}
 };
 
 #endif //TESTBENCH_GENE_H

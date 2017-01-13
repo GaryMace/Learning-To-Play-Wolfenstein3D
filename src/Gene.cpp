@@ -4,7 +4,6 @@
 #include <sstream>
 #include "Gene.h"
 
-bool enabled = true;
 
 Gene Gene::clone() {
     Gene copy;
