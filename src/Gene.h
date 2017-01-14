@@ -19,7 +19,7 @@ public:
     std::string backup();
     static bool compare(const Gene &g1, const Gene &g2);
 
-    Gene() : enabled(true), innovation(-1) {}
+    Gene() : enabled(true), innovation(-1) {}   //Init Gene instance variables
 };
 
 #endif //TESTBENCH_GENE_H

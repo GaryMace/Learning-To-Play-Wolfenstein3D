@@ -58,8 +58,9 @@ std::string Genome::backup() {
 Genome Genome::clone() {
     Genome genome;
 
-    for (Gene gene : genes)
+    for (Gene gene : genes) {
         genome.genes.push_back(gene);
+    }
     genome.maxNeuron = maxNeuron;
 
     for (int i = 0; i < MUTATION_TYPES; i++)
