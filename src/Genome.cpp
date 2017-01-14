@@ -79,6 +79,7 @@ int Genome::compareByPointer(const Genome *o1, const Genome *o2) {
     return cmp == 0.0 ? 0 : cmp > 0.0 ? 1 : -1;
 }
 
+//#fixed
 void Genome::initMutationRates() {
     this->mutationRates[CONNECTIONS] = MUTATE_CONNECTIONS_CHANCE;
     this->mutationRates[LINK] = MUTATE_LINK_CHANCE;

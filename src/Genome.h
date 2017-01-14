@@ -47,6 +47,8 @@ public:
     double weights(Genome genome);   //MarIO: genes1[], genes2[]
     bool sameSpecies(Genome genome);    //MarIO: genome1, genome2
 
-    Genome() : initMutationRates(), maxNeuron(0), globalRank(0), fitness(0.0) {}
+    Genome() : maxNeuron(0), globalRank(0), fitness(0.0) {
+        initMutationRates();    //I'm not overly fond of this but old C++ doesn't allow array initialisations in class constructors
+    }
 };
 #endif  //TESTBENCH_GENOME_H
