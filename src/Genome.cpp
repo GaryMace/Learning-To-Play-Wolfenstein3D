@@ -58,9 +58,13 @@ std::string Genome::backup() {
 Genome Genome::clone() {
     Genome genome;
 
+    for (int i = 0; i < genes.size(); i++) {
+        Gene gene  = genes[i];
+        genome.genes.push_back(gene);
+    }/*
     for (Gene gene : genes) {
         genome.genes.push_back(gene);
-    }
+    }*/
     genome.maxNeuron = maxNeuron;
 
     for (int i = 0; i < MUTATION_TYPES; i++)
@@ -102,7 +106,8 @@ void Genome::generateNetwork() {
     }
     std::sort(genes.begin(), genes.end(), Gene::compare);   //Order genes based on output
 
-    for (Gene gene : genes) {
+    for (int i = 0; i < genes.size(); i++) {
+        Gene gene  = genes[i];
         if (gene.enabled) { //If this Gene is enabled
             std::map<int, Neuron>::iterator it = network.find(gene.output);
             if (it != network.end()) {  //If key gene.output doesn't exist
