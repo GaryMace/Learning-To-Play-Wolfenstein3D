@@ -61,10 +61,7 @@ Genome Genome::clone() {
     for (int i = 0; i < genes.size(); i++) {
         Gene gene  = genes[i];
         genome.genes.push_back(gene);
-    }/*
-    for (Gene gene : genes) {
-        genome.genes.push_back(gene);
-    }*/
+    }
     genome.maxNeuron = maxNeuron;
 
     for (int i = 0; i < MUTATION_TYPES; i++)
@@ -140,11 +137,7 @@ std::vector<double> Genome::evaluateNetwork(std::vector<double> input) {
             Gene incoming = n1.inputs[i];   //for each Gene of Neurons inputs
             Neuron n2 = network[incoming.input];
             sum += incoming.weight * n2.value;  //Get sum on Neuron
-        }/*
-        for (Gene incoming : n1.inputs) {   //for each Gene of Neurons inputs
-            Neuron n2 = network[incoming.input];
-            sum += incoming.weight * n2.value;  //Get sum on Neuron
-        }*/
+        }
         if (!n1.inputs.empty())
             n1.value = Neuron::sigmoid(sum);    //which is needed for this step! i.e. in-place map edit
     }
@@ -160,11 +153,7 @@ std::vector<double> Genome::evaluateNetwork(std::vector<double> input) {
             Gene incoming = n1.inputs[i];   //for each Gene of Neurons inputs
             Neuron n2 = network[incoming.input];
             sum += incoming.weight * n2.value;  //Get sum on Neuron
-        }/*
-        for (Gene incoming : n1.inputs) {   //for each input Gene of Neuron
-            Neuron n2 = network[incoming.input];
-            sum += incoming.weight * n2.value;
-        }*/
+        }
 
         if (!n1.inputs.empty())
             n1.value = Neuron::sigmoid(sum);
@@ -211,12 +200,6 @@ void Genome::pointMutate() {
         else
             gene.weight = Genus::nextDouble() * 4.0 - 2.0;
     }
-    /*for (Gene& gene : genes) {
-        if (Genus::nextDouble() < PERTURBATION_CHANCE)
-            gene.weight += Genus::nextDouble() * step * 2.0 - step;
-        else
-            gene.weight = Genus::nextDouble() * 4.0 - 2.0;
-    }*/
 }
 
 void Genome::linkMutate(bool forceBias) {
@@ -301,10 +284,6 @@ void Genome::mutateEnableDisable(bool enable) {
         if (gene.enabled != enable)
             candidates.push_back(&gene);
     }
-//    for (Gene& gene : genes)    //for each actual obj ref
-//        if (gene.enabled != enable)
-//            candidates.push_back(&gene);    //store obj ref
-
     if (candidates.empty())
         return;
 
@@ -318,10 +297,7 @@ bool Genome::containsLink(Gene link) {
         Gene gene = genes[i];
         if (gene.input == link.input && gene.output == link.output)
             return true;
-    }/*
-    for (Gene gene : genes)
-        if (gene.input == link.input && gene.output == link.output)
-            return true;*/
+    }
     return false;
 }
 
@@ -331,7 +307,7 @@ double Genome::disjoint(Genome genome) {
 
     for (int i = 0; i < genes.size(); i++) {
         Gene gene1 = genes[i];
-        for (int j = 0; j < genome.genes.size(); i++) {
+        for (int j = 0; j < genome.genes.size(); j++) {
             Gene gene2 = genome.genes[j];
             if (gene1.innovation == gene2.innovation) {
                 isDisjoint = false;
@@ -342,19 +318,7 @@ double Genome::disjoint(Genome genome) {
             disjointGenes++;
             isDisjoint = true;
         }
-    }/*
-    for (Gene gene1 : genes) {
-        for (Gene gene2 : genome.genes) {
-            if (gene1.innovation == gene2.innovation) {
-                isDisjoint = false;
-                break;
-            }
-        }
-        if (isDisjoint) {
-            disjointGenes++;
-            isDisjoint = true;
-        }
-    }*/
+    }
 
     return disjointGenes / std::max(genes.size(), genome.genes.size());
 }
@@ -379,15 +343,7 @@ int Genome::randomNeuron(bool nonInput, bool nonOutput) {
         if ((!nonInput || gene.output >= INPUTS)
             && (!nonOutput || gene.output >= INPUTS + OUTPUTS))
             neurons.push_back(gene.output);
-    }/*
-    for (Gene gene : genes) {
-        if ((!nonInput || gene.input >= INPUTS)
-            && (!nonOutput || gene.input >= INPUTS + OUTPUTS))
-            neurons.push_back(gene.input);
-        if ((!nonInput || gene.output >= INPUTS)
-            && (!nonOutput || gene.output >= INPUTS + OUTPUTS))
-            neurons.push_back(gene.output);
-    }*/
+    }
 
     return neurons[rand() % neurons.size()];    //Does this need to be a pointer or just the val?
 }
@@ -401,21 +357,12 @@ double Genome::weights(Genome genome) {
         for (int j = 0; j < genome.genes.size(); j++) {
             Gene gene2 = genome.genes[j];
             if (gene1.innovation == gene2.innovation) {
-                sum += std::fabs(gene1.weight - gene2.weight); //std::fabs is abs() on a float
+                sum += std::abs(gene1.weight - gene2.weight); //std::fabs is abs() on a float, too bad it doesn't exist pre C++11
                 coincident++;
                 break;
             }
         }
-    }/*
-    for (Gene gene1 : genes) {
-        for (Gene gene2 : genome.genes) {
-            if (gene1.innovation == gene2.innovation) {
-                sum += std::fabs(gene1.weight - gene2.weight); //std::fabs is abs() on a float
-                coincident++;
-                break;
-            }
-        }
-    }*/
+    }
     if (sum == 0 && coincident == 0)    //since  0.0/0.0 in C++ is -nan ...
         return 0;
     else

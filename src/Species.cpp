@@ -47,8 +47,10 @@ Genome Species::breedChild() {
 void Species::calculateAverageFitness() {
     double total = 0.0;
 
-    for (Genome genome : genomes)
+    for (int i = 0; i < genomes.size(); i++) {
+        Genome genome = genomes[i];
         total += genome.globalRank;
+    }
 
     averageFitness = total / genomes.size();
 }
@@ -62,8 +64,10 @@ Genome Species::crossover(Genome g1, Genome g2) {
     Genome child;   //The new child
     bool skipDoup = false;  //Some genes are identical across g1 & g2, this avoids adding them twice
 
-    for (Gene gene1 : g1.genes) {
-        for (Gene gene2 : g2.genes) {
+    for (int i = 0; i < g1.genes.size(); i++) {
+        Gene gene1 = g1.genes[i];
+        for (int j = 0; j < g2.genes.size(); j++) {
+            Gene gene2 = g2.genes[j];
             if (gene1.innovation == gene2.innovation) {
                 if (rand() % 2 == 1 && gene2.enabled) {  //if true
                     child.genes.push_back(gene2.clone());
