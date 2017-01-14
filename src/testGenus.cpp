@@ -50,9 +50,13 @@ int main() {
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genus::removeStaleSpecies()" << std::endl;
     int i = 0;
-    for (Species& s : Genus::species)
-        for (Genome& genome : s.genomes)
+    for (int j = 0; j < Genus::species.size(); j++) {
+        Species& s = Genus::species[j];
+        for (int k = 0; k < s.genomes.size(); k++) {
+            Genome& genome = s.genomes[k];
             genome.fitness = i++;
+        }
+    }
 
     Genus::removeStaleSpecies();
     std::cout << Genus::backup() << "\n" << std::endl;
@@ -64,8 +68,9 @@ int main() {
 
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genus::cullSpecies()" << std::endl;
-    for (Species& s : Genus::species) { //Add extra Genomes for testing
-        Genome g;
+    for (int j = 0; j < Genus::species.size(); j++) {
+        Species& s = Genus::species[j];
+        Genome g;   //Add extra Genomes for testing
         s.genomes.push_back(g);
     }
     Genus::cullSpecies(true);

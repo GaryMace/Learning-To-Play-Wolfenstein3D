@@ -22,8 +22,8 @@ int main() {
     std::vector<double> out = g1.evaluateNetwork(inputs);
     std::cout << "g1 evalNetwork size (expected 8): " << out.size() << std::endl;
     std::cout << "g1 output vals (expected eight default vals i.e. 0): ";
-    for (double outVal : out)
-        std::cout << outVal << " ";
+    for (int i = 0; i < out.size(); i++)
+        std:cout << out[i] << " ";
     std::cout << std::endl;
 
     std::cout << "g1 network size instantiated (expected 12): " << g1.network.size() << "\n" << std::endl;
@@ -41,12 +41,16 @@ int main() {
 
     std::cout << std::endl;
     std::cout << "g1 before node mutate: " << std::endl;
-    for (Gene gene : g1.genes)
+    for (int i = 0; i < g1.genes.size(); i++) {
+        Gene gene = g1.genes[i];
         std::cout << gene.backup() << std::endl;
+    }
     std::cout << "g1 after node mutate: " << std::endl;
     g1.nodeMutate();
-    for (Gene gene : g1.genes)
+    for (int i = 0; i < g1.genes.size(); i++) {
+        Gene gene = g1.genes[i];
         std::cout << gene.backup() << "\n" << std::endl;
+    }
 
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::randomNeuron()" << std::endl;
@@ -55,43 +59,53 @@ int main() {
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::pointMutate()" << std::endl;
     std::cout << "g1 before point mutate: " << std::endl;
-    for (Gene gene : g1.genes)
+    for (int i = 0; i < g1.genes.size(); i++) {
+        Gene gene = g1.genes[i];
         std::cout << gene.backup() << std::endl;
+    }
     g1.pointMutate();
     std::cout << "g1 after point mutate: " << std::endl;
-    for (Gene gene : g1.genes)
+    for (int i = 0; i < g1.genes.size(); i++) {
+        Gene gene = g1.genes[i];
         std::cout << gene.backup() << "\n" << std::endl;
-
+    }
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::linkMutate()" << std::endl;
     std::cout << "g1 before link mutate(forceBias - false): " << std::endl;
-    for (Gene gene : g1.genes)
+    for (int i = 0; i < g1.genes.size(); i++) {
+        Gene gene = g1.genes[i];
         std::cout << gene.backup() << std::endl;
+    }
     g1.linkMutate(false);
     std::cout << "g1 after link mutate(forceBias - false): " << std::endl;
-    for (Gene gene : g1.genes)
+    for (int i = 0; i < g1.genes.size(); i++) {
+        Gene gene = g1.genes[i];
         std::cout << gene.backup() << std::endl;
-
+    }
     std::cout << "g1 before link mutate(forceBias - true): " << std::endl;
-    for (Gene gene : g1.genes)
+    for (int i = 0; i < g1.genes.size(); i++) {
+        Gene gene = g1.genes[i];
         std::cout << gene.backup() << std::endl;
-    g1.linkMutate(true);
+    }    g1.linkMutate(true);
     std::cout << "g1 after link mutate(forceBias - true): " << std::endl;
-    for (Gene gene : g1.genes)
+    for (int i = 0; i < g1.genes.size(); i++) {
+        Gene gene = g1.genes[i];
         std::cout << gene.backup() << std::endl;
-
+    }
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::mutateEnableDisable()" << std::endl;
     g1.mutateEnableDisable(true);
-    for (Gene gene : g1.genes)
+    for (int i = 0; i < g1.genes.size(); i++) {
+        Gene gene = g1.genes[i];
         std::cout << gene.backup() << std::endl;
-
+    }
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::mutate()" << std::endl;
     g1.mutate();
-    for (Gene gene : g1.genes)
+    for (int i = 0; i < g1.genes.size(); i++) {
+        Gene gene = g1.genes[i];
         std::cout << gene.backup() << std::endl;
-
+    }
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::containsLink()" << std::endl;
     Gene testGene;
