@@ -79,6 +79,16 @@ int Genome::compareByPointer(const Genome *o1, const Genome *o2) {
     return cmp == 0.0 ? 0 : cmp > 0.0 ? 1 : -1;
 }
 
+void Genome::initMutationRates() {
+    this->mutationRates[CONNECTIONS] = MUTATE_CONNECTIONS_CHANCE;
+    this->mutationRates[LINK] = MUTATE_LINK_CHANCE;
+    this->mutationRates[BIAS] = MUTATE_BIAS_CHANCE;
+    this->mutationRates[NODE] = MUTATE_NODE_CHANCE;
+    this->mutationRates[ENABLE] = MUTATE_ENABLE_CHANCE;
+    this->mutationRates[DISABLE] = MUTATE_DISABLE_CHANCE;
+    this->mutationRates[STEP] = STEP_SIZE;
+}
+
 void Genome::generateNetwork() {
     for (int i = 0; i < INPUTS; i++) {  //Make Neurons for all inputs
         Neuron n;

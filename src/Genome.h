@@ -33,6 +33,7 @@ public:
     static int compare(const Genome &o1, const Genome &o2);
     static int compareByPointer(const Genome *o1, const Genome *o2);
 
+    void initMutationRates();
     void generateNetwork(); //has Genome param in marIO
     std::vector<double> evaluateNetwork(std::vector<double> inputs);  //Has network, inputs param in MarIO
     void nodeMutate();  //MarIO: genome
@@ -46,9 +47,6 @@ public:
     double weights(Genome genome);   //MarIO: genes1[], genes2[]
     bool sameSpecies(Genome genome);    //MarIO: genome1, genome2
 
-    Genome() : mutationRates {
-        MUTATE_CONNECTIONS_CHANCE, MUTATE_LINK_CHANCE, MUTATE_BIAS_CHANCE,
-                MUTATE_NODE_CHANCE, MUTATE_ENABLE_CHANCE, MUTATE_DISABLE_CHANCE,
-                STEP_SIZE }, maxNeuron(0), globalRank(0), fitness(0.0) {}
+    Genome() : initMutationRates(), maxNeuron(0), globalRank(0), fitness(0.0) {}
 };
 #endif  //TESTBENCH_GENOME_H
