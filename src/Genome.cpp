@@ -131,10 +131,15 @@ std::vector<double> Genome::evaluateNetwork(std::vector<double> input) {
 
         Neuron& n1 = it->second;    //Neuron& grabs the address of the value from the hashmap
         double sum = 0.0;
+        for (int i = 0; i < n1.inputs.size(); i++) {
+            Gene incoming = n1.inputs[i];   //for each Gene of Neurons inputs
+            Neuron n2 = network[incoming.input];
+            sum += incoming.weight * n2.value;  //Get sum on Neuron
+        }/*
         for (Gene incoming : n1.inputs) {   //for each Gene of Neurons inputs
             Neuron n2 = network[incoming.input];
             sum += incoming.weight * n2.value;  //Get sum on Neuron
-        }
+        }*/
         if (!n1.inputs.empty())
             n1.value = Neuron::sigmoid(sum);    //which is needed for this step! i.e. in-place map edit
     }
@@ -146,10 +151,15 @@ std::vector<double> Genome::evaluateNetwork(std::vector<double> input) {
 
         Neuron& n1 = it->second;
         double sum = 0.0;
+        for (int i = 0; i < n1.inputs.size(); i++) {
+            Gene incoming = n1.inputs[i];   //for each Gene of Neurons inputs
+            Neuron n2 = network[incoming.input];
+            sum += incoming.weight * n2.value;  //Get sum on Neuron
+        }/*
         for (Gene incoming : n1.inputs) {   //for each input Gene of Neuron
             Neuron n2 = network[incoming.input];
             sum += incoming.weight * n2.value;
-        }
+        }*/
 
         if (!n1.inputs.empty())
             n1.value = Neuron::sigmoid(sum);
@@ -189,12 +199,19 @@ void Genome::nodeMutate() {
 void Genome::pointMutate() {
     double step = mutationRates[STEP];
 
-    for (Gene& gene : genes) {
+    for (int i = 0; i < genes.size(); i++) {
+        Gene& gene = genes[i];
         if (Genus::nextDouble() < PERTURBATION_CHANCE)
             gene.weight += Genus::nextDouble() * step * 2.0 - step;
         else
             gene.weight = Genus::nextDouble() * 4.0 - 2.0;
     }
+    /*for (Gene& gene : genes) {
+        if (Genus::nextDouble() < PERTURBATION_CHANCE)
+            gene.weight += Genus::nextDouble() * step * 2.0 - step;
+        else
+            gene.weight = Genus::nextDouble() * 4.0 - 2.0;
+    }*/
 }
 
 void Genome::linkMutate(bool forceBias) {
@@ -274,9 +291,14 @@ void Genome::mutate() {
 void Genome::mutateEnableDisable(bool enable) {
     std::vector<Gene*> candidates;  //vector of pointers
 
-    for (Gene& gene : genes)    //for each actual obj ref
+    for (int i = 0; i < genes.size(); i++) {
+        Gene& gene = genes[i];
         if (gene.enabled != enable)
-            candidates.push_back(&gene);    //store obj ref
+            candidates.push_back(&gene);
+    }
+//    for (Gene& gene : genes)    //for each actual obj ref
+//        if (gene.enabled != enable)
+//            candidates.push_back(&gene);    //store obj ref
 
     if (candidates.empty())
         return;
@@ -287,9 +309,14 @@ void Genome::mutateEnableDisable(bool enable) {
 }
 
 bool Genome::containsLink(Gene link) {
-    for (Gene gene : genes)
+    for (int i = 0; i < genes.size(); i++) {
+        Gene gene = genes[i];
         if (gene.input == link.input && gene.output == link.output)
             return true;
+    }/*
+    for (Gene gene : genes)
+        if (gene.input == link.input && gene.output == link.output)
+            return true;*/
     return false;
 }
 
@@ -297,6 +324,20 @@ double Genome::disjoint(Genome genome) {
     double disjointGenes = 0.0;
     bool isDisjoint = true;
 
+    for (int i = 0; i < genes.size(); i++) {
+        Gene gene1 = genes[i];
+        for (int j = 0; j < genome.genes.size(); i++) {
+            Gene gene2 = genome.genes[j];
+            if (gene1.innovation == gene2.innovation) {
+                isDisjoint = false;
+                break;
+            }
+        }
+        if (isDisjoint) {
+            disjointGenes++;
+            isDisjoint = true;
+        }
+    }/*
     for (Gene gene1 : genes) {
         for (Gene gene2 : genome.genes) {
             if (gene1.innovation == gene2.innovation) {
@@ -308,7 +349,7 @@ double Genome::disjoint(Genome genome) {
             disjointGenes++;
             isDisjoint = true;
         }
-    }
+    }*/
 
     return disjointGenes / std::max(genes.size(), genome.genes.size());
 }
@@ -325,6 +366,15 @@ int Genome::randomNeuron(bool nonInput, bool nonOutput) {
         for (int i = 0; i < OUTPUTS; ++i)
             neurons.push_back(INPUTS + i);
 
+    for (int i = 0; i < genes.size(); i++) {
+        Gene gene = genes[i];
+        if ((!nonInput || gene.input >= INPUTS)
+            && (!nonOutput || gene.input >= INPUTS + OUTPUTS))
+            neurons.push_back(gene.input);
+        if ((!nonInput || gene.output >= INPUTS)
+            && (!nonOutput || gene.output >= INPUTS + OUTPUTS))
+            neurons.push_back(gene.output);
+    }/*
     for (Gene gene : genes) {
         if ((!nonInput || gene.input >= INPUTS)
             && (!nonOutput || gene.input >= INPUTS + OUTPUTS))
@@ -332,7 +382,7 @@ int Genome::randomNeuron(bool nonInput, bool nonOutput) {
         if ((!nonInput || gene.output >= INPUTS)
             && (!nonOutput || gene.output >= INPUTS + OUTPUTS))
             neurons.push_back(gene.output);
-    }
+    }*/
 
     return neurons[rand() % neurons.size()];    //Does this need to be a pointer or just the val?
 }
@@ -341,6 +391,17 @@ double Genome::weights(Genome genome) {
     double sum = 0.0;
     double coincident = 0.0;
 
+    for (int i = 0; i < genes.size(); i++) {
+        Gene gene1 = genes[i];
+        for (int j = 0; j < genome.genes.size(); j++) {
+            Gene gene2 = genome.genes[j];
+            if (gene1.innovation == gene2.innovation) {
+                sum += std::fabs(gene1.weight - gene2.weight); //std::fabs is abs() on a float
+                coincident++;
+                break;
+            }
+        }
+    }/*
     for (Gene gene1 : genes) {
         for (Gene gene2 : genome.genes) {
             if (gene1.innovation == gene2.innovation) {
@@ -349,7 +410,7 @@ double Genome::weights(Genome genome) {
                 break;
             }
         }
-    }
+    }*/
     if (sum == 0 && coincident == 0)    //since  0.0/0.0 in C++ is -nan ...
         return 0;
     else
