@@ -733,7 +733,7 @@ typedef struct statestruct
 //
 //---------------------
 
-typedef struct statstruct
+typedef struct statstruct   //static objects on map
 {
     byte      tilex,tiley;
     short     shapenum;           // if shapenum == -1 the obj has been removed
@@ -775,7 +775,7 @@ typedef struct objstruct
     activetype  active;
     short       ticcount;
     classtype   obclass;
-    statetype   *state;
+    statetype   *state;             //Is it a guard, officer, dog etc...
 
     uint32_t    flags;              // FL_SHOOTABLE, etc
 
@@ -890,6 +890,23 @@ extern int mapon;
 /*
 =============================================================================
 
+                         NEATDoop DEFINITIONS
+
+=============================================================================
+*/
+
+typedef struct visactorstruct
+{
+    statetype   *actstate;             //Is it a guard, officer, dog etc... if so what state is it in
+    uint32_t    flags;              // FL_SHOOTABLE, etc
+    word        tileX,tileY;
+    short       hitPoints;
+} visactor;
+
+extern visactor doopvislist[250];             //visible actor list
+/*
+=============================================================================
+
                              WL_MAIN DEFINITIONS
 
 =============================================================================
@@ -939,7 +956,6 @@ boolean         LoadTheGame(FILE *file,int x,int y);
 boolean         SaveTheGame(FILE *file,int x,int y);
 void            ShowViewSize (int width);
 void            ShutdownId (void);
-
 
 /*
 =============================================================================
@@ -1000,7 +1016,7 @@ void UpdateSoundLoc(void);
 
 extern  byte            tilemap[MAPSIZE][MAPSIZE];      // wall values only
 extern  byte            spotvis[MAPSIZE][MAPSIZE];
-extern  objtype         *actorat[MAPSIZE][MAPSIZE];
+extern  objtype         *actorat[MAPSIZE][MAPSIZE];     //Enemies list
 
 extern  objtype         *player;
 
@@ -1014,13 +1030,13 @@ extern  int             lastgamemusicoffset;
 //
 extern  int         controlx,controly;              // range from -100 to 100
 extern  boolean     buttonstate[NUMBUTTONS];
-extern  objtype     objlist[MAXACTORS];
+extern  objtype     objlist[MAXACTORS];             //actor list
 extern  boolean     buttonheld[NUMBUTTONS];
 extern  exit_t      playstate;
 extern  boolean     madenoise;
 extern  statobj_t   statobjlist[MAXSTATS];
 extern  statobj_t   *laststatobj;
-extern  objtype     *newobj,*killerobj;
+extern  objtype     *newobj,*killerobj;     //newobj is a new enemy/other spawned
 extern  doorobj_t   doorobjlist[MAXDOORS];
 extern  doorobj_t   *lastdoorobj;
 extern  int         godmode;

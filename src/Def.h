@@ -5,12 +5,13 @@
 #ifndef TESTBENCH_DEF_H
 #define TESTBENCH_DEF_H
 
-#define POPULATION 300  //TODO: refactor
+#define POPULATION 10  //TODO: refactor
 #define STALE_SPECIES 15
 #define TIMEOUT 20
 #define MUTATION_TYPES 7    //consider moving later
 #define INPUTS 4    //refactor, not correct
 #define OUTPUTS 8   //num buttons, refactor not correct
+#define NUMBUTTONS 8
 
 #define DELTA_DISJOINT 2.0
 #define DELTA_WEIGHTS  0.4

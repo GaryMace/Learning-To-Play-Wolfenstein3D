@@ -44,12 +44,12 @@ std::string Genome::backup() {
     out += "\n\t\t\t\t\tnetwork={";
     for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
         str = static_cast<std::ostringstream*>(&(std::ostringstream() << it->first))->str();
-        out += "\n\t\t\t\t\t{key=" + str + ",value=" + it->second.backup() + "\t\t},";
+        out += "\n\t\t\t\t\t\t{key=" + str + ",value=" + it->second.backup() + "\t\t\t\t\t\t},";
     }
     if (!network.empty())
         out = out.substr(0, out.length() - 1);  //Remove last ","
 
-    out += "}\n\t\t\t\t}";  //close network then Genome brackets
+    out += "\n\t\t\t\t\t}\n\t\t\t\t}";  //close network then Genome brackets
 
     return out;
 }

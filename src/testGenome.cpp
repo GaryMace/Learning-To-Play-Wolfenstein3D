@@ -23,7 +23,7 @@ int main() {
     std::cout << "g1 evalNetwork size (expected 8): " << out.size() << std::endl;
     std::cout << "g1 output vals (expected eight default vals i.e. 0): ";
     for (int i = 0; i < out.size(); i++)
-        std:cout << out[i] << " ";
+        std::cout << out[i] << " ";
     std::cout << std::endl;
 
     std::cout << "g1 network size instantiated (expected 12): " << g1.network.size() << "\n" << std::endl;

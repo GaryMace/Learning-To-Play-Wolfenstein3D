@@ -1,5 +1,6 @@
 // WL_DRAW.C
 
+#include <fstream>
 #include "wl_def.h"
 #pragma hdrstop
 
@@ -880,6 +881,8 @@ typedef struct
 visobj_t vislist[MAXVISABLE];
 visobj_t *visptr,*visstep,*farthest;
 
+visactor *doopvisptr;     //{'-'} doopvisptr is our way of iterating through the arr[] struct, adding new structs as we go
+
 void DrawScaleds (void)
 {
     int      i,least,numvisable,height;
@@ -890,7 +893,7 @@ void DrawScaleds (void)
     objtype   *obj;
 
     visptr = &vislist[0];
-
+    doopvisptr = &doopvislist[0]; //{'-'} Doop's list of things it can see
 //
 // place static objects
 //
@@ -922,7 +925,7 @@ void DrawScaleds (void)
 
         if (visptr < &vislist[MAXVISABLE-1])    // don't let it overflow
         {
-            visptr->flags = (short) statptr->flags;
+            visptr->flags = (short) statptr->flags; //Flags are things that enemies drop when dead etc..
             visptr++;
         }
     }
@@ -936,9 +939,24 @@ void DrawScaleds (void)
             continue;                                               // no shape
 
         spotloc = (obj->tilex<<mapshift)+obj->tiley;   // optimize: keep in struct?
-        visspot = &spotvis[0][0]+spotloc;
+        visspot = &spotvis[0][0]+spotloc;              //Index forward from base address
         tilespot = &tilemap[0][0]+spotloc;
 
+        ////{'-'} Doop definitions, get info of visable actors each frame
+        doopvisptr->tileX = obj->tilex;
+        doopvisptr->tileY = obj->tiley;
+        doopvisptr->hitPoints = obj->hitpoints;
+        doopvisptr->actstate = obj->state;
+        if (doopvisptr < &doopvislist[MAXVISABLE - 1]) {   //prevents overflow
+            doopvisptr++;
+            std::ofstream filewrite;
+            filewrite.open("test.txt");
+            filewrite << "Vis actor found: {tileX=" << doopvisptr->tileX
+                      << ",tileY=" << doopvisptr->tileY << ",hitpoints=" << doopvisptr->hitPoints << "\n";
+            filewrite.close();
+        }
+
+        ////////////////////
         //
         // could be in any of the nine surrounding tiles
         //
@@ -976,7 +994,7 @@ void DrawScaleds (void)
             obj->flags |= FL_VISABLE;
         }
         else
-            obj->flags &= ~FL_VISABLE;
+            obj->flags &= ~FL_VISABLE;  // ~ is a class deconstructor?
     }
 
 //
@@ -1584,6 +1602,7 @@ void    ThreeDRefresh (void)
 // draw all the scaled images
 //
     DrawScaleds();                  // draw scaled stuff
+    //TODO: Put callback here
 
 #if defined(USE_FEATUREFLAGS) && defined(USE_RAIN)
     if(GetFeatureFlags() & FF_RAIN)

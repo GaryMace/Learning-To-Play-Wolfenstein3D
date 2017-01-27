@@ -7,12 +7,12 @@
 
 
 std::string Neuron::backup() {
-    std::string out = "\n\t\t\tNeuron{";
+    std::string out = "\n\t\t\t\t\t\t\tNeuron{";
 
     std::string str =
             static_cast<std::ostringstream*>(&(std::ostringstream() << value))->str();
     out += "value=" + str + ",";
-    out += "\n\t\t\t\tinputs={";
+    out += "\n\t\t\t\t\t\t\t\tinputs={";
     for (int i = 0; i < inputs.size(); i++) {
         Gene gene = inputs[i];
         if (i == inputs.size() - 1)
@@ -21,7 +21,7 @@ std::string Neuron::backup() {
             out += gene.backup() + ",";
     }
 
-    out += "}\n";
+    out += "}\n\t\t\t\t\t\t\t}\n";
     return out;
 }
 

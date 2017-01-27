@@ -36,6 +36,15 @@ int main() {
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genus::initialiseGenus()" << std::endl;
     Genus::initializeGenus();
+
+    for (int i = 0; i < Genus::species.size(); i++) {
+        Species& species = Genus::species[i];
+        for (int j = 0; j < species.genomes.size(); j++) {
+            Genome& genome = species.genomes[j];
+            genome.generateNetwork();
+        }
+    }
+
     std::cout << Genus::backup() << "\n" << std::endl;
 
     std::cout << "/////////////////////////////////////////" << std::endl;
