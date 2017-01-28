@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <sstream>
 #include <iostream>
+#include <cmath>
 #include "Genome.h"
 #include "Genus.h"
 
@@ -357,7 +358,7 @@ double Genome::weights(Genome genome) {
         for (int j = 0; j < genome.genes.size(); j++) {
             Gene gene2 = genome.genes[j];
             if (gene1.innovation == gene2.innovation) {
-                sum += std::abs(gene1.weight - gene2.weight); //std::fabs is abs() on a float, too bad it doesn't exist pre C++11
+                sum += std::fabs(gene1.weight - gene2.weight); //std::fabs is abs() on a float, too bad it doesn't exist pre C++11
                 coincident++;
                 break;
             }
