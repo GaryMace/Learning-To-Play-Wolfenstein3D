@@ -1,6 +1,7 @@
 // WL_DRAW.C
 
 #include <fstream>
+#include <iostream>
 #include "wl_def.h"
 #pragma hdrstop
 
@@ -881,7 +882,10 @@ typedef struct
 visobj_t vislist[MAXVISABLE];
 visobj_t *visptr,*visstep,*farthest;
 
-visactor *doopvisptr;     //{'-'} doopvisptr is our way of iterating through the arr[] struct, adding new structs as we go
+//{'-'} provide the extern definitions
+visactor doopvislist[MAXVISABLE];
+visactor *doopvisptr;
+int doopnumvis;
 
 void DrawScaleds (void)
 {
@@ -894,6 +898,7 @@ void DrawScaleds (void)
 
     visptr = &vislist[0];
     doopvisptr = &doopvislist[0]; //{'-'} Doop's list of things it can see
+    doopnumvis = 0;
 //
 // place static objects
 //
@@ -941,22 +946,6 @@ void DrawScaleds (void)
         spotloc = (obj->tilex<<mapshift)+obj->tiley;   // optimize: keep in struct?
         visspot = &spotvis[0][0]+spotloc;              //Index forward from base address
         tilespot = &tilemap[0][0]+spotloc;
-
-        ////{'-'} Doop definitions, get info of visable actors each frame
-        doopvisptr->tileX = obj->tilex;
-        doopvisptr->tileY = obj->tiley;
-        doopvisptr->hitPoints = obj->hitpoints;
-        doopvisptr->actstate = obj->state;
-        if (doopvisptr < &doopvislist[MAXVISABLE - 1]) {   //prevents overflow
-            doopvisptr++;
-            std::ofstream filewrite;
-            filewrite.open("test.txt");
-            filewrite << "Vis actor found: {tileX=" << doopvisptr->tileX
-                      << ",tileY=" << doopvisptr->tileY << ",hitpoints=" << doopvisptr->hitPoints << "\n";
-            filewrite.close();
-        }
-
-        ////////////////////
         //
         // could be in any of the nine surrounding tiles
         //
@@ -992,6 +981,23 @@ void DrawScaleds (void)
                 visptr++;
             }
             obj->flags |= FL_VISABLE;
+
+            if (obj->flags & FL_SHOOTABLE) {    //if the enemy is visable without obstructions
+                ////{'-'} Doop definitions, get info of visable actors each frame
+                doopvisptr->tilex = obj->tilex;
+                doopvisptr->tiley = obj->tiley;
+                doopvisptr->hitpoints = obj->hitpoints;
+                doopvisptr->actstate = obj->state;
+                if (doopvisptr < &doopvislist[MAXVISABLE - 1]) {   //prevents overflow
+                    std::cout << "enemyx=" << doopvisptr->tilex << "enemyy="
+                              << doopvisptr->tiley << "enemyhp" << doopvisptr->hitpoints << std::endl;
+                    std::cout << "myx=" << player->tilex << "myy="
+                              << player->tiley << "myhp" << player->hitpoints << std::endl;
+                    doopvisptr++;
+                }
+                doopnumvis++;
+                ////////////////////
+            }
         }
         else
             obj->flags &= ~FL_VISABLE;  // ~ is a class deconstructor?
@@ -1602,7 +1608,6 @@ void    ThreeDRefresh (void)
 // draw all the scaled images
 //
     DrawScaleds();                  // draw scaled stuff
-    //TODO: Put callback here
 
 #if defined(USE_FEATUREFLAGS) && defined(USE_RAIN)
     if(GetFeatureFlags() & FF_RAIN)

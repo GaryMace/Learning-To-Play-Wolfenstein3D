@@ -899,11 +899,13 @@ typedef struct visactorstruct
 {
     statetype   *actstate;             //Is it a guard, officer, dog etc... if so what state is it in
     uint32_t    flags;              // FL_SHOOTABLE, etc
-    word        tileX,tileY;
-    short       hitPoints;
+    word        tilex,tiley;
+    short       hitpoints;
 } visactor;
 
 extern visactor doopvislist[250];             //visible actor list
+extern visactor *doopvisptr;
+extern int doopnumvis;
 /*
 =============================================================================
 

@@ -1,5 +1,6 @@
 // WL_PLAY.C
 
+#include <iostream>
 #include "wl_def.h"
 #pragma hdrstop
 
@@ -211,7 +212,7 @@ int songs[] = {
     XFUNKIE_MUS,
     XDEATH_MUS,
     XGETYOU_MUS,                // DON'T KNOW
-    ULTIMATE_MUS,               // Trans Gr”sse
+    ULTIMATE_MUS,               // Trans Grï¿½sse
 
     DUNGEON_MUS,
     GOINGAFT_MUS,
@@ -1153,12 +1154,12 @@ void FinishPaletteShifts (void)
 
 void DoActor (objtype * ob)
 {
-    void (*think) (objtype *);
+    void (*think) (objtype *);  //TODO: cast pointer to function pointer?
 
-    if (!ob->active && !areabyplayer[ob->areanumber])
+    if (!ob->active && !areabyplayer[ob->areanumber])   //TODO: does this mean if actor isn't nearby dont react?
         return;
 
-    if (!(ob->flags & (FL_NONMARK | FL_NEVERMARK)))
+    if (!(ob->flags & (FL_NONMARK | FL_NEVERMARK))) //TODO: ?? whut
         actorat[ob->tilex][ob->tiley] = NULL;
 
 //
@@ -1303,7 +1304,7 @@ void PlayLoop (void)
         UpdatePaletteShifts ();
 
         ThreeDRefresh ();
-
+        std::cout << "num enemies visable=" << doopnumvis << std::endl;
         //
         // MAKE FUNNY FACE IF BJ DOESN'T MOVE FOR AWHILE
         //
