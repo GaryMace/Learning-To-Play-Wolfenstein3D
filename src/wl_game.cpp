@@ -2,7 +2,7 @@
 
 #include <math.h>
 #include "wl_def.h"
-#include "NEURON.h"
+#include "Neuron.h"
 #include <SDL_mixer.h>
 #pragma hdrstop
 
@@ -227,8 +227,8 @@ static void ScanInfoPlane(void)
     int      tile;
     word     *start;
 
-    start = mapsegs[1];
-    for (y=0;y<mapheight;y++)
+    start = mapsegs[1]; //mapseg from id_vh.h
+    for (y=0;y<mapheight;y++)   //mapheight from wl_def.h
     {
         for (x=0;x<mapwidth;x++)
         {
@@ -1369,14 +1369,11 @@ void Died (void)
 
 void GameLoop (void)
 {
-    Neuron n;
     boolean died;
 #ifdef MYPROFILE
     clock_t start,end;
 #endif
 
-    n.foo();
-    n.bar(10, 10);
 restartgame:
     ClearMemory ();
     SETFONTCOLOR(0,15);

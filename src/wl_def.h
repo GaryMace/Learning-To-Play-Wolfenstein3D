@@ -895,17 +895,43 @@ extern int mapon;
 =============================================================================
 */
 
-typedef struct visactorstruct
-{
+//maybe add an int flag field so that if we get the chance to demo what Doop can see later it will be
+//easier to id what color box to display?
+typedef struct visactorstruct {
     statetype   *actstate;             //Is it a guard, officer, dog etc... if so what state is it in
     uint32_t    flags;              // FL_SHOOTABLE, etc
     word        tilex,tiley;
     short       hitpoints;
 } visactor;
 
-extern visactor doopvislist[250];             //visible actor list
+typedef struct visstatstruct {
+    byte      tilex,tiley;
+    short     shapenum;           // if shapenum == -1 the obj has been removed
+    byte      *visspot;
+    uint32_t  flags;
+    byte      itemnumber;
+} visstat;
+
+typedef struct visdoorstruct {
+    byte     tilex,tiley;
+    boolean  vertical;
+    byte     lock;
+    doortype action;
+    short    ticcount;
+} visdoor;
+
+extern visactor doopvislist[MAXACTORS];             //visible actor list
 extern visactor *doopvisptr;
-extern int doopnumvis;
+
+extern visstat doopvisstat[MAXSTATS];               //visible pickups list
+extern visstat *doopstatptr;
+
+extern visdoor doopvisdoor[MAXDOORS];               //visible doors list
+extern visdoor *doopdoorptr;
+
+extern int doopactsvis;
+extern int doopstatsvis;
+extern int doopdoorsvis;
 /*
 =============================================================================
 

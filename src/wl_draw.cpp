@@ -883,9 +883,14 @@ visobj_t vislist[MAXVISABLE];
 visobj_t *visptr,*visstep,*farthest;
 
 //{'-'} provide the extern definitions
-visactor doopvislist[MAXVISABLE];
+visactor doopvislist[MAXACTORS];
 visactor *doopvisptr;
-int doopnumvis;
+int doopactsvis;
+
+visstat doopvisstat[MAXSTATS];
+visstat *doopstatptr;
+int doopstatsvis;
+//{'-'} //////////////////////////////
 
 void DrawScaleds (void)
 {
@@ -898,7 +903,10 @@ void DrawScaleds (void)
 
     visptr = &vislist[0];
     doopvisptr = &doopvislist[0]; //{'-'} Doop's list of things it can see
-    doopnumvis = 0;
+    doopactsvis = 0;
+
+    doopstatptr = &doopvisstat[0];  //{'-'} Static objects (ammo, health, chairs) that doop can see
+    doopstatsvis = 0;
 //
 // place static objects
 //
@@ -932,6 +940,27 @@ void DrawScaleds (void)
         {
             visptr->flags = (short) statptr->flags; //Flags are things that enemies drop when dead etc..
             visptr++;
+        }
+
+        //{'-'} keep track of relevant visible static items..
+        if (statptr->shapenum == bo_key1
+            || statptr->shapenum == bo_key2
+            || statptr->shapenum == bo_food
+            || statptr->shapenum == bo_clip
+            || statptr->shapenum == bo_machinegun
+            || statptr->shapenum == bo_chaingun
+            || statptr->shapenum == bo_fullheal) {
+
+            doopstatptr->shapenum = statptr->shapenum;
+            doopstatptr->tilex = statptr->tilex;
+            doopstatptr->tiley = statptr->tiley;
+            doopstatptr->flags = statptr->flags;
+            doopstatptr->itemnumber = statptr->itemnumber;
+            doopstatptr->visspot = statptr->visspot;
+            std::cout << "item at tilex=" << doopstatptr->tilex << ", tiley="
+                      << doopstatptr->tiley << std::endl;
+            doopstatptr++;
+            doopstatsvis++;
         }
     }
 
@@ -972,7 +1001,7 @@ void DrawScaleds (void)
             if (obj->state->rotate)
                 visptr->shapenum += CalcRotate (obj);
 
-            if (visptr < &vislist[MAXVISABLE-1])    // don't let it overflow
+            if (visptr < &vislist[MAXACTORS-1])    // don't let it overflow
             {
                 visptr->flags = (short) obj->flags;
 #ifdef USE_DIR3DSPR
@@ -989,13 +1018,13 @@ void DrawScaleds (void)
                 doopvisptr->hitpoints = obj->hitpoints;
                 doopvisptr->actstate = obj->state;
                 if (doopvisptr < &doopvislist[MAXVISABLE - 1]) {   //prevents overflow
-                    std::cout << "enemyx=" << doopvisptr->tilex << "enemyy="
-                              << doopvisptr->tiley << "enemyhp" << doopvisptr->hitpoints << std::endl;
-                    std::cout << "myx=" << player->tilex << "myy="
-                              << player->tiley << "myhp" << player->hitpoints << std::endl;
-                    doopvisptr++;
+                    std::cout << "enemyx=" << doopvisptr->tilex << ", enemyy="
+                              << doopvisptr->tiley << ", enemyhp" << doopvisptr->hitpoints << std::endl;
+                    std::cout << "myx=" << player->tilex << ", myy="
+                              << player->tiley << ", myhp" << player->hitpoints << std::endl;
+                    doopvisptr++;   //Increment the address pointed to
                 }
-                doopnumvis++;
+                doopactsvis++;
                 ////////////////////
             }
         }
