@@ -943,9 +943,21 @@ void DrawScaleds (void)
         }
 
         std::cout << "item visible: " << statptr->shapenum << std::endl;
+        std::cout << "item food: " << bo_food << std::endl;
+        std::cout << "item fullheal: " << bo_fullheal << std::endl;
+        std::cout << "item clip: " << bo_clip << std::endl;
+        std::cout << "item clip2: " << bo_clip2 << std::endl;
+        std::cout << "item chaing: " << bo_chaingun << std::endl;
+        std::cout << "item machineg: " << bo_machinegun << std::endl;
+        std::cout << "item key1: " << bo_key1 << std::endl;
+        std::cout << "item key2: " << bo_key2 << std::endl;
+        std::cout << "item key3: " << bo_key3 << std::endl;
+        std::cout << "item key4: " << bo_key4 << std::endl;
         //{'-'} keep track of relevant visible static items..
         if (statptr->shapenum == bo_key1
             || statptr->shapenum == bo_key2
+            || statptr->shapenum == bo_key3
+            || statptr->shapenum == bo_key4
             || statptr->shapenum == bo_food
             || statptr->shapenum == bo_clip
             || statptr->shapenum == bo_machinegun
