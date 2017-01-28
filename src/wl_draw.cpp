@@ -942,28 +942,18 @@ void DrawScaleds (void)
             visptr++;
         }
 
-        std::cout << "item visible: " << statptr->shapenum << std::endl;
-        std::cout << "item food: " << bo_food << std::endl;
-        std::cout << "item fullheal: " << bo_fullheal << std::endl;
-        std::cout << "item clip: " << bo_clip << std::endl;
-        std::cout << "item clip2: " << bo_clip2 << std::endl;
-        std::cout << "item chaing: " << bo_chaingun << std::endl;
-        std::cout << "item machineg: " << bo_machinegun << std::endl;
-        std::cout << "item key1: " << bo_key1 << std::endl;
-        std::cout << "item key2: " << bo_key2 << std::endl;
-        std::cout << "item key3: " << bo_key3 << std::endl;
-        std::cout << "item key4: " << bo_key4 << std::endl;
         //{'-'} keep track of relevant visible static items..
-        if (statptr->shapenum == bo_key1
-            || statptr->shapenum == bo_key2
-            || statptr->shapenum == bo_key3
-            || statptr->shapenum == bo_key4
-            || statptr->shapenum == bo_food
-            || statptr->shapenum == bo_clip
-            || statptr->shapenum == bo_machinegun
-            || statptr->shapenum == bo_chaingun
-            || statptr->shapenum == bo_fullheal) {
-
+        if (statptr->itemnumber == bo_key1
+            || statptr->itemnumber == bo_key2
+            || statptr->itemnumber == bo_key3
+            || statptr->itemnumber == bo_key4
+            || statptr->itemnumber == bo_food
+            || statptr->itemnumber == bo_clip
+            || statptr->itemnumber == bo_machinegun
+            || statptr->itemnumber == bo_chaingun
+            || statptr->itemnumber == bo_fullheal) {
+            std::cout << "located item: " << (int) statptr->itemnumber << "at x="
+                      << (int) statptr->tilex << ",y=" << (int) statptr->tiley << std::endl;
             doopstatptr->shapenum = statptr->shapenum;
             doopstatptr->tilex = statptr->tilex;
             doopstatptr->tiley = statptr->tiley;
