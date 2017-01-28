@@ -942,6 +942,7 @@ void DrawScaleds (void)
             visptr++;
         }
 
+        std::cout << "item visible: " << statptr->shapenum << std::endl;
         //{'-'} keep track of relevant visible static items..
         if (statptr->shapenum == bo_key1
             || statptr->shapenum == bo_key2
