@@ -920,18 +920,21 @@ typedef struct visdoorstruct {
     short    ticcount;
 } visdoor;
 
-extern visactor doopvislist[MAXACTORS];             //visible actor list
-extern visactor *doopvisptr;
+extern visactor doop_vislist[MAXACTORS];             //visible actor list
+extern visactor *doop_lastactptr;
+extern visactor *doop_visptr;
 
-extern visstat doopvisstat[MAXSTATS];               //visible pickups list
-extern visstat *doopstatptr;
+extern visstat doop_visstat[MAXSTATS];               //visible pickups list
+extern visstat *doop_laststatptr;
+extern visstat *doop_statptr;
 
-extern visdoor doopvisdoor[MAXDOORS];               //visible doors list
-extern visdoor *doopdoorptr;
+extern visdoor doop_visdoor[MAXDOORS];               //visible doors list
+extern visdoor *doop_lastdoorptr;
+extern visdoor *doop_doorptr;
 
-extern int doopactsvis;
-extern int doopstatsvis;
-extern int doopdoorsvis;
+extern int doop_actsvis;
+extern int doop_statsvis;
+extern int doop_doorsvis;
 /*
 =============================================================================
 
@@ -1043,7 +1046,7 @@ void UpdateSoundLoc(void);
 #define JOYSCALE                2
 
 extern  byte            tilemap[MAPSIZE][MAPSIZE];      // wall values only
-extern  byte            spotvis[MAPSIZE][MAPSIZE];
+extern  byte            spotvis[MAPSIZE][MAPSIZE];      //mapsize is 64
 extern  objtype         *actorat[MAPSIZE][MAPSIZE];     //Enemies list
 
 extern  objtype         *player;

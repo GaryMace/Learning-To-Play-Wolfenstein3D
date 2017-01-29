@@ -1304,7 +1304,14 @@ void PlayLoop (void)
         UpdatePaletteShifts ();
 
         ThreeDRefresh ();
-        std::cout << "num enemies visable=" << doopnumvis << std::endl;
+        int numEnemies = (int) (doop_lastactptr - &doop_vislist[0]);
+        int enemies[numEnemies];
+
+        for (visactor *tmp = &doop_vislist[0] ; tmp !=doop_lastactptr ; tmp++) {
+            int actLoc = (tmp->tilex<<mapshift)+tmp->tiley;   // optimize: keep in struct?
+            int myLoc = (player->tilex<<mapshift)+player->tiley;   // optimize: keep in struct?
+            std::cout << "dist: " << actLoc - myLoc << std::endl;
+        }
         //
         // MAKE FUNNY FACE IF BJ DOESN'T MOVE FOR AWHILE
         //

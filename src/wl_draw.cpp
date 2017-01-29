@@ -883,14 +883,15 @@ visobj_t vislist[MAXVISABLE];
 visobj_t *visptr,*visstep,*farthest;
 
 //{'-'} provide the extern definitions
-visactor doopvislist[MAXACTORS];
-visactor *doopvisptr;
-int doopactsvis;
+visactor doop_vislist[MAXACTORS];
+visactor *doop_visptr;
+visactor *doop_lastactptr;
+int doop_actsvis;
 
-visstat doopvisstat[MAXSTATS];
-visstat *doopstatptr;
-int doopstatsvis;
-//{'-'} //////////////////////////////
+visstat doop_visstat[MAXSTATS];
+visstat *doop_statptr;
+visstat *doop_laststatptr;
+int doop_statsvis;
 
 void DrawScaleds (void)
 {
@@ -902,11 +903,13 @@ void DrawScaleds (void)
     objtype   *obj;
 
     visptr = &vislist[0];
-    doopvisptr = &doopvislist[0]; //{'-'} Doop's list of things it can see
-    doopactsvis = 0;
+    doop_visptr = &doop_vislist[0]; //{'-'} Doop's list of things it can see
+    doop_lastactptr = doop_visptr;
+    doop_actsvis = 0;
 
-    doopstatptr = &doopvisstat[0];  //{'-'} Static objects (ammo, health, chairs) that doop can see
-    doopstatsvis = 0;
+    doop_statptr = &doop_visstat[0];  //{'-'} Static objects (ammo, health, chairs) that doop can see
+    doop_laststatptr = doop_statptr;
+    doop_statsvis = 0;
 //
 // place static objects
 //
@@ -954,16 +957,18 @@ void DrawScaleds (void)
             || statptr->itemnumber == bo_fullheal) {
             std::cout << "located item: " << (int) statptr->itemnumber << "at x="
                       << (int) statptr->tilex << ",y=" << (int) statptr->tiley << std::endl;
-            doopstatptr->shapenum = statptr->shapenum;
-            doopstatptr->tilex = statptr->tilex;
-            doopstatptr->tiley = statptr->tiley;
-            doopstatptr->flags = statptr->flags;
-            doopstatptr->itemnumber = statptr->itemnumber;
-            doopstatptr->visspot = statptr->visspot;
-            std::cout << "item at tilex=" << doopstatptr->tilex << ", tiley="
-                      << doopstatptr->tiley << std::endl;
-            doopstatptr++;
-            doopstatsvis++;
+            doop_statptr->shapenum = statptr->shapenum;
+            doop_statptr->tilex = statptr->tilex;
+            doop_statptr->tiley = statptr->tiley;
+            doop_statptr->flags = statptr->flags;
+            doop_statptr->itemnumber = statptr->itemnumber;
+            doop_statptr->visspot = statptr->visspot;
+
+            if (doop_statptr < &doop_visstat[MAXSTATS - 1]) {    //dont fall off the edge
+                doop_statptr++;
+                doop_laststatptr = doop_statptr;
+            }
+            doop_statsvis++;
         }
     }
 
@@ -989,7 +994,7 @@ void DrawScaleds (void)
             || ( *(visspot-63) && !*(tilespot-63) )
             || ( *(visspot+65) && !*(tilespot+65) )
             || ( *(visspot+64) && !*(tilespot+64) )
-            || ( *(visspot+63) && !*(tilespot+63) ) )
+            || ( *(visspot+63) && !*(tilespot+63) ) )   //map size is 64
         {
             obj->active = ac_yes;
             TransformActor (obj);
@@ -1016,18 +1021,19 @@ void DrawScaleds (void)
 
             if (obj->flags & FL_SHOOTABLE) {    //if the enemy is visable without obstructions
                 ////{'-'} Doop definitions, get info of visable actors each frame
-                doopvisptr->tilex = obj->tilex;
-                doopvisptr->tiley = obj->tiley;
-                doopvisptr->hitpoints = obj->hitpoints;
-                doopvisptr->actstate = obj->state;
-                if (doopvisptr < &doopvislist[MAXVISABLE - 1]) {   //prevents overflow
-                    std::cout << "enemyx=" << doopvisptr->tilex << ", enemyy="
-                              << doopvisptr->tiley << ", enemyhp" << doopvisptr->hitpoints << std::endl;
-                    std::cout << "myx=" << player->tilex << ", myy="
-                              << player->tiley << ", myhp" << player->hitpoints << std::endl;
-                    doopvisptr++;   //Increment the address pointed to
+                doop_visptr->tilex = obj->tilex;
+                doop_visptr->tiley = obj->tiley;
+                doop_visptr->hitpoints = obj->hitpoints;
+                doop_visptr->actstate = obj->state;
+                if (doop_visptr < &doop_vislist[MAXVISABLE - 1]) {   //prevents overflow
+                    //std::cout << "enemyx=" << doop_visptr->tilex << ", enemyy="
+                    //          << doop_visptr->tiley << ", enemyhp" << doop_visptr->hitpoints << std::endl;
+                    //std::cout << "myx=" << player->tilex << ", myy="
+                    //          << player->tiley << ", myhp" << player->hitpoints << std::endl;
+                    doop_visptr++;   //Increment the address pointed to
+                    doop_lastactptr = doop_visptr;
                 }
-                doopactsvis++;
+                doop_actsvis++;
                 ////////////////////
             }
         }
