@@ -935,6 +935,7 @@ extern visdoor *doop_doorptr;
 extern int doop_actsvis;
 extern int doop_statsvis;
 extern int doop_doorsvis;
+extern int falg;
 /*
 =============================================================================
 

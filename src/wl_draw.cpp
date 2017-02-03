@@ -83,7 +83,7 @@ longword xpartialup,xpartialdown,ypartialup,ypartialdown;
 
 short   midangle,angle;
 
-word    tilehit;
+word    tilehit;    //pointer to a 1-D array from tilemap[x][y] i think
 int     pixx;
 
 short   xtile,ytile;
@@ -93,7 +93,7 @@ word    xstep,ystep;
 word    xspot,yspot;
 int     texdelta;
 
-word horizwall[MAXWALLTILES],vertwall[MAXWALLTILES];
+word horizwall[MAXWALLTILES],vertwall[MAXWALLTILES];    //How do I know which of these are visible?
 
 
 /*
@@ -882,17 +882,8 @@ typedef struct
 visobj_t vislist[MAXVISABLE];
 visobj_t *visptr,*visstep,*farthest;
 
-//{'-'} provide the extern definitions
-visactor doop_vislist[MAXACTORS];
-visactor *doop_visptr;
-visactor *doop_lastactptr;
-int doop_actsvis;
-
-visstat doop_visstat[MAXSTATS];
-visstat *doop_statptr;
-visstat *doop_laststatptr;
-int doop_statsvis;
-
+int falg = 0;
+//WL_GAME ~line 675 is how walls are made and stored!!
 void DrawScaleds (void)
 {
     int      i,least,numvisable,height;
@@ -903,7 +894,7 @@ void DrawScaleds (void)
     objtype   *obj;
 
     visptr = &vislist[0];
-    doop_visptr = &doop_vislist[0]; //{'-'} Doop's list of things it can see
+    doop_visptr = &doop_vislist[0]; //{'-'} Doop's list of enemies it can see
     doop_lastactptr = doop_visptr;
     doop_actsvis = 0;
 
@@ -1036,6 +1027,16 @@ void DrawScaleds (void)
                 doop_actsvis++;
                 ////////////////////
             }
+            if (falg  == 0) {
+                for (int i = 0; i < MAPSIZE; i++) {
+                    for (int j = 0; j < MAPSIZE; j++) {
+                        std::cout << tilemap[i][j] << " ";
+                    }
+                    std::cout << std::endl;
+                }
+                falg = 1;
+            }
+
         }
         else
             obj->flags &= ~FL_VISABLE;  // ~ is a class deconstructor?
