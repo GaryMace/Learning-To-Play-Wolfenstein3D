@@ -41,6 +41,17 @@ extern byte signon[];
 #define VIEWWIDTH       256                     // size of view window
 #define VIEWHEIGHT      144
 
+//{'-'} provide the extern definitions
+visactor doop_vislist[MAXACTORS];
+visactor *doop_visptr;
+visactor *doop_lastactptr;
+int doop_actsvis;
+
+visstat doop_visstat[MAXSTATS];
+visstat *doop_statptr;
+visstat *doop_laststatptr;
+int doop_statsvis;
+
 /*
 =============================================================================
 
@@ -528,7 +539,7 @@ boolean LoadTheGame(FILE *file,int x,int y)
     checksum = DoChecksum((byte *)&LevelRatios[0],sizeof(LRstruct)*LRpack,checksum);
 
     DiskFlopAnim(x,y);
-    SetupGameLevel ();
+    SetupGameLevel ();  //what does this do?
 
     DiskFlopAnim(x,y);
     fread (tilemap,sizeof(tilemap),1,file);
@@ -537,7 +548,7 @@ boolean LoadTheGame(FILE *file,int x,int y)
     DiskFlopAnim(x,y);
 
     int actnum=0, i;
-    for(i=0;i<MAPSIZE;i++)
+    for(i=0;i<MAPSIZE;i++)  //spawn all the actors
     {
         for(int j=0;j<MAPSIZE;j++)
         {
