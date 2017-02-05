@@ -64,7 +64,7 @@ int     CalcRotate (objtype *ob);
 void    DrawScaleds (void);
 void    CalcTics (void);
 void    ThreeDRefresh (void);
-
+void    GetInputs (void);
 
 
 //
@@ -946,8 +946,8 @@ void DrawScaleds (void)
             || statptr->itemnumber == bo_machinegun
             || statptr->itemnumber == bo_chaingun
             || statptr->itemnumber == bo_fullheal) {
-            std::cout << "located item: " << (int) statptr->itemnumber << "at x="
-                      << (int) statptr->tilex << ",y=" << (int) statptr->tiley << std::endl;
+            //std::cout << "located item: " << (int) statptr->itemnumber << "at x="
+            //          << (int) statptr->tilex << ",y=" << (int) statptr->tiley << std::endl;
             doop_statptr->shapenum = statptr->shapenum;
             doop_statptr->tilex = statptr->tilex;
             doop_statptr->tiley = statptr->tiley;
@@ -1027,20 +1027,24 @@ void DrawScaleds (void)
                 doop_actsvis++;
                 ////////////////////
             }
-            if (falg  == 0) {
+
+            /*if (falg  == 0) {
                 for (int i = 0; i < MAPSIZE; i++) {
                     for (int j = 0; j < MAPSIZE; j++) {
-                        std::cout << tilemap[i][j] << " ";
+                        if ((int)tilemap[i][j] > 0)
+                            std::cout << "  ";
+                        else
+                            std::cout << 0 << " ";
                     }
                     std::cout << std::endl;
                 }
                 falg = 1;
-            }
-
+            }*/
         }
         else
             obj->flags &= ~FL_VISABLE;  // ~ is a class deconstructor?
     }
+    GetInputs();
 
 //
 // draw from back to front
@@ -1073,6 +1077,40 @@ void DrawScaleds (void)
             ScaleShape(farthest->viewx, farthest->shapenum, farthest->viewheight, farthest->flags);
 
         farthest->viewheight = 32000;
+    }
+}
+
+void GetInputs (void) {
+    unsigned spotloc = (player->tilex<<mapshift)+player->tiley;
+    int idx = 0;
+
+    for (int row = -MAPSIZE; row < MAPSIZE*2; row += MAPSIZE) {     //{-65,-64,-63}
+        for (int i = 1; i > -2; i--) {                              //{ -1,  0,  1}
+            byte *pos = &tilemap[0][0] + spotloc + (MAPSIZE + i);   //{ 63, 64, 65}
+            if (pos) {   //If tile is not occupied by a wall
+                inputs[idx] = 0;
+            } else {     //There's a wall here
+                inputs[idx] = -1;
+            }
+            for (visactor *visact = &doop_vislist[0]; visact != doop_lastactptr; visact++) {
+                if (&tilemap[0][0] + ((visact->tilex<<mapshift)+visact->tiley) == pos) {    //There's an enemy on this position
+                    inputs[idx] = 1;
+                }
+            }
+            for (visstat *visitem = &doop_visstat[0]; visitem != doop_laststatptr; visitem++) {
+                if (&tilemap[0][0] + ((visitem->tilex<<mapshift)+ visitem->tiley) == pos) { //Static item
+                    inputs[idx] = 2;
+                }
+            }
+            idx++;
+        }
+    }
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            std::cout << inputs[j+i] << " ";
+        }
+        std::cout << std::endl;
     }
 }
 

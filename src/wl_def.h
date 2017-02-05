@@ -936,6 +936,8 @@ extern int doop_actsvis;
 extern int doop_statsvis;
 extern int doop_doorsvis;
 extern int falg;
+
+extern int inputs[9];
 /*
 =============================================================================
 
@@ -1170,6 +1172,7 @@ extern  fixed   viewsin,viewcos;
 
 void    ThreeDRefresh (void);
 void    CalcTics (void);
+void    GetInputs (void);            //{'-'} Doop definition method
 
 typedef struct
 {

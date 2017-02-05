@@ -51,6 +51,7 @@ visstat doop_visstat[MAXSTATS];
 visstat *doop_statptr;
 visstat *doop_laststatptr;
 int doop_statsvis;
+int inputs[9];
 
 /*
 =============================================================================
