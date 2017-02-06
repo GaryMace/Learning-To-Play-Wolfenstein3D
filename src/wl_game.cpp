@@ -2,7 +2,6 @@
 
 #include <math.h>
 #include "wl_def.h"
-#include "Neuron.h"
 #include <SDL_mixer.h>
 #pragma hdrstop
 
@@ -688,7 +687,7 @@ void SetupGameLevel (void)
             if (tile<AREATILE)
             {
                 // solid wall
-                tilemap[x][y] = (byte) tile;
+                tilemap[x][y] = (byte) tile;        // HI WALLLS I FOLUND YO!!!!
                 actorat[x][y] = (objtype *)(uintptr_t) tile;
             }
             else

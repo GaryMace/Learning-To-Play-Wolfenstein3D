@@ -935,9 +935,9 @@ extern visdoor *doop_doorptr;
 extern int doop_actsvis;
 extern int doop_statsvis;
 extern int doop_doorsvis;
-extern int falg;
+extern int falg;    //TODO: remove
 
-extern int inputs[9];
+extern int inputs[25];
 /*
 =============================================================================
 
@@ -1049,7 +1049,7 @@ void UpdateSoundLoc(void);
 #define JOYSCALE                2
 
 extern  byte            tilemap[MAPSIZE][MAPSIZE];      // wall values only
-extern  byte            spotvis[MAPSIZE][MAPSIZE];      //mapsize is 64
+extern  byte            spotvis[MAPSIZE][MAPSIZE];      //MAPSIZE is 64
 extern  objtype         *actorat[MAPSIZE][MAPSIZE];     //Enemies list
 
 extern  objtype         *player;

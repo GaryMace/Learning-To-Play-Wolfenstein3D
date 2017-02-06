@@ -1028,7 +1028,11 @@ void DrawScaleds (void)
                 ////////////////////
             }
 
-            /*if (falg  == 0) {
+            if (falg  == 0) {
+                for (int i = 0; i < MAPSIZE; i++) {
+                    std::cout << i << " ";
+                }
+                std::endl;
                 for (int i = 0; i < MAPSIZE; i++) {
                     for (int j = 0; j < MAPSIZE; j++) {
                         if ((int)tilemap[i][j] > 0)
@@ -1036,10 +1040,10 @@ void DrawScaleds (void)
                         else
                             std::cout << 0 << " ";
                     }
-                    std::cout << std::endl;
+                    std::cout << i << std::endl;
                 }
                 falg = 1;
-            }*/
+            }
         }
         else
             obj->flags &= ~FL_VISABLE;  // ~ is a class deconstructor?
@@ -1081,37 +1085,50 @@ void DrawScaleds (void)
 }
 
 void GetInputs (void) {
-    unsigned spotloc = (player->tilex<<mapshift)+player->tiley;
-    int idx = 0;
+    int idx = 0;    //index into input array
 
-    for (int row = -MAPSIZE; row < MAPSIZE*2; row += MAPSIZE) {     //{-65,-64,-63}
-        for (int i = 1; i > -2; i--) {                              //{ -1,  0,  1}
-            byte *pos = &tilemap[0][0] + spotloc + (MAPSIZE + i);   //{ 63, 64, 65}
-            if (pos) {   //If tile is not occupied by a wall
-                inputs[idx] = 0;
-            } else {     //There's a wall here
+    for (int row = -2; row < 3; row++) {
+        for (int col = -2; col < 3; col++) {
+            int xp = (int) player->tilex + row;     //xpos
+            int yp = (int) player->tiley + col;     //ypos
+            int pos = (int) tilemap[xp][yp];
+
+            if (pos > 0)    //If map pos is a wall or out of bounds area
                 inputs[idx] = -1;
-            }
-            for (visactor *visact = &doop_vislist[0]; visact != doop_lastactptr; visact++) {
-                if (&tilemap[0][0] + ((visact->tilex<<mapshift)+visact->tiley) == pos) {    //There's an enemy on this position
+            else            //Otherwise player can walk on it
+                inputs[idx] = 0;
+
+            for (visactor *visact = &doop_vislist[0]; visact != doop_lastactptr; visact++) {    //for each enemy nearby (vis for visible)
+                if ((int) visact->tilex == xp && (int) visact->tiley == yp) {    //There's an enemy on a position in a 5x5 grid around player
                     inputs[idx] = 1;
+                    break;
                 }
             }
-            for (visstat *visitem = &doop_visstat[0]; visitem != doop_laststatptr; visitem++) {
-                if (&tilemap[0][0] + ((visitem->tilex<<mapshift)+ visitem->tiley) == pos) { //Static item
+            for (visstat *visitem = &doop_visstat[0]; visitem != doop_laststatptr; visitem++) { //for each static (vis for visible)
+                if ((int) visitem->tilex == xp && (int) visitem->tiley == yp) { //Static item
                     inputs[idx] = 2;
+                    break;
+                }
+            }
+
+            for (doorobj_t *door = &doorobjlist[0]; door != lastdoorobj; door++) {
+                if ((int) door->tilex == xp && (int) door->tiley == yp) {
+                    inputs[idx] = 4;
+                    break;
                 }
             }
             idx++;
         }
     }
 
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            std::cout << inputs[j+i] << " ";
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            std::cout << inputs[j+(i*5)] << " ";
         }
         std::cout << std::endl;
     }
+    std::cout << std::endl;
+
 }
 
 //==========================================================================
