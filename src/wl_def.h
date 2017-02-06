@@ -83,6 +83,7 @@ void Quit(const char *errorStr, ...);
 #include "id_ca.h"
 
 #include "wl_menu.h"
+#include "Def.h"    //{'-'} for the INPUT and SEARCH_GRID constants
 
 #define MAPSPOT(x,y,plane) (mapsegs[plane][((y)<<mapshift)+(x)])
 
@@ -937,7 +938,7 @@ extern int doop_statsvis;
 extern int doop_doorsvis;
 extern int falg;    //TODO: remove
 
-extern int inputs[25];
+extern int inputs[INPUTS][SEARCH_GRID];
 /*
 =============================================================================
 
@@ -1172,7 +1173,8 @@ extern  fixed   viewsin,viewcos;
 
 void    ThreeDRefresh (void);
 void    CalcTics (void);
-void    GetInputs (void);            //{'-'} Doop definition method
+void    GetInputs (void);                           // {'-'}
+void    AddItemToInput (visstat *item, int idx);    //       Doop definition methods
 
 typedef struct
 {

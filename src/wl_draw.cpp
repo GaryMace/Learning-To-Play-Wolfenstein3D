@@ -64,8 +64,8 @@ int     CalcRotate (objtype *ob);
 void    DrawScaleds (void);
 void    CalcTics (void);
 void    ThreeDRefresh (void);
-void    GetInputs (void);
-
+void    GetInputs (void);                           // {'-'}
+void    AddItemToInput (visstat *item, int idx);    //       Doop definition methods
 
 //
 // wall optimization variables
@@ -932,7 +932,7 @@ void DrawScaleds (void)
 
         if (visptr < &vislist[MAXVISABLE-1])    // don't let it overflow
         {
-            visptr->flags = (short) statptr->flags; //Flags are things that enemies drop when dead etc..
+            visptr->flags = (short) statptr->flags; // {'-'} fyi Flags are things that enemies drop when dead etc..
             visptr++;
         }
 
@@ -943,11 +943,11 @@ void DrawScaleds (void)
             || statptr->itemnumber == bo_key4
             || statptr->itemnumber == bo_food
             || statptr->itemnumber == bo_clip
+            || statptr->itemnumber == bo_clip2
             || statptr->itemnumber == bo_machinegun
             || statptr->itemnumber == bo_chaingun
             || statptr->itemnumber == bo_fullheal) {
-            //std::cout << "located item: " << (int) statptr->itemnumber << "at x="
-            //          << (int) statptr->tilex << ",y=" << (int) statptr->tiley << std::endl;
+
             doop_statptr->shapenum = statptr->shapenum;
             doop_statptr->tilex = statptr->tilex;
             doop_statptr->tiley = statptr->tiley;
@@ -955,7 +955,7 @@ void DrawScaleds (void)
             doop_statptr->itemnumber = statptr->itemnumber;
             doop_statptr->visspot = statptr->visspot;
 
-            if (doop_statptr < &doop_visstat[MAXSTATS - 1]) {    //dont fall off the edge
+            if (doop_statptr < &doop_visstat[MAXSTATS - 1]) {    // {'-'} dont fall off the edge
                 doop_statptr++;
                 doop_laststatptr = doop_statptr;
             }
@@ -972,7 +972,7 @@ void DrawScaleds (void)
             continue;                                               // no shape
 
         spotloc = (obj->tilex<<mapshift)+obj->tiley;   // optimize: keep in struct?
-        visspot = &spotvis[0][0]+spotloc;              //Index forward from base address
+        visspot = &spotvis[0][0]+spotloc;              // Index forward from base address
         tilespot = &tilemap[0][0]+spotloc;
         //
         // could be in any of the nine surrounding tiles
@@ -1010,22 +1010,16 @@ void DrawScaleds (void)
             }
             obj->flags |= FL_VISABLE;
 
-            if (obj->flags & FL_SHOOTABLE) {    //if the enemy is visible without obstructions
-                ////{'-'} Doop definitions, get info of visible actors each frame
+            if (obj->flags & FL_SHOOTABLE) {    // {'-'} if the enemy is visible without obstructions
                 doop_visptr->tilex = obj->tilex;
                 doop_visptr->tiley = obj->tiley;
                 doop_visptr->hitpoints = obj->hitpoints;
                 doop_visptr->actstate = obj->state;
-                if (doop_visptr < &doop_vislist[MAXVISABLE - 1]) {   //prevents overflow
-                    //std::cout << "enemyx=" << doop_visptr->tilex << ", enemyy="
-                    //          << doop_visptr->tiley << ", enemyhp" << doop_visptr->hitpoints << std::endl;
-                    //std::cout << "myx=" << player->tilex << ", myy="
-                    //          << player->tiley << ", myhp" << player->hitpoints << std::endl;
-                    doop_visptr++;   //Increment the address pointed to
+                if (doop_visptr < &doop_vislist[MAXVISABLE - 1]) {  // {'-'} prevents overflow
+                    doop_visptr++;                                  // {'-'} Increment the address pointed to
                     doop_lastactptr = doop_visptr;
                 }
                 doop_actsvis++;
-                ////////////////////
             }
 
             /*if (falg  == 0) {
@@ -1048,6 +1042,7 @@ void DrawScaleds (void)
         else
             obj->flags &= ~FL_VISABLE;  // ~ is a class deconstructor?
     }
+    memset(inputs, 0, sizeof(inputs[0][0]) * INPUTS * SEARCH_GRID);     //reset values of inputs to 0
     GetInputs();
 
 //
@@ -1084,6 +1079,15 @@ void DrawScaleds (void)
     }
 }
 
+/*
+=================================
+=
+= {'-'} GetInputs
+=
+= Populates a 2D array of inputs for the Network to consume later.
+=
+=================================
+ */
 void GetInputs (void) {
     int idx = 0;    //index into input array
 
@@ -1092,31 +1096,31 @@ void GetInputs (void) {
             int xp = (int) player->tilex + row;     //xpos
             int yp = (int) player->tiley + col;     //ypos
             if (xp < 0 || yp > MAPSIZE) {
-                inputs[idx++] = -1; //Map position out of bounds, just make it a -1 input
+                inputs[WALK_SPACE][idx++] = 0; //Map position out of bounds, just make it a 0 input
                 continue;
             }
             int pos = (int) tilemap[xp][yp];
 
-            //-1 if map pos is a wall or out of bounds area
-            // 0 if player can walk on area
-            (pos > 0) ? (inputs[idx] = -1) : (inputs[idx] = 0);
+            //0 if map pos is a wall or out of bounds area
+            //1 if player can walk on area
+            (pos > 0) ? (inputs[WALK_SPACE][idx] = 0) : (inputs[WALK_SPACE][idx] = 1);
 
             for (visactor *visact = &doop_vislist[0]; visact != doop_lastactptr; visact++) {    //for each enemy nearby (vis for visible)
                 if ((int) visact->tilex == xp && (int) visact->tiley == yp) {    //There's an enemy on a position in a 5x5 grid around player
-                    inputs[idx] = 1;
+                    inputs[ENEMYS][idx] = 1;
                     break;
                 }
             }
             for (visstat *visitem = &doop_visstat[0]; visitem != doop_laststatptr; visitem++) { //for each static (vis for visible)
                 if ((int) visitem->tilex == xp && (int) visitem->tiley == yp) { //Static item
-                    inputs[idx] = 2;
+                    AddItemToInput(visitem, idx);
                     break;
                 }
             }
 
             for (doorobj_t *door = &doorobjlist[0]; door != lastdoorobj; door++) {              //See if any doors are within visible sight range
                 if ((int) door->tilex == xp && (int) door->tiley == yp) {
-                    inputs[idx] = 3;
+                    inputs[DOORS][idx] = 1;
                     break;
                 }
             }
@@ -1124,13 +1128,48 @@ void GetInputs (void) {
         }
     }
 
-    for (int i = 0; i < 5; i++) {
-        for (int j = 0; j < 5; j++) {
-            std::cout << inputs[j + (i * 5)] << " ";
+    for (int k = 0; k < INPUTS; k++) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                std::cout << inputs[k][j + (i * 5)] << " ";
+            }
+            std::cout << std::endl;
         }
         std::cout << std::endl;
+        std::cout << std::endl;
     }
-    std::cout << std::endl;
+}
+
+/*
+=================================
+=
+= {'-'} AddItemToInput
+=
+= Add the given static item to the appropriate partition of the 2D input array.
+=
+=================================
+ */
+void AddItemToInput (visstat *item, int idx) {
+    switch (item->itemnumber) {
+        case bo_key1:
+        case bo_key2:
+        case bo_key3:
+        case bo_key4:
+            inputs[KEY][idx] = 1;
+            break;
+        case bo_food:
+        case bo_fullheal:
+            inputs[HEALTH][idx] = 1;
+            break;
+        case bo_clip:
+        case bo_clip2:
+            inputs[AMMO][idx] = 1;
+            break;
+        case bo_machinegun:
+        case bo_chaingun:
+            inputs[GUN][idx] = 1;
+            break;
+    }
 }
 
 //==========================================================================
