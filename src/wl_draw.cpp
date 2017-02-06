@@ -1010,8 +1010,8 @@ void DrawScaleds (void)
             }
             obj->flags |= FL_VISABLE;
 
-            if (obj->flags & FL_SHOOTABLE) {    //if the enemy is visable without obstructions
-                ////{'-'} Doop definitions, get info of visable actors each frame
+            if (obj->flags & FL_SHOOTABLE) {    //if the enemy is visible without obstructions
+                ////{'-'} Doop definitions, get info of visible actors each frame
                 doop_visptr->tilex = obj->tilex;
                 doop_visptr->tiley = obj->tiley;
                 doop_visptr->hitpoints = obj->hitpoints;
@@ -1028,11 +1028,11 @@ void DrawScaleds (void)
                 ////////////////////
             }
 
-            if (falg  == 0) {
+            /*if (falg  == 0) {
                 for (int i = 0; i < MAPSIZE; i++) {
                     std::cout << i << " ";
                 }
-                std::endl;
+                std::cout << std::endl;
                 for (int i = 0; i < MAPSIZE; i++) {
                     for (int j = 0; j < MAPSIZE; j++) {
                         if ((int)tilemap[i][j] > 0)
@@ -1043,7 +1043,7 @@ void DrawScaleds (void)
                     std::cout << i << std::endl;
                 }
                 falg = 1;
-            }
+            }*/
         }
         else
             obj->flags &= ~FL_VISABLE;  // ~ is a class deconstructor?
@@ -1056,7 +1056,7 @@ void DrawScaleds (void)
     numvisable = (int) (visptr-&vislist[0]);
 
     if (!numvisable)
-        return;                                                                 // no visable objects
+        return;                                                                 // no visible objects
 
     for (i = 0; i<numvisable; i++)
     {
@@ -1091,12 +1091,15 @@ void GetInputs (void) {
         for (int col = -2; col < 3; col++) {
             int xp = (int) player->tilex + row;     //xpos
             int yp = (int) player->tiley + col;     //ypos
+            if (xp < 0 || yp > MAPSIZE) {
+                inputs[idx++] = -1; //Map position out of bounds, just make it a -1 input
+                continue;
+            }
             int pos = (int) tilemap[xp][yp];
 
-            if (pos > 0)    //If map pos is a wall or out of bounds area
-                inputs[idx] = -1;
-            else            //Otherwise player can walk on it
-                inputs[idx] = 0;
+            //-1 if map pos is a wall or out of bounds area
+            // 0 if player can walk on area
+            (pos > 0) ? (inputs[idx] = -1) : (inputs[idx] = 0);
 
             for (visactor *visact = &doop_vislist[0]; visact != doop_lastactptr; visact++) {    //for each enemy nearby (vis for visible)
                 if ((int) visact->tilex == xp && (int) visact->tiley == yp) {    //There's an enemy on a position in a 5x5 grid around player
@@ -1111,9 +1114,9 @@ void GetInputs (void) {
                 }
             }
 
-            for (doorobj_t *door = &doorobjlist[0]; door != lastdoorobj; door++) {
+            for (doorobj_t *door = &doorobjlist[0]; door != lastdoorobj; door++) {              //See if any doors are within visible sight range
                 if ((int) door->tilex == xp && (int) door->tiley == yp) {
-                    inputs[idx] = 4;
+                    inputs[idx] = 3;
                     break;
                 }
             }
@@ -1123,12 +1126,11 @@ void GetInputs (void) {
 
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 5; j++) {
-            std::cout << inputs[j+(i*5)] << " ";
+            std::cout << inputs[j + (i * 5)] << " ";
         }
         std::cout << std::endl;
     }
     std::cout << std::endl;
-
 }
 
 //==========================================================================
