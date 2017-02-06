@@ -1042,7 +1042,7 @@ void DrawScaleds (void)
         else
             obj->flags &= ~FL_VISABLE;  // ~ is a class deconstructor?
     }
-    memset(inputs, 0, sizeof(inputs[0][0]) * INPUTS * SEARCH_GRID);     //reset values of inputs to 0
+    memset(inputs, 0, sizeof(inputs[0][0]) * TOTAL_INPUTS);     //reset values of inputs to 0
     GetInputs();
 
 //
@@ -1096,14 +1096,15 @@ void GetInputs (void) {
             int xp = (int) player->tilex + row;     //xpos
             int yp = (int) player->tiley + col;     //ypos
             if (xp < 0 || yp > MAPSIZE) {
-                inputs[WALK_SPACE][idx++] = 0; //Map position out of bounds, just make it a 0 input
+                inputs[WALLS][idx] = 1; //Map position out of bounds, just make it a 0 input
+                inputs[WALK_SPACE][idx++] = 0;
                 continue;
             }
             int pos = (int) tilemap[xp][yp];
 
             //0 if map pos is a wall or out of bounds area
             //1 if player can walk on area
-            (pos > 0) ? (inputs[WALK_SPACE][idx] = 0) : (inputs[WALK_SPACE][idx] = 1);
+            (pos > 0) ? (inputs[WALK_SPACE][idx] = 0, inputs[WALLS][idx] = 1) : (inputs[WALK_SPACE][idx] = 1, inputs[WALLS][idx] = 0);
 
             for (visactor *visact = &doop_vislist[0]; visact != doop_lastactptr; visact++) {    //for each enemy nearby (vis for visible)
                 if ((int) visact->tilex == xp && (int) visact->tiley == yp) {    //There's an enemy on a position in a 5x5 grid around player
@@ -1121,6 +1122,7 @@ void GetInputs (void) {
             for (doorobj_t *door = &doorobjlist[0]; door != lastdoorobj; door++) {              //See if any doors are within visible sight range
                 if ((int) door->tilex == xp && (int) door->tiley == yp) {
                     inputs[DOORS][idx] = 1;
+                    inputs[WALLS][idx] = 0;                         //this position is no longer a "wall" (it's assumed to be prior to this code executing)
                     break;
                 }
             }
@@ -1128,16 +1130,17 @@ void GetInputs (void) {
         }
     }
 
-    for (int k = 0; k < INPUTS; k++) {
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                std::cout << inputs[k][j + (i * 5)] << " ";
-            }
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
-        std::cout << std::endl;
-    }
+    //for (int k = 0; k < INPUTS; k++) {
+    //    std::cout << "Matrix type: " << k << std::endl;
+    //    for (int i = 0; i < 5; i++) {
+    //        for (int j = 0; j < 5; j++) {
+    //            std::cout << inputs[k][j + (i * 5)] << " ";
+    //        }
+    //        std::cout << std::endl;
+    //    }
+    //    std::cout << std::endl;
+    //    std::cout << std::endl;
+    //}
 }
 
 /*
@@ -1155,15 +1158,15 @@ void AddItemToInput (visstat *item, int idx) {
         case bo_key2:
         case bo_key3:
         case bo_key4:
-            inputs[KEY][idx] = 1;
+            inputs[KEY][idx] = 1;       //treat all keys the same way
             break;
         case bo_food:
         case bo_fullheal:
-            inputs[HEALTH][idx] = 1;
+            inputs[HEALTH][idx] = 1;    //treat all health pick-ups the same way
             break;
         case bo_clip:
         case bo_clip2:
-            inputs[AMMO][idx] = 1;
+            inputs[AMMO][idx] = 1;      //you get the idea
             break;
         case bo_machinegun:
         case bo_chaingun:

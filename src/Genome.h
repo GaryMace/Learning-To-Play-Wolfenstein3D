@@ -35,7 +35,7 @@ public:
 
     void initMutationRates();
     void generateNetwork(); //has Genome param in marIO
-    std::vector<double> evaluateNetwork(std::vector<double> inputs);  //Has network, inputs param in MarIO
+    std::vector<bool> evaluateNetwork(int inputs[][SEARCH_GRID]);  //Has network, inputs param in MarIO
     void nodeMutate();  //MarIO: genome
     void linkMutate(bool forceBias);  //MarIO: genome, forceBias(bool)
     void pointMutate(); //MarIO: genome

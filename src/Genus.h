@@ -19,6 +19,8 @@ public:
     static std::vector<Species> species;
     static int generation;
     static double maxFitness;
+    static int currSpecies;
+    static int currGenome;
 
     static std::string backup();
     static void loadSaveState(std::string saveState);
@@ -26,7 +28,6 @@ public:
     static double nextDouble();
     static void addToSpecies(Genome child);
     static void cullSpecies(bool cutToOne);
-    static void initializeGenus();
     static void newGeneration();
     static void rankGlobally();
     static void removeStaleSpecies();

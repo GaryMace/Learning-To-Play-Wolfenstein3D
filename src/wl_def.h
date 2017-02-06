@@ -10,6 +10,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+
 #if defined(_arch_dreamcast)
 #	include <string.h>
 #	include "dc/dc_main.h"
@@ -83,7 +84,6 @@ void Quit(const char *errorStr, ...);
 #include "id_ca.h"
 
 #include "wl_menu.h"
-#include "Def.h"    //{'-'} for the INPUT and SEARCH_GRID constants
 
 #define MAPSPOT(x,y,plane) (mapsegs[plane][((y)<<mapshift)+(x)])
 
@@ -223,6 +223,32 @@ void Quit(const char *errorStr, ...);
 #define PIXRADIUS       512
 
 #define STARTAMMO       8
+
+// {'-'} Doop constants for input matrices
+#define INPUTS 9                // doors, walls, walk space, enemys, ammo, health, keys, guns, push walls
+#define SEARCH_GRID 25          //5x5 grid
+#define TOTAL_INPUTS 225
+#define DOORS 0
+#define WALLS 1
+#define WALK_SPACE 2
+#define ENEMYS 3
+#define AMMO 4
+#define HEALTH 5
+#define KEY 6
+#define GUN 7
+#define PUSH_WALLS 8
+
+// {'-'} Doop constants for button pressing look-ups
+#define FORWARD 0
+#define BACK 1
+#define TURN_RIGHT 2
+#define TURN_LEFT 3
+#define SHOOT 4
+#define OPEN_DOOR 5
+#define WEAPON1 6
+#define WEAPON2 7
+#define WEAPON3 8
+#define WEAPON4 9
 
 
 // object flag values
@@ -920,6 +946,7 @@ typedef struct visdoorstruct {
     doortype action;
     short    ticcount;
 } visdoor;
+extern boolean buttoons[NUMBUTTONS];            //Duplicate of buttonstate, will replace buttonstate later
 
 extern visactor doop_vislist[MAXACTORS];             //visible actor list
 extern visactor *doop_lastactptr;

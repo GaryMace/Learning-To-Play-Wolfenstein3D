@@ -10,6 +10,8 @@
 // instantiate static members
 int Genus::innovation = OUTPUTS;
 int Genus::generation = 0;
+int Genus::currSpecies = 0;
+int Genus::currGenome = 0;
 double Genus::maxFitness = 0.0;
 std::vector<Species> Genus::species;
 
@@ -70,15 +72,6 @@ void Genus::cullSpecies(bool cutToOne) {
 
         while (species.genomes.size() > remaining)
             species.genomes.erase(species.genomes.end());   //Remove weak species from end
-    }
-}
-
-void Genus::initializeGenus() {
-    for (int i = 0; i < POPULATION; i++) {  //initial population
-        Genome basic;
-        basic.maxNeuron = INPUTS;   //inputs is dynamic in our case ? maybe not..
-        basic.mutate();             //TODO: figure out input size, if deterministic
-        addToSpecies(basic);
     }
 }
 

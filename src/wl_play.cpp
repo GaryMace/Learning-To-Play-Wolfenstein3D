@@ -1307,11 +1307,12 @@ void PlayLoop (void)
         int numEnemies = (int) (doop_lastactptr - &doop_vislist[0]);
         int enemies[numEnemies];
 
-        for (visactor *tmp = &doop_vislist[0] ; tmp !=doop_lastactptr ; tmp++) {
+        //TODO: remove this jargon
+        /*for (visactor *tmp = &doop_vislist[0] ; tmp !=doop_lastactptr ; tmp++) {
             int actLoc = (tmp->tilex<<mapshift)+tmp->tiley;   // optimize: keep in struct?
             int myLoc = (player->tilex<<mapshift)+player->tiley;   // optimize: keep in struct?
             std::cout << "dist: " << actLoc - myLoc << std::endl;
-        }
+        }*/
         //
         // MAKE FUNNY FACE IF BJ DOESN'T MOVE FOR AWHILE
         //
@@ -1325,7 +1326,6 @@ void PlayLoop (void)
             facecount = 0;
         }
 #endif
-
         gamestate.TimeCount += tics;
 
         UpdateSoundLoc ();      // JAB
