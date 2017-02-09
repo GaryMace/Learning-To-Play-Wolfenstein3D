@@ -326,6 +326,17 @@ void PollKeyboardMove (void)
         controlx -= delta;
     if (Keyboard[dirscan[di_east]])
         controlx += delta;
+
+    if (buttonstate[bt_run]) {
+        if (Keyboard[dirscan[di_north]])
+            std::cout << "Going forward" << std::endl;
+        else if (Keyboard[dirscan[di_south]])
+            std::cout << "Going backwards" << std::endl;
+        else if (Keyboard[dirscan[di_west]])
+            std::cout << "Turning left" << std::endl;
+        else if (Keyboard[dirscan[di_east]])
+            std::cout << "Turning right" << std::endl;
+    }
 }
 
 

@@ -10,10 +10,14 @@
 
 class NEATDoop {
 public:
+    bool genusSetUp;
+
     void initialiseGenus ();
     void initialiseRun ();
     void clearControls ();
     void evaluateCurrent ();
     void setUpController (std::vector<bool> controls);
+
+    void nextGenome();
 };
 #endif //TESTBENCH_NEATDOOP_H

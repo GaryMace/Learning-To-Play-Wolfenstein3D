@@ -26,7 +26,7 @@ public:
     std::vector<Gene> genes;
     int maxNeuron;
     int globalRank;
-    double fitness;
+    double fitness; //this will be set in the game loop
 
     Genome clone();
     std::string backup();

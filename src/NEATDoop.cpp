@@ -31,16 +31,22 @@ void NEATDoop::clearControls() {
     std::vector<bool> controls;
     for (int i = 0; i < OUTPUTS; i++)
         controls[i] = false;
+
+    //set this equal to the buttonstate[] array later
     //TODO: figure out later the relevance of this
 }
 
 void NEATDoop::evaluateCurrent() {
     Species& species = Genus::species[Genus::currSpecies];
     Genome& genome = species.genomes[Genus::currGenome];
-
     std::vector<bool> controls = genome.evaluateNetwork(inputs);
 
     setUpController(controls);
+
+    if (!genusSetUp) {
+        initialiseGenus();
+        genusSetUp = true;
+    }
 }
 
 void NEATDoop::setUpController(std::vector<bool> controls) {
@@ -48,10 +54,11 @@ void NEATDoop::setUpController(std::vector<bool> controls) {
         if (controls[i]) {
             switch (i) {
                 case FORWARD:
-                    buttoons[bt_run] = true;
+                    buttoons[bt_run] = true;    //TODO: I think I need to set dirscan[dir_east] and such in here too!...seeing as i'm simulating keyboard pressing
                     break;
                 case BACK:
                     buttoons[bt_run] = true;    //TODO: refactor this!
+                    break;
                 case TURN_LEFT:
                     buttoons[bt_strafeleft] = true;
                     break;
@@ -79,6 +86,19 @@ void NEATDoop::setUpController(std::vector<bool> controls) {
             }
         } else {
             buttoons[i] = false;
+        }
+    }
+}
+
+void NEATDoop::nextGenome() {
+    Genus::currGenome++;
+
+    if (Genus::currGenome >= Genus::species[Genus::currSpecies].genomes.size()) {    //TODO: >= or > ?
+        Genus::currGenome = 0;
+        Genus::currSpecies++;
+        if (Genus::currSpecies >= Genus::species.size()) {
+            Genus::newGeneration();
+            Genus::currSpecies = 0;
         }
     }
 }
