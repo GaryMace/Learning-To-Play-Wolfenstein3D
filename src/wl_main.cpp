@@ -42,6 +42,8 @@ extern byte signon[];
 #define VIEWHEIGHT      144
 
 //{'-'} provide the extern definitions
+NEATDoop doopAI;
+
 visactor doop_vislist[MAXACTORS];
 visactor *doop_visptr;
 visactor *doop_lastactptr;
@@ -1667,6 +1669,11 @@ static void DemoLoop()
 #else
         US_ControlPanel (0);
 #endif
+        // TODO: {'-'} set up the network, may need to be moved
+        if (!doopAI.genusSetUp) {
+            doopAI.initialiseGenus();
+            doopAI.genusSetUp = true;
+        }
 
         if (startgame || loadedgame)
         {

@@ -2345,7 +2345,7 @@ EnterCtrlData (int index, CustomCtrls * cust, void (*DrawRtn) (int), void (*Prin
                     case KEYBOARDMOVE:
                         if (LastScan && LastScan != sc_Escape)
                         {
-                            dirscan[moveorder[which]] = LastScan;
+                            dirscan[moveorder[which]] = LastScan;   //TODO: Overwrite this polling
                             picked = 1;
                             ShootSnd ();
                             IN_ClearKeysDown ();

@@ -258,7 +258,7 @@ void PollKeyboardButtons (void)
 {
     int i;
 
-    for (i = 0; i < NUMBUTTONS; i++)
+    for (i = 0; i < NUMBUTTONS; i++)    //TODO: replace this action with doops controls
         if (Keyboard[buttonscan[i]])
             buttonstate[i] = true;
 }
@@ -327,16 +327,14 @@ void PollKeyboardMove (void)
     if (Keyboard[dirscan[di_east]])
         controlx += delta;
 
-    if (buttonstate[bt_run]) {
-        if (Keyboard[dirscan[di_north]])
-            std::cout << "Going forward" << std::endl;
-        else if (Keyboard[dirscan[di_south]])
-            std::cout << "Going backwards" << std::endl;
-        else if (Keyboard[dirscan[di_west]])
-            std::cout << "Turning left" << std::endl;
-        else if (Keyboard[dirscan[di_east]])
-            std::cout << "Turning right" << std::endl;
-    }
+    if (Keyboard[dirscan[di_north]])
+        std::cout << "Going forward" << std::endl;
+    else if (Keyboard[dirscan[di_south]])
+        std::cout << "Going backwards" << std::endl;
+    else if (Keyboard[dirscan[di_west]])
+        std::cout << "Turning left" << std::endl;
+    else if (Keyboard[dirscan[di_east]])
+        std::cout << "Turning right" << std::endl;
 }
 
 
@@ -361,6 +359,7 @@ void PollMouseMove (void)
 
     controlx += mousexmove * 10 / (13 - mouseadjustment);
     controly += mouseymove * 20 / (13 - mouseadjustment);
+
 }
 
 
@@ -388,6 +387,7 @@ void PollJoystickMove (void)
         controly += delta;
     else if (joyy < -64 || buttonstate[bt_moveforward])
         controly -= delta;
+
 }
 
 /*
@@ -465,7 +465,8 @@ void PollControls (void)
 //
 // get button states
 //
-    PollKeyboardButtons ();
+    //TODO: disable this for now, values should already be set
+    //PollKeyboardButtons ();
 
     if (mouseenabled && IN_IsInputGrabbed())
         PollMouseButtons ();
@@ -1299,6 +1300,7 @@ void PlayLoop (void)
 
     do
     {
+        //TODO: here's where I need to do doop thing
         PollControls ();
 
 //
@@ -1315,15 +1317,6 @@ void PlayLoop (void)
         UpdatePaletteShifts ();
 
         ThreeDRefresh ();
-        int numEnemies = (int) (doop_lastactptr - &doop_vislist[0]);
-        int enemies[numEnemies];
-
-        //TODO: remove this jargon
-        /*for (visactor *tmp = &doop_vislist[0] ; tmp !=doop_lastactptr ; tmp++) {
-            int actLoc = (tmp->tilex<<mapshift)+tmp->tiley;   // optimize: keep in struct?
-            int myLoc = (player->tilex<<mapshift)+player->tiley;   // optimize: keep in struct?
-            std::cout << "dist: " << actLoc - myLoc << std::endl;
-        }*/
         //
         // MAKE FUNNY FACE IF BJ DOESN'T MOVE FOR AWHILE
         //
@@ -1363,6 +1356,12 @@ void PlayLoop (void)
                 IN_ClearKeysDown ();
                 playstate = ex_abort;
             }
+        }
+
+        doopAI.timeout--;
+        if (doopAI.timeout <= 0) {
+            playstate = ex_died;
+            //measure fitness;
         }
     }
     while (!playstate && !startgame);

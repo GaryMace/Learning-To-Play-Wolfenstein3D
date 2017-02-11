@@ -84,6 +84,7 @@ void Quit(const char *errorStr, ...);
 #include "id_ca.h"
 
 #include "wl_menu.h"
+#include "NEATDoop.h"
 
 #define MAPSPOT(x,y,plane) (mapsegs[plane][((y)<<mapshift)+(x)])
 
@@ -921,7 +922,7 @@ extern int mapon;
 
 =============================================================================
 */
-
+extern NEATDoop doopAI;
 //maybe add an int flag field so that if we get the chance to demo what Doop can see later it will be
 //easier to id what color box to display?
 typedef struct visactorstruct {
@@ -939,13 +940,6 @@ typedef struct visstatstruct {
     byte      itemnumber;
 } visstat;
 
-typedef struct visdoorstruct {
-    byte     tilex,tiley;
-    boolean  vertical;
-    byte     lock;
-    doortype action;
-    short    ticcount;
-} visdoor;
 extern boolean buttoons[NUMBUTTONS];            //Duplicate of buttonstate, will replace buttonstate later
 
 extern visactor doop_vislist[MAXACTORS];             //visible actor list
@@ -956,16 +950,11 @@ extern visstat doop_visstat[MAXSTATS];               //visible pickups list
 extern visstat *doop_laststatptr;
 extern visstat *doop_statptr;
 
-extern visdoor doop_visdoor[MAXDOORS];               //visible doors list
-extern visdoor *doop_lastdoorptr;
-extern visdoor *doop_doorptr;
-
 extern int doop_actsvis;
 extern int doop_statsvis;
-extern int doop_doorsvis;
 extern int falg;    //TODO: remove
 
-extern int inputs[INPUTS][SEARCH_GRID];
+extern int inputs[INPUTS][SEARCH_GRID]; // inputs size is [10][25]
 /*
 =============================================================================
 

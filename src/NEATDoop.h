@@ -6,11 +6,11 @@
 #define TESTBENCH_NEATDOOP_H
 
 #include <vector>
-#include "wl_def.h"
 
 class NEATDoop {
 public:
     bool genusSetUp;
+    int timeout;
 
     void initialiseGenus ();
     void initialiseRun ();

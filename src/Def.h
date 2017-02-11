@@ -7,7 +7,7 @@
 
 #define POPULATION 10           //TODO: refactor
 #define STALE_SPECIES 15
-#define TIMEOUT 20
+#define TIMEOUT 300 //was 20
 #define MUTATION_TYPES 7        //consider moving later
 #define INPUTS 9                // doors, walls, walk space, enemys, ammo, health, keys, guns, push walls
 #define SEARCH_GRID 25          //5x5 grid
