@@ -9,7 +9,7 @@ int main() {
     Genome g1;
     Genome g2;
     Neuron n;
-    std::vector<Gene> test;
+    std::list<Gene> test;
 
     for (int i = 0; i < 4; i++) {
         Gene g;
@@ -38,9 +38,8 @@ int main() {
 
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Species::calculateAverageFitness()" << std::endl;
-    s.genomes[0].globalRank = 3;
-    s.genomes[1].globalRank = 5;
+    (s.genomes.begin()++)->globalRank = 5;
     s.calculateAverageFitness();
-    std::cout << "Average fitness of Species (expected 4): " << s.averageFitness << std::endl;
+    std::cout << "Average fitness of Species (expected 2.5): " << s.averageFitness << std::endl;
     return 0;
 }

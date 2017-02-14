@@ -5,6 +5,7 @@
 #include <sstream>
 #include <iostream>
 #include <cmath>
+//#include <windows.h>
 #include "Genome.h"
 #include "Genus.h"
 
@@ -33,13 +34,9 @@ std::string Genome::backup() {
     }
 
     out += "\n\t\t\t\t\tgenes={";
-    for (int i = 0; i < genes.size(); i++) {
-        Gene gene = genes[i];
-        if (i == genes.size() - 1)
-            out += gene.backup();
-        else
-            out += gene.backup() + ",";
-    }
+    for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++)
+        out += geneItr->backup() + ",";
+    out = out.substr(0, out.length() - 1);  //Remove last ","
     out += "\n\t\t\t\t\t},";
 
     out += "\n\t\t\t\t\tnetwork={";
@@ -59,10 +56,8 @@ std::string Genome::backup() {
 Genome Genome::clone() {
     Genome genome;
 
-    for (int i = 0; i < genes.size(); i++) {
-        Gene gene  = genes[i];
-        genome.genes.push_back(gene);
-    }
+    for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++)
+        genome.genes.push_back(*geneItr);
     genome.maxNeuron = maxNeuron;
 
     for (int i = 0; i < MUTATION_TYPES; i++)
@@ -102,29 +97,29 @@ void Genome::generateNetwork() {
         Neuron n;
         network.insert(std::make_pair(MAX_NODES + i, n));  //notice output neurons start right after input neurons here
     }
-    std::sort(genes.begin(), genes.end(), Gene::compare);   //Order genes based on output
+//    std::sort(genes.begin(), genes.end(), Gene::compare);   //Order genes based on output
+    genes.sort(Gene::compare);
 
-    for (int i = 0; i < genes.size(); i++) {
-        Gene gene  = genes[i];
-        if (gene.enabled) { //If this Gene is enabled
-            std::map<int, Neuron>::iterator it = network.find(gene.output);
+    for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
+        if (geneItr->enabled) { //If this Gene is enabled
+            std::map<int, Neuron>::iterator it = network.find(geneItr->output);
             if (it != network.end()) {  //If key gene.output doesn't exist
                 Neuron n;
-                network.insert(std::make_pair(gene.output, n)); //make new entry
+                network.insert(std::make_pair(geneItr->output, n)); //make new entry
             }
-            Neuron& n = network[gene.output];   //add this Gene to entry
-            n.inputs.push_back(gene);
+            Neuron& n = network[geneItr->output];   //add this Gene to entry
+            n.inputs.push_back(*geneItr);
 
-            std::map<int, Neuron>::iterator it2 = network.find(gene.input);
+            std::map<int, Neuron>::iterator it2 = network.find(geneItr->input);
             if (it != network.end()) {  //If key gene.input doesn't exist
                 Neuron n2;
-                network.insert(std::make_pair(gene.input, n2));
+                network.insert(std::make_pair(geneItr->input, n2));
             }
         }
     }
 }
 
-std::vector<bool> Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
+bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
     for (int i = 0; i < INPUTS; i++)
         for (int j = 0; j < SEARCH_GRID; j++)
             network[i].value = inputs[i][j];    //Change input values to network
@@ -135,8 +130,8 @@ std::vector<bool> Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
 
         Neuron& n1 = it->second;    //Neuron& grabs the address of the value from the hashmap
         double sum = 0.0;
-        for (int i = 0; i < n1.inputs.size(); i++) {
-            Gene incoming = n1.inputs[i];   //for each Gene of Neurons inputs
+        for (n1.geneItr = n1.inputs.begin(); n1.geneItr != n1.inputs.end(); n1.geneItr++) {
+            Gene incoming = *n1.geneItr;   //for each Gene of Neurons inputs
             Neuron n2 = network[incoming.input];
             sum += incoming.weight * n2.value;  //Get sum of input Genes to this Neuron
         }
@@ -151,8 +146,8 @@ std::vector<bool> Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
 
         Neuron& n1 = it->second;
         double sum = 0.0;
-        for (int i = 0; i < n1.inputs.size(); i++) {
-            Gene incoming = n1.inputs[i];       //For each Gene of Neurons inputs
+        for (n1.geneItr = n1.inputs.begin(); n1.geneItr != n1.inputs.end(); n1.geneItr++) {
+            Gene incoming = *n1.geneItr;       //For each Gene of Neurons inputs
             Neuron n2 = network[incoming.input];
             sum += incoming.weight * n2.value;  //Get sum of input Genes to this Neuron
         }
@@ -161,7 +156,7 @@ std::vector<bool> Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
             n1.value = Neuron::sigmoid(sum);
     }
 
-    std::vector<bool> outputs;
+    bool outputs[OUTPUTS];
     for (int i = 0; i < OUTPUTS; i++) {
         if (network[MAX_NODES + i].value > 0)
             outputs[i] = true;
@@ -175,21 +170,29 @@ void Genome::nodeMutate() {
     if (genes.empty())
         return;
 
-    Gene &gene = genes[rand() % genes.size()];
-    if (!gene.enabled)
+    int randGene =  0 + (rand() % (int)(genes.size() - 0 + 1));
+    Gene *gene;
+
+    for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
+        if (--randGene <= 0) {
+            gene = &(*geneItr);
+            break;
+        }
+    }
+    if (!gene->enabled)
         return;
 
-    gene.enabled = false;
+    gene->enabled = false;
     maxNeuron++;
 
-    Gene gene1 = gene.clone();  //TODO: is this not just making a copy and putting it at the end?
+    Gene gene1 = gene->clone();  //TODO: is this not just making a copy and putting it at the end?
     gene1.output = maxNeuron;
     gene1.weight = 1.0;
     gene1.innovation = Genus::newInnovation();
     gene1.enabled = true;
     genes.push_back(gene1);
 
-    Gene gene2 = gene.clone();
+    Gene gene2 = gene->clone();
     gene2.input = maxNeuron;
     gene2.innovation = Genus::newInnovation();
     gene2.enabled = true;
@@ -199,19 +202,17 @@ void Genome::nodeMutate() {
 void Genome::pointMutate() {
     double step = mutationRates[STEP];
 
-    for (int i = 0; i < genes.size(); i++) {
-        Gene& gene = genes[i];
+    for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
         if (Genus::nextDouble() < PERTURBATION_CHANCE)
-            gene.weight += Genus::nextDouble() * step * 2.0 - step;
+            geneItr->weight += Genus::nextDouble() * step * 2.0 - step;
         else
-            gene.weight = Genus::nextDouble() * 4.0 - 2.0;
+            geneItr->weight = Genus::nextDouble() * 4.0 - 2.0;
     }
 }
 
 void Genome::linkMutate(bool forceBias) {
     int neuron1 = randomNeuron(false, true);
     int neuron2 = randomNeuron(true, false);
-
     if (neuron1 <= TOTAL_INPUTS && neuron2 <= TOTAL_INPUTS) //Both input nodes, exit
         return;
     if (neuron2 <= TOTAL_INPUTS) {    //swap output and input
@@ -219,20 +220,23 @@ void Genome::linkMutate(bool forceBias) {
         neuron1 = neuron2;
         neuron2 = tempNeuron;
     }
-
+    
     Gene newLink;
     newLink.input = neuron1;
     newLink.output = neuron2;
 
     if (forceBias)
-        newLink.input = TOTAL_INPUTS; //TODO: Check back on this part,should be =INPUTS I think
+        newLink.input = TOTAL_INPUTS;
 
     if (containsLink(newLink))
         return;
 
     newLink.innovation = Genus::newInnovation();
     newLink.weight = Genus::nextDouble() * 4.0 - 2.0;
+    //Sleep(5000);
     genes.push_back(newLink);
+    //Sleep(1000);
+    std::cout << "I dida thing" << std::endl;
 }
 
 void Genome::mutate() {
@@ -244,74 +248,79 @@ void Genome::mutate() {
 
     double prob = mutationRates[LINK];
     while (prob > 0) {
-        if (Genus::nextDouble() < prob)
+        if (Genus::nextDouble() < prob){
             linkMutate(false);
+        }
         prob--;
     }
+    
+    //double prob2 = mutationRates[BIAS];
+    //while (prob2 > 0) {
+    //    if (Genus::nextDouble() < prob2)
+    //        linkMutate(true);
+    //    prob2--;
+    //}
+    
+    //double prob3 = mutationRates[NODE];
+    //while (prob3 > 0) {
+    //    if (Genus::nextDouble() < prob3)
+    //        nodeMutate();
+    //    prob3--;
+    //}
+    
+    //double prob4 = mutationRates[ENABLE];
+    //while (prob4 > 0) {
+    //    if (Genus::nextDouble() < prob4)
+    //        mutateEnableDisable(true);
+    //    prob4--;
+    //}
 
-    prob = mutationRates[BIAS];
-    while (prob > 0) {
-        if (Genus::nextDouble() < prob)
-            linkMutate(true);
-        prob--;
-    }
-
-    prob = mutationRates[NODE];
-    while (prob > 0) {
-        if (Genus::nextDouble() < prob)
-            nodeMutate();
-        prob--;
-    }
-
-    prob = mutationRates[ENABLE];
-    while (prob > 0) {
-        if (Genus::nextDouble() < prob)
-            mutateEnableDisable(true);
-        prob--;
-    }
-
-    prob = mutationRates[DISABLE];
-    while (prob > 0) {
-        if (Genus::nextDouble() < prob)
-            mutateEnableDisable(false);
-        prob--;
-    }
+    //double prob5 = mutationRates[DISABLE];
+    //while (prob5 > 0) {
+    //    if (Genus::nextDouble() < prob5)
+    //        mutateEnableDisable(false);
+    //    prob5--;
+    //}
 }
 
 void Genome::mutateEnableDisable(bool enable) {
-    std::vector<Gene*> candidates;  //vector of pointers
+    std::list<Gene*>::iterator geneItr2;
+    std::list<Gene*> candidates;  //vector of pointers
 
-    for (int i = 0; i < genes.size(); i++) {
-        Gene& gene = genes[i];
-        if (gene.enabled != enable)
-            candidates.push_back(&gene);
+    for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
+        if (geneItr->enabled != enable)
+            candidates.push_back(&(*geneItr));
     }
     if (candidates.empty())
         return;
 
     //pointer to obj ref from original vector
-    Gene *gene = candidates[rand() % candidates.size()]; //in-place vector edit
+    int randGene =  0 + (rand() % (int)(candidates.size() - 0 + 1));
+    Gene *gene;
+    for (geneItr2 = candidates.begin(); geneItr2 != candidates.end(); geneItr2++) {
+        if (--randGene <= 0) {
+            gene = *geneItr2;
+        }
+    }
     gene->enabled = !gene->enabled; //change value via pointer
 }
 
 bool Genome::containsLink(Gene link) {
-    for (int i = 0; i < genes.size(); i++) {
-        Gene gene = genes[i];
-        if (gene.input == link.input && gene.output == link.output)
+    for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
+        if (geneItr->input == link.input && geneItr->output == link.output)
             return true;
     }
     return false;
 }
 
 double Genome::disjoint(Genome genome) {
+    std::list<Gene>::iterator geneItr2; //Gene 2 iterator
     double disjointGenes = 0.0;
     bool isDisjoint = true;
 
-    for (int i = 0; i < genes.size(); i++) {
-        Gene gene1 = genes[i];
-        for (int j = 0; j < genome.genes.size(); j++) {
-            Gene gene2 = genome.genes[j];
-            if (gene1.innovation == gene2.innovation) {
+    for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {          //Gene 1
+        for (geneItr2 = genome.genes.begin(); geneItr2 != genome.genes.end(); geneItr2++) { //Gene 2
+            if (geneItr->innovation == geneItr2->innovation) {      //Is Gene 1 == Gene 2
                 isDisjoint = false;
                 break;
             }
@@ -329,45 +338,42 @@ double Genome::disjoint(Genome genome) {
 int Genome::randomNeuron(bool nonInput, bool nonOutput) {
     std::map<int, bool> neurons;
     srand(time(NULL));  //TODO: is this necessary?
-
+    
     if (!nonInput)
-        for (int i = 0; i < TOTAL_INPUTS; i++)
+        for (int i = 0; i < TOTAL_INPUTS; i++) 
             neurons[i] = true;
-
+    
     if (!nonOutput)
-        for (int i = 0; i < OUTPUTS; ++i)
+        for (int i = 0; i < OUTPUTS; ++i) 
             neurons[MAX_NODES + i] = true;
 
-    for (int i = 0; i < genes.size(); i++) {
-        Gene gene = genes[i];
-        if ((!nonInput || gene.input > TOTAL_INPUTS))
-            neurons[gene.input] = true;
-        if ((!nonInput || gene.output > TOTAL_INPUTS))
-            neurons[gene.output] = true;
+    for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
+        if ((!nonInput || geneItr->input > TOTAL_INPUTS))
+            neurons[geneItr->input] = true;
+        if ((!nonInput || geneItr->output > TOTAL_INPUTS))
+            neurons[geneItr->output] = true;
     }
-
     int size = 0;
-    for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++)   //get size of map
+    for (std::map<int, bool>::iterator it = neurons.begin(); it != neurons.end(); it++)   //get size of map
         size++;
 
     int n = (rand() % size) + 1;
-    for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++)   //get random neuron in there (Not a hidden one)
+    for (std::map<int, bool>::iterator it = neurons.begin(); it != neurons.end(); it++)   //get random neuron in there (Not a hidden one)
         if (--n == 0)
             return it->first;
-
+    
     return 0;
 }
 
 double Genome::weights(Genome genome) {
-    double sum = 0.0;
+    std::list<Gene>::iterator geneItr2; //Gene 2 iterator
     double coincident = 0.0;
+    double sum = 0.0;
 
-    for (int i = 0; i < genes.size(); i++) {
-        Gene gene1 = genes[i];
-        for (int j = 0; j < genome.genes.size(); j++) {
-            Gene gene2 = genome.genes[j];
-            if (gene1.innovation == gene2.innovation) {
-                sum += std::fabs(gene1.weight - gene2.weight); //std::fabs is abs() on a float, too bad it doesn't exist pre C++11
+    for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
+        for (geneItr2 = genome.genes.begin(); geneItr2 != genome.genes.end(); geneItr2++) {
+            if (geneItr->innovation == geneItr2->innovation) {
+                sum += std::fabs(geneItr->weight - geneItr2->weight); //std::fabs is abs() on a float, too bad it doesn't exist pre C++11
                 coincident++;
                 break;
             }

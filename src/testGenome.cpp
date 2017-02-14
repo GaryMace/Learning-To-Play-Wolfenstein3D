@@ -3,6 +3,7 @@
 //
 #include <iostream>
 #include "Genome.h"
+#include "NEATDoop.h"
 
 int main() {
     Genome g1;
@@ -18,15 +19,14 @@ int main() {
     std::cout << "g1 network size on init (expected 0): " << g1.network.size() << std::endl;
     g1.generateNetwork();
 
-    std::vector<double> inputs = {1,2,3,4};
-    std::vector<double> out = g1.evaluateNetwork(inputs);
-    std::cout << "g1 evalNetwork size (expected 8): " << out.size() << std::endl;
-    std::cout << "g1 output vals (expected eight default vals i.e. 0): ";
-    for (int i = 0; i < out.size(); i++)
-        std::cout << out[i] << " ";
-    std::cout << std::endl;
-
-    std::cout << "g1 network size instantiated (expected 12): " << g1.network.size() << "\n" << std::endl;
+    //std::list<double> inputs = {1,2,3,4};
+    //std::vector<double> out = g1.evaluateNetwork(inputs);
+    //std::cout << "g1 evalNetwork size (expected 8): " << out.size() << std::endl;
+    //std::cout << "g1 output vals (expected eight default vals i.e. 0): ";
+    //for (int i = 0; i < out.size(); i++)
+    //    std::cout << out[i] << " ";
+    //std::cout << std::endl;
+    std::cout << "g1 network size instantiated (expected 235): " << g1.network.size() << "\n" << std::endl;
 
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::compare()" << std::endl;
@@ -41,16 +41,13 @@ int main() {
 
     std::cout << std::endl;
     std::cout << "g1 before node mutate: " << std::endl;
-    for (int i = 0; i < g1.genes.size(); i++) {
-        Gene gene = g1.genes[i];
-        std::cout << gene.backup() << std::endl;
-    }
+    for (g1.geneItr = g1.genes.begin(); g1.geneItr != g1.genes.end(); g1.geneItr++)
+        std::cout << g1.geneItr->backup() << std::endl;
+
     std::cout << "g1 after node mutate: " << std::endl;
     g1.nodeMutate();
-    for (int i = 0; i < g1.genes.size(); i++) {
-        Gene gene = g1.genes[i];
-        std::cout << gene.backup() << "\n" << std::endl;
-    }
+    for (g1.geneItr = g1.genes.begin(); g1.geneItr != g1.genes.end(); g1.geneItr++)
+        std::cout << g1.geneItr->backup() << "\n" << std::endl;
 
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::randomNeuron()" << std::endl;
@@ -59,53 +56,42 @@ int main() {
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::pointMutate()" << std::endl;
     std::cout << "g1 before point mutate: " << std::endl;
-    for (int i = 0; i < g1.genes.size(); i++) {
-        Gene gene = g1.genes[i];
-        std::cout << gene.backup() << std::endl;
-    }
+    for (g1.geneItr = g1.genes.begin(); g1.geneItr != g1.genes.end(); g1.geneItr++)
+        std::cout << g1.geneItr->backup() << std::endl;
     g1.pointMutate();
     std::cout << "g1 after point mutate: " << std::endl;
-    for (int i = 0; i < g1.genes.size(); i++) {
-        Gene gene = g1.genes[i];
-        std::cout << gene.backup() << "\n" << std::endl;
-    }
+    for (g1.geneItr = g1.genes.begin(); g1.geneItr != g1.genes.end(); g1.geneItr++)
+        std::cout << g1.geneItr->backup() << "\n" << std::endl;
+
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::linkMutate()" << std::endl;
     std::cout << "g1 before link mutate(forceBias - false): " << std::endl;
-    for (int i = 0; i < g1.genes.size(); i++) {
-        Gene gene = g1.genes[i];
-        std::cout << gene.backup() << std::endl;
-    }
+    for (g1.geneItr = g1.genes.begin(); g1.geneItr != g1.genes.end(); g1.geneItr++)
+        std::cout << g1.geneItr->backup() << std::endl;
     g1.linkMutate(false);
     std::cout << "g1 after link mutate(forceBias - false): " << std::endl;
-    for (int i = 0; i < g1.genes.size(); i++) {
-        Gene gene = g1.genes[i];
-        std::cout << gene.backup() << std::endl;
-    }
+    for (g1.geneItr = g1.genes.begin(); g1.geneItr != g1.genes.end(); g1.geneItr++)
+        std::cout << g1.geneItr->backup() << std::endl;
     std::cout << "g1 before link mutate(forceBias - true): " << std::endl;
-    for (int i = 0; i < g1.genes.size(); i++) {
-        Gene gene = g1.genes[i];
-        std::cout << gene.backup() << std::endl;
-    }    g1.linkMutate(true);
+    for (g1.geneItr = g1.genes.begin(); g1.geneItr != g1.genes.end(); g1.geneItr++)
+        std::cout << g1.geneItr->backup() << std::endl;
+    g1.linkMutate(true);
     std::cout << "g1 after link mutate(forceBias - true): " << std::endl;
-    for (int i = 0; i < g1.genes.size(); i++) {
-        Gene gene = g1.genes[i];
-        std::cout << gene.backup() << std::endl;
-    }
+    for (g1.geneItr = g1.genes.begin(); g1.geneItr != g1.genes.end(); g1.geneItr++)
+        std::cout << g1.geneItr->backup() << std::endl;
+
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::mutateEnableDisable()" << std::endl;
     g1.mutateEnableDisable(true);
-    for (int i = 0; i < g1.genes.size(); i++) {
-        Gene gene = g1.genes[i];
-        std::cout << gene.backup() << std::endl;
-    }
+    for (g1.geneItr = g1.genes.begin(); g1.geneItr != g1.genes.end(); g1.geneItr++)
+        std::cout << g1.geneItr->backup() << std::endl;
+
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::mutate()" << std::endl;
     g1.mutate();
-    for (int i = 0; i < g1.genes.size(); i++) {
-        Gene gene = g1.genes[i];
-        std::cout << gene.backup() << std::endl;
-    }
+    for (g1.geneItr = g1.genes.begin(); g1.geneItr != g1.genes.end(); g1.geneItr++)
+        std::cout << g1.geneItr->backup() << std::endl;
+
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::containsLink()" << std::endl;
     Gene testGene;

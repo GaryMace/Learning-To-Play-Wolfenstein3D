@@ -15,7 +15,7 @@ int main() {
     g.input = 2;
     std::cout << "Gene input (expected 2): " << g.input << std::endl;
     g.output = 3;
-    std::cout << "Gene input (expected 3): " << g.output << std::endl;
+    std::cout << "Gene output (expected 3): " << g.output << std::endl;
 
     std::cout << "Gene innovation (expected 0): " << g.innovation << std::endl;
 

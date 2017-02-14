@@ -13,13 +13,9 @@ std::string Neuron::backup() {
             static_cast<std::ostringstream*>(&(std::ostringstream() << value))->str();
     out += "value=" + str + ",";
     out += "\n\t\t\t\t\t\t\t\tinputs={";
-    for (int i = 0; i < inputs.size(); i++) {
-        Gene gene = inputs[i];
-        if (i == inputs.size() - 1)
-            out += gene.backup() + "}";
-        else
-            out += gene.backup() + ",";
-    }
+    for (geneItr = inputs.begin(); geneItr != inputs.end(); geneItr++)
+            out += geneItr->backup() + ",";
+    out = out.substr(0, out.length() - 1) + "}";  //Remove last ","
 
     out += "}\n\t\t\t\t\t\t\t}\n";
     return out;

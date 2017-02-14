@@ -18,13 +18,10 @@ std::string Species::backup() {
     out += "\n\t\t\tstaleness=" + str + ",";
 
     out += "\n\t\t\tgenomes={";
-    for (int i = 0; i < genomes.size(); i++) {
-        Genome genome = genomes[i];
-        if (i == genomes.size() - 1)
-            out += genome.backup();
-        else
-            out += genome.backup() + ",";
-    }
+    for (genomeItr = genomes.begin(); genomeItr != genomes.end(); genomeItr++)
+            out += genomeItr->backup() + ",";
+    out = out.substr(0, out.length() - 1);  //Remove last ","
+
     out += "\n\t\t\t}\n\t\t}";  //close genomes{} then Species brackets
 
     return out;
@@ -34,11 +31,30 @@ Genome Species::breedChild() {
     Genome child;
 
     if (Genus::nextDouble() < CROSSOVER_CHANCE) {
-        Genome g1 = genomes[rand() % genomes.size()];
-        Genome g2 = genomes[rand() % genomes.size()];
+        int randGenome1 = rand() % genomes.size();
+        int randGenome2 = rand() % genomes.size();
+        Genome g1;
+        Genome g2;
+        for (genomeItr = genomes.begin(); genomeItr != genomes.end(); genomeItr++)
+            if (--randGenome1 <= 0) {
+                g1 = genomeItr->clone();
+                break;
+            }
+        for (genomeItr = genomes.begin(); genomeItr != genomes.end(); genomeItr++)
+            if (--randGenome2 <= 0) {
+                g2 = genomeItr->clone();
+                break;
+            }
+
         child = crossover(g1, g2);
-    } else
-        child = genomes[rand() % genomes.size()].clone();
+    } else {
+        int randGenome = rand() % genomes.size();
+        for (genomeItr = genomes.begin(); genomeItr != genomes.end(); genomeItr++)
+            if (--randGenome <= 0) {
+                child = genomeItr->clone();
+                break;
+            }
+    }
     child.mutate();
 
     return child;
@@ -47,10 +63,8 @@ Genome Species::breedChild() {
 void Species::calculateAverageFitness() {
     double total = 0.0;
 
-    for (int i = 0; i < genomes.size(); i++) {
-        Genome genome = genomes[i];
-        total += genome.globalRank;
-    }
+    for (genomeItr = genomes.begin(); genomeItr != genomes.end(); genomeItr++)
+        total += genomeItr->globalRank;
 
     averageFitness = total / genomes.size();
 }
@@ -64,20 +78,18 @@ Genome Species::crossover(Genome g1, Genome g2) {
     Genome child;   //The new child
     bool skipDoup = false;  //Some genes are identical across g1 & g2, this avoids adding them twice
 
-    for (int i = 0; i < g1.genes.size(); i++) {
-        Gene gene1 = g1.genes[i];
-        for (int j = 0; j < g2.genes.size(); j++) {
-            Gene gene2 = g2.genes[j];
-            if (gene1.innovation == gene2.innovation) {
-                if (rand() % 2 == 1 && gene2.enabled) {  //if true
-                    child.genes.push_back(gene2.clone());
+    for (g1.geneItr = g1.genes.begin(); g1.geneItr != g1.genes.end(); g1.geneItr++) {
+        for (g2.geneItr = g2.genes.begin(); g2.geneItr != g2.genes.end(); g2.geneItr++) {
+            if (g1.geneItr->innovation == g2.geneItr->innovation) {
+                if (rand() % 2 == 1 && g2.geneItr->enabled) {  //if true
+                    child.genes.push_back(g2.geneItr->clone());
                     skipDoup = true;
                     break;
                 }
             }
         }
         if (!skipDoup)   //prevents adding the same gene twice
-            child.genes.push_back(gene1.clone());
+            child.genes.push_back(g1.geneItr->clone());
         else
             skipDoup = false;
     }

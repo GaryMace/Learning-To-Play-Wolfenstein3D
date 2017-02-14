@@ -14,9 +14,8 @@ int main() {
     }
 
     std::cout << "Neuron genes (expected 0 1 ... 9): ";
-    for (int i = 0; i < n.inputs.size(); i++) {
-        Gene g = n.inputs[i];
-        std::cout << g.innovation << " ";
+    for (n.geneItr = n.inputs.begin(); n.geneItr != n.inputs.end(); n.geneItr++) {
+        std::cout << n.geneItr->innovation << " ";
     }
     std::cout << std::endl;
 

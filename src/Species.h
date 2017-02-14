@@ -8,7 +8,8 @@
 
 class Species {
 public:
-    std::vector<Genome> genomes;
+    std::list<Genome> genomes;
+    std::list<Genome>::iterator genomeItr;
     double topFitness;
     double averageFitness;
     int staleness;

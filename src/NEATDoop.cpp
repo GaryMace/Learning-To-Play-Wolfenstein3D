@@ -5,7 +5,7 @@
 #include "wl_def.h"
 #include "Genome.h"
 #include "Genus.h"
-
+#include <iostream>
 /*
 =================================
 =
@@ -19,11 +19,14 @@ void NEATDoop::initialiseGenus() {
     for (int i = 0; i < POPULATION; i++) {  //initial population
         Genome basic;
         basic.maxNeuron = TOTAL_INPUTS;     // See wl_def.h for a description on this constant.
+        //std::cout << basic.backup()<< std::endl;
         basic.mutate();
+        //std::cout << basic.backup() <<std::endl;
+        //std::cout << Genus::species.size() << std::endl;
         Genus::addToSpecies(basic);
     }
-
-    initialiseRun();
+    
+    //initialiseRun();
 }
 
 /*
@@ -41,8 +44,8 @@ void NEATDoop::initialiseRun() {
     int rightmist = 0;  //???
     clearControls();
 
-    Species& species = Genus::species[Genus::currSpecies];
-    Genome& genome = species.genomes[Genus::currGenome];
+    Species& species = *Genus::currSpeciesItr;
+    Genome& genome = *Genus::currGenomeItr;
     genome.generateNetwork();
     evaluateCurrent();
 }
@@ -76,9 +79,9 @@ void NEATDoop::clearControls() {
 =================================
  */
 void NEATDoop::evaluateCurrent() {
-    Species& species = Genus::species[Genus::currSpecies];
-    Genome& genome = species.genomes[Genus::currGenome];
-    std::vector<bool> controls = genome.evaluateNetwork(inputs);
+    Species& species = *Genus::currSpeciesItr;;
+    Genome& genome = *Genus::currGenomeItr;
+    bool controls[] = genome.evaluateNetwork(inputs);
 
     setUpController(controls);
 }
@@ -94,8 +97,8 @@ int mydirscan[4];   //TODO: remove and replace with dirscan
 =
 =================================
  */
-void NEATDoop::setUpController(std::vector<bool> controls) {
-    for (int i = 0; i < controls.size(); i++) {
+void NEATDoop::setUpController(bool* controls) {
+    for (int i = 0; i < OUTPUTS; i++) {
         if (controls[i]) {
             switch (i) {        //If an output val from network is true, switch on it set the appropriate control
                 case FORWARD:
@@ -129,9 +132,8 @@ void NEATDoop::setUpController(std::vector<bool> controls) {
                     buttonstate[bt_readychaingun] = true;
                     break;
             }
-        } else {
+        } else
             buttonstate[i] = false;    //all other controls we don't care about set to false, i.e. pausing the game
-        }
     }
 }
 
@@ -147,13 +149,24 @@ void NEATDoop::setUpController(std::vector<bool> controls) {
  */
 void NEATDoop::nextGenome() {
     Genus::currGenome++;
+    Genus::currGenomeItr++;
 
-    if (Genus::currGenome >= Genus::species[Genus::currSpecies].genomes.size()) {    //TODO: >= or > ?
+    if (Genus::currGenomeItr == Genus::currSpeciesItr->genomes.end()) {
+        Genus::currSpeciesItr++;
+        if (Genus::currSpeciesItr == Genus::species.end()) {
+            Genus::newGeneration();
+            Genus::currSpeciesItr = NULL;
+            Genus::currGenomeItr = NULL;
+        } else
+            Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
+    }
+
+    /*if (Genus::currGenome >= Genus::species[Genus::currSpecies].genomes.size()) {    //TODO: >= or > ?
         Genus::currGenome = 0;
         Genus::currSpecies++;
         if (Genus::currSpecies >= Genus::species.size()) {
             Genus::newGeneration();
             Genus::currSpecies = 0;
         }
-    }
+    }*/
 }

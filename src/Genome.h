@@ -4,7 +4,7 @@
 #ifndef TESTBENCH_GENOME_H
 #define TESTBENCH_GENOME_H
 
-#include <vector>
+#include <list>
 #include <map>
 
 #include "Neuron.h"
@@ -23,7 +23,8 @@ class Genome {
 public:
     double mutationRates[MUTATION_TYPES];
     std::map<int, Neuron> network;
-    std::vector<Gene> genes;
+    std::list<Gene> genes;
+    std::list<Gene>::iterator geneItr;
     int maxNeuron;
     int globalRank;
     double fitness; //this will be set in the game loop
@@ -35,7 +36,7 @@ public:
 
     void initMutationRates();
     void generateNetwork(); //has Genome param in marIO
-    std::vector<bool> evaluateNetwork(int inputs[][SEARCH_GRID]);  //Has network, inputs param in MarIO
+    bool* evaluateNetwork(int inputs[][SEARCH_GRID]);  //Has network, inputs param in MarIO
     void nodeMutate();  //MarIO: genome
     void linkMutate(bool forceBias);  //MarIO: genome, forceBias(bool)
     void pointMutate(); //MarIO: genome

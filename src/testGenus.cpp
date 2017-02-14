@@ -32,6 +32,7 @@ int main() {
     Genus::addToSpecies(g1);
     std::cout << "Total species increase (expected 4): " << Genus::species.size() << std::endl;
     std::cout << Genus::backup() << "\n" << std::endl;
+/*
 
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genus::initialiseGenus()" << std::endl;
@@ -46,6 +47,7 @@ int main() {
     }
 
     std::cout << Genus::backup() << "\n" << std::endl;
+*/
 
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genus::rankGlobally()" << std::endl;
@@ -59,11 +61,13 @@ int main() {
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genus::removeStaleSpecies()" << std::endl;
     int i = 0;
-    for (int j = 0; j < Genus::species.size(); j++) {
-        Species& s = Genus::species[j];
-        for (int k = 0; k < s.genomes.size(); k++) {
-            Genome& genome = s.genomes[k];
-            genome.fitness = i++;
+
+    for (Genus::speciesItr = Genus::species.begin(); Genus::speciesItr != Genus::species.end(); Genus::speciesItr++) {
+        Species* s = &(*Genus::speciesItr);
+    //for (int j = 0; j < Genus::species.size(); j++) {
+        for (s->genomeItr = s->genomes.begin(); s->genomeItr != s->genomes.end(); s->genomeItr++) {
+            //for (int k = 0; k < s.genomes.size(); k++) {
+            s->genomeItr->fitness = i++;
         }
     }
 
@@ -77,10 +81,11 @@ int main() {
 
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genus::cullSpecies()" << std::endl;
-    for (int j = 0; j < Genus::species.size(); j++) {
-        Species& s = Genus::species[j];
+    for (Genus::speciesItr = Genus::species.begin(); Genus::speciesItr != Genus::species.end(); Genus::speciesItr++) {
+        //for (int j = 0; j < Genus::species.size(); j++) {
+        Species* s = &(*Genus::speciesItr);
         Genome g;   //Add extra Genomes for testing
-        s.genomes.push_back(g);
+        s->genomes.push_back(g);
     }
     Genus::cullSpecies(true);
     std::cout << Genus::backup() << "\n" << std::endl;

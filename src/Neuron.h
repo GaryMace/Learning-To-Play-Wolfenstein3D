@@ -4,13 +4,14 @@
 #ifndef TESTBENCH_NEURON_H
 #define TESTBENCH_NEURON_H
 
-#include <vector>
+#include <list>
 #include "Gene.h"
 
 class Neuron {
 public:
     double value;
-    std::vector<Gene> inputs;
+    std::list<Gene> inputs;
+    std::list<Gene>::iterator geneItr;
 
     std::string backup();
     static double sigmoid(double x);
