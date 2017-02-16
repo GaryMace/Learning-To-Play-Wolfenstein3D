@@ -6,6 +6,7 @@
 #define TESTBENCH_NEATDOOP_H
 
 #include <vector>
+#include "Def.h"
 
 class NEATDoop {
 public:
@@ -16,8 +17,10 @@ public:
     void initialiseRun ();
     void clearControls ();
     void evaluateCurrent ();
-    void setUpController (std::vector<bool> controls);
+    void setUpController (bool* controls);
 
     void nextGenome();
+
+    NEATDoop() : timeout(100), genusSetUp(false) { }
 };
 #endif //TESTBENCH_NEATDOOP_H

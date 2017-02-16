@@ -25,8 +25,10 @@ void NEATDoop::initialiseGenus() {
         //std::cout << Genus::species.size() << std::endl;
         Genus::addToSpecies(basic);
     }
-    
-    //initialiseRun();
+    Genus::currSpeciesItr = Genus::species.begin();
+    Genus::currGenomeItr = Genus::species.begin()->genomes.begin();
+    std::cout << "start run" << std::endl;
+    initialiseRun();
 }
 
 /*
@@ -40,13 +42,12 @@ void NEATDoop::initialiseGenus() {
 =================================
  */
 void NEATDoop::initialiseRun() {
-    timeout = TIMEOUT;
+    //timeout = TIMEOUT;
     int rightmist = 0;  //???
-    clearControls();
+    //clearControls();
 
-    Species& species = *Genus::currSpeciesItr;
-    Genome& genome = *Genus::currGenomeItr;
-    genome.generateNetwork();
+    Genome* genome = &(*Genus::currGenomeItr);
+    genome->generateNetwork();
     evaluateCurrent();
 }
 
@@ -79,14 +80,18 @@ void NEATDoop::clearControls() {
 =================================
  */
 void NEATDoop::evaluateCurrent() {
-    Species& species = *Genus::currSpeciesItr;;
-    Genome& genome = *Genus::currGenomeItr;
-    bool controls[] = genome.evaluateNetwork(inputs);
+    Genome* genome = &(*Genus::currGenomeItr);
+    bool *controls = genome->evaluateNetwork(inputs);
+    //std::cout << genome->backup() << std::endl;
+    //Sleep(5000);
 
+    for (bool *i = &controls[0]; i != controls[9]; i++)
+        std::cout << "Val: " << (int) *i << std::endl;
+
+    //Sleep(1000);
     setUpController(controls);
 }
 
-int mydirscan[4];   //TODO: remove and replace with dirscan
 /*
 =================================
 =
@@ -98,20 +103,21 @@ int mydirscan[4];   //TODO: remove and replace with dirscan
 =================================
  */
 void NEATDoop::setUpController(bool* controls) {
-    for (int i = 0; i < OUTPUTS; i++) {
-        if (controls[i]) {
+    int i;
+    for (bool *control = &controls[0], i = 0; control != &controls[9]; control++, i++) {
+        if ((int) *control) {
             switch (i) {        //If an output val from network is true, switch on it set the appropriate control
                 case FORWARD:
-                    mydirscan[di_north] = true;
+                    dirscan[di_north] = true;
                     break;
                 case BACK:
-                    mydirscan[di_south] = true;
+                    dirscan[di_south] = true;
                     break;
                 case TURN_LEFT:
-                    mydirscan[di_west] = true;
+                    dirscan[di_west] = true;
                     break;
                 case TURN_RIGHT:
-                    mydirscan[di_east] = true;
+                    dirscan[di_east] = true;
                     break;                          // dirscan[bt_..] is for direction changing inputs
                 case SHOOT:
                     buttonstate[bt_attack] = true;     //TODO: remove buttoons and replace with buttonstate[..]
@@ -135,6 +141,10 @@ void NEATDoop::setUpController(bool* controls) {
         } else
             buttonstate[i] = false;    //all other controls we don't care about set to false, i.e. pausing the game
     }
+
+    for (bool *freeMem = &controls[0]; freeMem < &controls[9]; freeMem++)
+        delete freeMem;
+
 }
 
 /*
@@ -155,10 +165,14 @@ void NEATDoop::nextGenome() {
         Genus::currSpeciesItr++;
         if (Genus::currSpeciesItr == Genus::species.end()) {
             Genus::newGeneration();
-            Genus::currSpeciesItr = NULL;
-            Genus::currGenomeItr = NULL;
+            Genus::currSpeciesItr = Genus::species.begin();
+            Genus::currGenomeItr = Genus::species.begin()->genomes.begin();
         } else
             Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
+
+        //std::cout << Genus::currGenomeItr->backup() << std::endl;
+        //Sleep(5000);
+        // timeout = TIMEOUT;
     }
 
     /*if (Genus::currGenome >= Genus::species[Genus::currSpecies].genomes.size()) {    //TODO: >= or > ?

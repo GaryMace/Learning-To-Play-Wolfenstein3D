@@ -8,15 +8,15 @@
 #include <sstream>
 
 // instantiate static members
-int Genus::innovation = OUTPUTS;
-int Genus::generation = 0;
-int Genus::currSpecies = 0;
-int Genus::currGenome = 0;
-double Genus::maxFitness = 0.0;
-std::list<Species> Genus::species;
-std::list<Species>::iterator Genus::speciesItr;
 std::list<Species>::iterator Genus:: currSpeciesItr;
 std::list<Genome>::iterator Genus::currGenomeItr;
+std::list<Species>::iterator Genus::speciesItr;
+std::list<Species> Genus::species;
+int Genus::innovation = OUTPUTS;
+double Genus::maxFitness = 0.0;
+int Genus::currSpecies = 0;
+int Genus::generation = 0;
+int Genus::currGenome = 0;
 
 void Genus::loadSaveState(std::string saveState) {
 

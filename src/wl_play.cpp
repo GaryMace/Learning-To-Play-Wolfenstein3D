@@ -327,14 +327,14 @@ void PollKeyboardMove (void)
     if (Keyboard[dirscan[di_east]])
         controlx += delta;
 
-    if (Keyboard[dirscan[di_north]])
+    /*if (Keyboard[dirscan[di_north]])
         std::cout << "Going forward" << std::endl;
     else if (Keyboard[dirscan[di_south]])
         std::cout << "Going backwards" << std::endl;
     else if (Keyboard[dirscan[di_west]])
         std::cout << "Turning left" << std::endl;
     else if (Keyboard[dirscan[di_east]])
-        std::cout << "Turning right" << std::endl;
+        std::cout << "Turning right" << std::endl;*/
 }
 
 
@@ -435,7 +435,9 @@ void PollControls (void)
     controlx = 0;
     controly = 0;
     memcpy (buttonheld, buttonstate, sizeof (buttonstate));
-    memset (buttonstate, 0, sizeof (buttonstate));
+    memset (buttonstate, 0, sizeof (buttonstate));           //#problem
+
+    doopAI.initialiseRun(); //{'-'} set the keys after the reset
 
     if (demoplayback)
     {
@@ -466,7 +468,7 @@ void PollControls (void)
 // get button states
 //
     //TODO: disable this for now, values should already be set
-    //PollKeyboardButtons ();
+    PollKeyboardButtons ();
 
     if (mouseenabled && IN_IsInputGrabbed())
         PollMouseButtons ();
@@ -1359,8 +1361,12 @@ void PlayLoop (void)
         }
 
         doopAI.timeout--;
+        std::cout << "Timeout: " << static_cast<std::ostringstream*>(&(std::ostringstream() << doopAI.timeout))->str() << std::endl;
         if (doopAI.timeout <= 0) {
-            playstate = ex_died;
+            //playstate = ex_died;
+            doopAI.timeout = 20;
+            doopAI.nextGenome();
+            //doopAI.initialiseRun();
             //measure fitness;
         }
     }

@@ -31,8 +31,8 @@ Genome Species::breedChild() {
     Genome child;
 
     if (Genus::nextDouble() < CROSSOVER_CHANCE) {
-        int randGenome1 = rand() % genomes.size();
-        int randGenome2 = rand() % genomes.size();
+        int randGenome1 =  0 + (rand() % (int)(genomes.size() - 0 + 1));
+        int randGenome2 =  0 + (rand() % (int)(genomes.size() - 0 + 1));
         Genome g1;
         Genome g2;
         for (genomeItr = genomes.begin(); genomeItr != genomes.end(); genomeItr++)
@@ -48,7 +48,8 @@ Genome Species::breedChild() {
 
         child = crossover(g1, g2);
     } else {
-        int randGenome = rand() % genomes.size();
+        int randGenome = 0 + (rand() % (int)(genomes.size() - 0 + 1));
+
         for (genomeItr = genomes.begin(); genomeItr != genomes.end(); genomeItr++)
             if (--randGenome <= 0) {
                 child = genomeItr->clone();

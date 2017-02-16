@@ -1042,7 +1042,7 @@ void DrawScaleds (void)
         else
             obj->flags &= ~FL_VISABLE;  // ~ is a class deconstructor?
     }
-    memset(inputs, 0, sizeof(inputs[0][0]) * TOTAL_INPUTS);     //reset values of inputs to 0
+    memset(inputs, 0, sizeof(inputs[0][0]) * TOTAL_INPUTS); //reset values of inputs to 0?
     GetInputs();
 
 //

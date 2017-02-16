@@ -103,7 +103,7 @@ void Genome::generateNetwork() {
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
         if (geneItr->enabled) { //If this Gene is enabled
             std::map<int, Neuron>::iterator it = network.find(geneItr->output);
-            if (it != network.end()) {  //If key gene.output doesn't exist
+            if (it == network.end()) {  //If key gene.output doesn't exist
                 Neuron n;
                 network.insert(std::make_pair(geneItr->output, n)); //make new entry
             }
@@ -111,7 +111,7 @@ void Genome::generateNetwork() {
             n.inputs.push_back(*geneItr);
 
             std::map<int, Neuron>::iterator it2 = network.find(geneItr->input);
-            if (it != network.end()) {  //If key gene.input doesn't exist
+            if (it == network.end()) {  //If key gene.input doesn't exist
                 Neuron n2;
                 network.insert(std::make_pair(geneItr->input, n2));
             }
@@ -125,39 +125,24 @@ bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
             network[i].value = inputs[i][j];    //Change input values to network
 
     for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
-        //if (it->first < INPUTS + OUTPUTS) //Neuron val > (inputs + outputs)
-        //    continue;
-
         Neuron& n1 = it->second;    //Neuron& grabs the address of the value from the hashmap
         double sum = 0.0;
         for (n1.geneItr = n1.inputs.begin(); n1.geneItr != n1.inputs.end(); n1.geneItr++) {
             Gene incoming = *n1.geneItr;   //for each Gene of Neurons inputs
             Neuron n2 = network[incoming.input];
+            //std::cout << network[incoming.input].backup() << std::endl;
+            //Sleep(5000);
             sum += incoming.weight * n2.value;  //Get sum of input Genes to this Neuron
         }
-        if (!n1.inputs.empty())
-            n1.value = Neuron::sigmoid(sum);    //which is needed for this step! i.e. in-place map edit
-    }
-
-    for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
-        //int key = it->first;
-        //if (key < INPUTS || key >= INPUTS + OUTPUTS)
-        //    continue;
-
-        Neuron& n1 = it->second;
-        double sum = 0.0;
-        for (n1.geneItr = n1.inputs.begin(); n1.geneItr != n1.inputs.end(); n1.geneItr++) {
-            Gene incoming = *n1.geneItr;       //For each Gene of Neurons inputs
-            Neuron n2 = network[incoming.input];
-            sum += incoming.weight * n2.value;  //Get sum of input Genes to this Neuron
+        if (!n1.inputs.empty()) {
+            std::cout << static_cast<std::ostringstream*>(&(std::ostringstream() << sum))->str() << std::endl;
+            it->second.value = Neuron::sigmoid(sum);    //which is needed for this step! i.e. in-place map edit
         }
-
-        if (!n1.inputs.empty())
-            n1.value = Neuron::sigmoid(sum);
     }
 
-    bool outputs[OUTPUTS];
+    bool *outputs = new bool[OUTPUTS];
     for (int i = 0; i < OUTPUTS; i++) {
+        std::cout << "Net val: " << static_cast<std::ostringstream*>(&(std::ostringstream() <<network[MAX_NODES + i].value))->str() << std::endl;
         if (network[MAX_NODES + i].value > 0)
             outputs[i] = true;
         else
@@ -233,10 +218,7 @@ void Genome::linkMutate(bool forceBias) {
 
     newLink.innovation = Genus::newInnovation();
     newLink.weight = Genus::nextDouble() * 4.0 - 2.0;
-    //Sleep(5000);
     genes.push_back(newLink);
-    //Sleep(1000);
-    std::cout << "I dida thing" << std::endl;
 }
 
 void Genome::mutate() {
@@ -254,62 +236,60 @@ void Genome::mutate() {
         prob--;
     }
     
-    //double prob2 = mutationRates[BIAS];
-    //while (prob2 > 0) {
-    //    if (Genus::nextDouble() < prob2)
-    //        linkMutate(true);
-    //    prob2--;
-    //}
+    prob = mutationRates[BIAS];
+    while (prob > 0) {
+        if (Genus::nextDouble() < prob)
+            linkMutate(true);
+        prob--;
+    }
     
-    //double prob3 = mutationRates[NODE];
-    //while (prob3 > 0) {
-    //    if (Genus::nextDouble() < prob3)
-    //        nodeMutate();
-    //    prob3--;
-    //}
+    prob = mutationRates[NODE];
+    while (prob > 0) {
+        if (Genus::nextDouble() < prob)
+            nodeMutate();
+        prob--;
+    }
     
-    //double prob4 = mutationRates[ENABLE];
-    //while (prob4 > 0) {
-    //    if (Genus::nextDouble() < prob4)
-    //        mutateEnableDisable(true);
-    //    prob4--;
-    //}
+    prob = mutationRates[ENABLE];
+    while (prob > 0) {
+        if (Genus::nextDouble() < prob)
+            mutateEnableDisable(true);
+        prob--;
+    }
 
-    //double prob5 = mutationRates[DISABLE];
-    //while (prob5 > 0) {
-    //    if (Genus::nextDouble() < prob5)
-    //        mutateEnableDisable(false);
-    //    prob5--;
-    //}
+    prob = mutationRates[DISABLE];
+    while (prob > 0) {
+        if (Genus::nextDouble() < prob)
+            mutateEnableDisable(false);
+        prob--;
+    }
 }
 
 void Genome::mutateEnableDisable(bool enable) {
     std::list<Gene*>::iterator geneItr2;
     std::list<Gene*> candidates;  //vector of pointers
 
-    for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
+    for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++)
         if (geneItr->enabled != enable)
             candidates.push_back(&(*geneItr));
-    }
+
     if (candidates.empty())
         return;
 
     //pointer to obj ref from original vector
     int randGene =  0 + (rand() % (int)(candidates.size() - 0 + 1));
     Gene *gene;
-    for (geneItr2 = candidates.begin(); geneItr2 != candidates.end(); geneItr2++) {
-        if (--randGene <= 0) {
+    for (geneItr2 = candidates.begin(); geneItr2 != candidates.end(); geneItr2++)
+        if (--randGene <= 0)
             gene = *geneItr2;
-        }
-    }
+
     gene->enabled = !gene->enabled; //change value via pointer
 }
 
 bool Genome::containsLink(Gene link) {
-    for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
+    for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++)
         if (geneItr->input == link.input && geneItr->output == link.output)
             return true;
-    }
     return false;
 }
 
