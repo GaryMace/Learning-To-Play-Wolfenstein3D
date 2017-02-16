@@ -258,7 +258,7 @@ void PollKeyboardButtons (void)
 {
     int i;
 
-    for (i = 0; i < NUMBUTTONS; i++)    //TODO: replace this action with doops controls
+    for (i = 0; i < NUMBUTTONS; i++)
         if (Keyboard[buttonscan[i]])
             buttonstate[i] = true;
 }
@@ -326,15 +326,6 @@ void PollKeyboardMove (void)
         controlx -= delta;
     if (Keyboard[dirscan[di_east]])
         controlx += delta;
-
-    /*if (Keyboard[dirscan[di_north]])
-        std::cout << "Going forward" << std::endl;
-    else if (Keyboard[dirscan[di_south]])
-        std::cout << "Going backwards" << std::endl;
-    else if (Keyboard[dirscan[di_west]])
-        std::cout << "Turning left" << std::endl;
-    else if (Keyboard[dirscan[di_east]])
-        std::cout << "Turning right" << std::endl;*/
 }
 
 
@@ -435,9 +426,9 @@ void PollControls (void)
     controlx = 0;
     controly = 0;
     memcpy (buttonheld, buttonstate, sizeof (buttonstate));
-    memset (buttonstate, 0, sizeof (buttonstate));           //#problem
+    memset (buttonstate, 0, sizeof (buttonstate));           //#problem, chuck our stuff in after and job done
 
-    doopAI.initialiseRun(); //{'-'} set the keys after the reset
+    doopAI.initialiseRun(); //{'-'} set the keys after the keys reset above
 
     if (demoplayback)
     {
@@ -468,7 +459,7 @@ void PollControls (void)
 // get button states
 //
     //TODO: disable this for now, values should already be set
-    PollKeyboardButtons ();
+    //PollKeyboardButtons ();               //{'-'} Just disable these, they get set by Doop anyways
 
     if (mouseenabled && IN_IsInputGrabbed())
         PollMouseButtons ();
@@ -479,7 +470,7 @@ void PollControls (void)
 //
 // get movements
 //
-    PollKeyboardMove ();
+    PollKeyboardMove ();                    //{'-'} Don't disable movement, since the actual movement on the map is handled in here
 
     if (mouseenabled && IN_IsInputGrabbed())
         PollMouseMove ();

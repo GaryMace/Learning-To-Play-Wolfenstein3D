@@ -228,7 +228,8 @@ void Quit(const char *errorStr, ...);
 // {'-'} Doop constants for input matrices
 #define INPUTS 9                // doors, walls, walk space, enemys, ammo, health, keys, guns, push walls
 #define SEARCH_GRID 25          //5x5 grid
-#define TOTAL_INPUTS 225
+#define TOTAL_INPUTS 225        // INPUTS * SEARCH_GRID
+
 #define DOORS 0
 #define WALLS 1
 #define WALK_SPACE 2

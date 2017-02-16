@@ -44,7 +44,7 @@ void NEATDoop::initialiseGenus() {
 void NEATDoop::initialiseRun() {
     //timeout = TIMEOUT;
     int rightmist = 0;  //???
-    //clearControls();
+    //clearControls();  //Don't think I need this, doesn't Wolfenstein does it for us?
 
     Genome* genome = &(*Genus::currGenomeItr);
     genome->generateNetwork();
@@ -85,8 +85,8 @@ void NEATDoop::evaluateCurrent() {
     //std::cout << genome->backup() << std::endl;
     //Sleep(5000);
 
-    for (bool *i = &controls[0]; i != controls[9]; i++)
-        std::cout << "Val: " << (int) *i << std::endl;
+    //for (bool *i = &controls[0]; i != &controls[9]; i++)
+    //    std::cout << "Val: " << (int) *i << std::endl;
 
     //Sleep(1000);
     setUpController(controls);
@@ -97,30 +97,32 @@ void NEATDoop::evaluateCurrent() {
 =
 = {'-'} setUpController
 =
-= Receives a bool vector from the output of the neural network. It then iterates through this vector
-= and activates the appropriate controls for the actual game based on these bool values.
+= Receives a bool pointer to a boolean array from the output of the neural network. It then iterates through memory
+= space of the array and activates the appropriate controls for the actual game based on these bool values.
 =
 =================================
  */
 void NEATDoop::setUpController(bool* controls) {
     int i;
-    for (bool *control = &controls[0], i = 0; control != &controls[9]; control++, i++) {
-        if ((int) *control) {
-            switch (i) {        //If an output val from network is true, switch on it set the appropriate control
+    bool *control;
+
+    for (control = &controls[0], i = 0; control != &controls[9]; control++, i++) {
+        if ((int) *control) {   //If network says push a button
+            switch (i) {        //Find what button to press
                 case FORWARD:
-                    dirscan[di_north] = true;
+                    Keyboard[dirscan[di_north]] = true;  // dirscan[bt_..] is an index into Keyboard arr
                     break;
                 case BACK:
-                    dirscan[di_south] = true;
+                    Keyboard[dirscan[di_south]] = true;
                     break;
                 case TURN_LEFT:
-                    dirscan[di_west] = true;
+                    Keyboard[dirscan[di_west]] = true;
                     break;
                 case TURN_RIGHT:
-                    dirscan[di_east] = true;
-                    break;                          // dirscan[bt_..] is for direction changing inputs
+                    Keyboard[dirscan[di_east]] = true;
+                    break;
                 case SHOOT:
-                    buttonstate[bt_attack] = true;     //TODO: remove buttoons and replace with buttonstate[..]
+                    buttonstate[bt_attack] = true;
                     break;
                 case OPEN_DOOR:
                     buttonstate[bt_use] = true;
@@ -142,7 +144,7 @@ void NEATDoop::setUpController(bool* controls) {
             buttonstate[i] = false;    //all other controls we don't care about set to false, i.e. pausing the game
     }
 
-    for (bool *freeMem = &controls[0]; freeMem < &controls[9]; freeMem++)
+    for (bool *freeMem = &controls[0]; freeMem < &controls[9]; freeMem++)   //Free the memory that was allocated
         delete freeMem;
 
 }
@@ -164,11 +166,14 @@ void NEATDoop::nextGenome() {
     if (Genus::currGenomeItr == Genus::currSpeciesItr->genomes.end()) {
         Genus::currSpeciesItr++;
         if (Genus::currSpeciesItr == Genus::species.end()) {
+            std::cout << "New Generation: " << std::endl;
             Genus::newGeneration();
             Genus::currSpeciesItr = Genus::species.begin();
             Genus::currGenomeItr = Genus::species.begin()->genomes.begin();
-        } else
+        } else {
+            std::cout << "Next genome" << std::endl;
             Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
+        }
 
         //std::cout << Genus::currGenomeItr->backup() << std::endl;
         //Sleep(5000);

@@ -9,11 +9,9 @@
 #define STALE_SPECIES 15
 #define TIMEOUT 20 //was 20
 #define MUTATION_TYPES 7        //consider moving later
-#define INPUTS 9                // doors, walls, walk space, enemys, ammo, health, keys, guns, push walls
+#define INPUTS 9                // doors, walls, walk space, enemies, ammo, health, keys, guns, push walls
 #define SEARCH_GRID 25          //5x5 grid
-#define TOTAL_INPUTS 5
-#define OUTPUTS 10               //Buttons {num_1, num_2, num_3, num_4, space, LCtrl, up, down, left, right}
-#define NUMBUTTONS 8
+#define OUTPUTS 10              //{forward, backward, left, right, shoot, space, weap1, weap2, weap3, weap4}
 
 #define DELTA_DISJOINT 2.0
 #define DELTA_WEIGHTS  0.4
@@ -30,6 +28,6 @@
 #define PERTURBATION_CHANCE 0.9
 #define STEP_SIZE 0.1
 
-#define MAX_NODES 100000 //useful later maybe?
+#define MAX_NODES 100000
 
 #endif //TESTBENCH_DEF_H

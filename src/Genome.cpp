@@ -8,6 +8,7 @@
 //#include <windows.h>
 #include "Genome.h"
 #include "Genus.h"
+#include "wl_def.h"
 
 /*
  * Outputs string representation of the Genome class
