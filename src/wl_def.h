@@ -1190,9 +1190,11 @@ extern  fixed   viewsin,viewcos;
 
 void    ThreeDRefresh (void);
 void    CalcTics (void);
-void    GetInputs (void);                           // {'-'}
-void    AddItemToInput (visstat *item, int idx);    //       Doop definition methods
 
+// {'-'} These are Doop defined functions for this source file
+void    GetInputs (void);
+void    AddItemToInput (visstat *item, int idx);    //       Doop definition methods
+void    CheckDoorState(doorobj_t *door, int idx);
 typedef struct
 {
     word leftpix,rightpix;

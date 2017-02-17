@@ -64,9 +64,11 @@ int     CalcRotate (objtype *ob);
 void    DrawScaleds (void);
 void    CalcTics (void);
 void    ThreeDRefresh (void);
-void    GetInputs (void);                           // {'-'}
-void    AddItemToInput (visstat *item, int idx);    //       Doop definition methods
 
+// {'-'}    Doop functions
+void    GetInputs (void);
+void    AddItemToInput (visstat *item, int idx);
+void    CheckDoorState (doorobj_t *door, int idx);
 //
 // wall optimization variables
 //
@@ -1084,7 +1086,7 @@ void DrawScaleds (void)
 =
 = {'-'} GetInputs
 =
-= Populates a 2D array of inputs for the Network to consume later.
+= Populates a 2D array of inputs for the Network to process later.
 =
 =================================
  */
@@ -1095,7 +1097,7 @@ void GetInputs (void) {
         for (int col = -2; col < 3; col++) {
             int xp = (int) player->tilex + row;     //xpos
             int yp = (int) player->tiley + col;     //ypos
-            if (xp < 0 || yp > MAPSIZE) {
+            if ((xp < 0 || xp > MAPSIZE) || (yp < 0 || yp > MAPSIZE)) {
                 inputs[WALLS][idx] = 1; //Map position out of bounds, just make it a 0 input
                 inputs[WALK_SPACE][idx++] = 0;
                 continue;
@@ -1121,8 +1123,7 @@ void GetInputs (void) {
 
             for (doorobj_t *door = &doorobjlist[0]; door != lastdoorobj; door++) {              //See if any doors are within visible sight range
                 if ((int) door->tilex == xp && (int) door->tiley == yp) {
-                    inputs[DOORS][idx] = 1;
-                    inputs[WALLS][idx] = 0;                         //this position is no longer a "wall" (it's assumed to be prior to this code executing)
+                    CheckDoorState(door, idx);                                                  //If a door is visible, is it open or closed?
                     break;
                 }
             }
@@ -1148,7 +1149,8 @@ void GetInputs (void) {
 =
 = {'-'} AddItemToInput
 =
-= Add the given static item to the appropriate partition of the 2D input array.
+= Add the given static item (i.e can be picked up/doesn't move on map) to the appropriate partition of
+= the 2D input array.
 =
 =================================
  */
@@ -1172,6 +1174,28 @@ void AddItemToInput (visstat *item, int idx) {
         case bo_chaingun:
             inputs[GUN][idx] = 1;
             break;
+    }
+}
+
+/*
+=================================
+=
+= {'-'} CheckDoorState
+=
+= The value of a door being inputted into the network depends on the doors state. If the door is open/opening
+= then we assume that the space where the door was is now traversable. If the door is closed/closing then it
+= is assumed to be a door and we cannot walk through it.
+=
+=================================
+ */
+void CheckDoorState(doorobj_t *door, int idx) {
+    if (door->action == dr_closed || door->action == dr_closing) {
+        inputs[DOORS][idx] = 1;         //this position is no longer a "wall" (it's assumed to be prior to this step)
+        inputs[WALLS][idx] = 0;
+    } else if (door->action == dr_open || door->action == dr_opening){
+        inputs[DOORS][idx] = 0;
+        inputs[WALLS][idx] = 0;
+        inputs[WALK_SPACE][idx] = 1;
     }
 }
 

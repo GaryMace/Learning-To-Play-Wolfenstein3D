@@ -66,7 +66,7 @@ void NEATDoop::clearControls() {
         controls[i] = false;
 
     //set this equal to the buttonstate[] array later
-    //TODO: figure out later the relevance of this
+    //TODO: turns out probs dont need it....maybe?
 }
 
 /*

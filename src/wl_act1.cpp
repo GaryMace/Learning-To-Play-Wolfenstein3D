@@ -796,7 +796,7 @@ void PushWall (int checkx, int checky, int dir)
 =================
 */
 
-void MovePWalls (void)
+void MovePWalls (void)  //move Push wall..
 {
     int oldblock,oldtile;
 
