@@ -1,11 +1,13 @@
 // WL_PLAY.C
 
 #include <iostream>
+#include <cmath>
 #include "wl_def.h"
 #pragma hdrstop
 
 #include "wl_cloudsky.h"
 #include "wl_shade.h"
+#include "Genus.h"
 
 /*
 =============================================================================
@@ -1352,14 +1354,19 @@ void PlayLoop (void)
         }
 
         doopAI.timeout--;
-        std::cout << "Timeout: " << static_cast<std::ostringstream*>(&(std::ostringstream() << doopAI.timeout))->str() << std::endl;
+        if (distance(player->tilex, prevxp, player->tiley, prevyp) > 0)
+            doopAI.timeout += 5;
+        //std::cout << "Timeout: " << static_cast<std::ostringstream*>(&(std::ostringstream() << doopAI.timeout))->str() << std::endl;
         if (doopAI.timeout <= 0) {
-            //playstate = ex_died;
-            doopAI.timeout = 20;
-            doopAI.nextGenome();
+            doopAI.setGenomeFitness();
+            playstate = ex_died;
+            doopAI.timeout = 5;
+            doopAI.nextGenome();    //maybe move this to ex_died? i.e. dont start analysis of new genome until after respawn?
             //doopAI.initialiseRun();
             //measure fitness;
         }
+        prevxp = player->tilex;
+        prevyp = player->tiley;
     }
     while (!playstate && !startgame);
 

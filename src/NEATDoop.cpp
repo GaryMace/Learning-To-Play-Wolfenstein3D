@@ -6,7 +6,29 @@
 #include "Genome.h"
 #include "Genus.h"
 #include <iostream>
+#include <cmath>
+
 /*
+=================================
+=
+= {'-'} setGenomeFitness
+=
+= Set up the neural network given it hasn't been done yet already.
+=
+=================================
+*/
+void NEATDoop::setGenomeFitness() {
+    double distFromEnd = distance(player->x, endxp, player->y, endyp);
+    double distFromSpawn = std::sqrt(std::pow(spawnxp - player->x, 2.0) + std::pow(spawnxp - player->y, 2.0));
+    int sec = gamestate.TimeCount / 70;
+    int kills = gamestate.killcount;
+
+    Genus::currGenomeItr->fitness = MAX_DISTANCE - distFromEnd;
+    Genus::currGenomeItr->fitness += kills * KILL_REWARD;
+    Genus::currGenomeItr->fitness += (distFromSpawn / sec) * TRAVEL_REWARD;
+}
+/*
+ *
 =================================
 =
 = {'-'} initialiseGenus
@@ -124,7 +146,7 @@ void NEATDoop::setUpController(bool* controls) {
                 case SHOOT:
                     buttonstate[bt_attack] = true;
                     break;
-                case OPEN_DOOR:
+                case USE_ACTION:
                     buttonstate[bt_use] = true;
                     break;
                 case WEAPON1:
@@ -144,8 +166,8 @@ void NEATDoop::setUpController(bool* controls) {
             buttonstate[i] = false;    //all other controls we don't care about set to false, i.e. pausing the game
     }
 
-    for (bool *freeMem = &controls[0]; freeMem < &controls[9]; freeMem++)   //Free the memory that was allocated
-        delete freeMem;
+    for (bool *usedMem = &controls[0]; usedMem < &controls[9]; usedMem++)   //Free the memory that was allocated
+        delete usedMem;
 
 }
 

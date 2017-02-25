@@ -46,7 +46,11 @@ objtype        *LastAttacker;
 
 =============================================================================
 */
-
+// {'-'} spawn position definitions
+int spawnxp;
+int spawnyp;
+int prevxp;
+int prevyp;
 
 void    T_Player (objtype *ob);
 void    T_Attack (objtype *ob);
@@ -1190,6 +1194,10 @@ void SpawnPlayer (int tilex, int tiley, int dir)
     player->active = ac_yes;
     player->tilex = tilex;
     player->tiley = tiley;
+    spawnxp = tilex;
+    spawnyp = tiley;
+    prevxp = tilex;
+    prevyp = tiley;
     player->areanumber = (byte) *(mapsegs[0]+(player->tiley<<mapshift)+player->tilex);
     player->x = ((int32_t)tilex<<TILESHIFT)+TILEGLOBAL/2;
     player->y = ((int32_t)tiley<<TILESHIFT)+TILEGLOBAL/2;

@@ -94,6 +94,8 @@ void Quit(const char *errorStr, ...);
 
 #define abs(x) ABS(x)
 
+//{'-'} create a macro definition for distance between two points
+#define distance(x1, x2, y1, y2) (std::sqrt(std::pow(x2 - x1, 2.0) + std::pow(y2 - y1, 2.0)))
 /*
 =============================================================================
 
@@ -226,9 +228,9 @@ void Quit(const char *errorStr, ...);
 #define STARTAMMO       8
 
 // {'-'} Doop constants for input matrices
-#define INPUTS 9                // doors, walls, walk space, enemys, ammo, health, keys, guns, push walls
+#define INPUTS 11                // doors, walls, walk space, enemys, ammo, health, keys, guns, push walls, locked doors, elevator
 #define SEARCH_GRID 25          //5x5 grid
-#define TOTAL_INPUTS 225        // INPUTS * SEARCH_GRID
+#define TOTAL_INPUTS 275        // INPUTS * SEARCH_GRID
 
 #define DOORS 0
 #define WALLS 1
@@ -239,6 +241,8 @@ void Quit(const char *errorStr, ...);
 #define KEY 6
 #define GUN 7
 #define PUSH_WALLS 8
+#define LOCKED_DOOR 9
+#define ELEVATOR 10
 
 // {'-'} Doop constants for button pressing look-ups
 #define FORWARD 0
@@ -246,13 +250,15 @@ void Quit(const char *errorStr, ...);
 #define TURN_RIGHT 2
 #define TURN_LEFT 3
 #define SHOOT 4
-#define OPEN_DOOR 5
+#define USE_ACTION 5
 #define WEAPON1 6
 #define WEAPON2 7
 #define WEAPON3 8
 #define WEAPON4 9
 
-
+#define MAX_DISTANCE 90.51
+#define KILL_REWARD 50
+#define TRAVEL_REWARD 1000
 // object flag values
 
 typedef enum
@@ -892,8 +898,8 @@ typedef struct
 
     short       episode,secretcount,treasurecount,killcount,
                 secrettotal,treasuretotal,killtotal;
-    int32_t     TimeCount;
-    int32_t     killx,killy;
+    int32_t     TimeCount;              // time of play
+    int32_t     killx,killy;            // where the player died
     boolean     victoryflag;            // set during victory animations
 } gametype;
 
@@ -955,7 +961,14 @@ extern int doop_actsvis;
 extern int doop_statsvis;
 extern int falg;    //TODO: remove
 
-extern int inputs[INPUTS][SEARCH_GRID]; // inputs size is [10][25]
+//might end up 11x25 if locked doors and elevator are teated diff
+extern int inputs[INPUTS][SEARCH_GRID]; // inputs size is [11][25]
+extern int endxp;
+extern int endyp;
+extern int spawnxp;
+extern int spawnyp;
+extern int prevxp;
+extern int prevyp;
 /*
 =============================================================================
 

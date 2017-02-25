@@ -69,6 +69,11 @@ void    ThreeDRefresh (void);
 void    GetInputs (void);
 void    AddItemToInput (visstat *item, int idx);
 void    CheckDoorState (doorobj_t *door, int idx);
+
+//{'-'}     Doop end of level references
+int endxp;
+int endyp;
+
 //
 // wall optimization variables
 //
@@ -1095,14 +1100,19 @@ void GetInputs (void) {
 
     for (int row = -2; row < 3; row++) {
         for (int col = -2; col < 3; col++) {
-            int xp = (int) player->tilex + row;     //xpos
-            int yp = (int) player->tiley + col;     //ypos
+            int xp = (int) player->tilex + row;     //x position
+            int yp = (int) player->tiley + col;     //y position
             if ((xp < 0 || xp > MAPSIZE) || (yp < 0 || yp > MAPSIZE)) {
                 inputs[WALLS][idx] = 1; //Map position out of bounds, just make it a 0 input
                 inputs[WALK_SPACE][idx++] = 0;
                 continue;
             }
             int pos = (int) tilemap[xp][yp];
+            if (pos == ELEVATORTILE) {  //end of level tile.
+                inputs[ELEVATOR][idx] = 1;
+                endxp = xp;
+                endyp = yp;
+            }
 
             //0 if map pos is a wall or out of bounds area
             //1 if player can walk on area
@@ -1189,12 +1199,25 @@ void AddItemToInput (visstat *item, int idx) {
 =================================
  */
 void CheckDoorState(doorobj_t *door, int idx) {
+    int lock = door->lock;
+    inputs[WALLS][idx] = 0;                                 //It is no longer to be treated as a wall
+
+    if (lock >= dr_lock1 && lock <= dr_lock4) {             //locked door
+        if (!(gamestate.keys & (1 << (lock - dr_lock1)))) { //player doesn't have the key
+            inputs[LOCKED_DOOR][idx] = 1;
+            inputs[DOORS][idx] = 0;
+        } else {
+            inputs[LOCKED_DOOR][idx] = 0;
+            inputs[DOORS][idx] = 1;
+        }
+        return;
+    }
+
     if (door->action == dr_closed || door->action == dr_closing) {
         inputs[DOORS][idx] = 1;         //this position is no longer a "wall" (it's assumed to be prior to this step)
-        inputs[WALLS][idx] = 0;
+        inputs[WALK_SPACE][idx] = 0;
     } else if (door->action == dr_open || door->action == dr_opening){
         inputs[DOORS][idx] = 0;
-        inputs[WALLS][idx] = 0;
         inputs[WALK_SPACE][idx] = 1;
     }
 }

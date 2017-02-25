@@ -9,7 +9,7 @@
 #define STALE_SPECIES 15
 #define TIMEOUT 20 //was 20
 #define MUTATION_TYPES 7        //consider moving later
-#define INPUTS 9                // doors, walls, walk space, enemies, ammo, health, keys, guns, push walls
+#define INPUTS 11                // doors, walls, walk space, enemies, ammo, health, keys, guns, push walls, locked doors, elevator
 #define SEARCH_GRID 25          //5x5 grid
 #define OUTPUTS 10              //{forward, backward, left, right, shoot, space, weap1, weap2, weap3, weap4}
 

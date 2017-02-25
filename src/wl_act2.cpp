@@ -857,7 +857,7 @@ void SpawnStand (enemy_t which, int tilex, int tiley, int dir)
     {
         case en_guard:
             SpawnNewObj (tilex,tiley,&s_grdstand);
-            newobj->speed = SPDPATROL;
+            newobj->speed = SPDPATROL;              //newobj is instantiated in SpawnNewObj()
             if (!loadedgame)
                 gamestate.killtotal++;
             break;
@@ -3365,7 +3365,7 @@ void SelectPathDir (objtype *ob)
 {
     unsigned spot;
 
-    spot = MAPSPOT(ob->tilex,ob->tiley,1)-ICONARROWS;
+    spot = MAPSPOT(ob->tilex,ob->tiley,1)-ICONARROWS;   //MAPSOPT accesses mapsegs of id_ca.h via wl_def.h
 
     if (spot<8)
     {

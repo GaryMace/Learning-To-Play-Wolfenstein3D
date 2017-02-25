@@ -13,6 +13,7 @@ public:
     bool genusSetUp;
     int timeout;
 
+    void setGenomeFitness ();
     void initialiseGenus ();
     void initialiseRun ();
     void clearControls ();
@@ -21,6 +22,9 @@ public:
 
     void nextGenome();
 
-    NEATDoop() : timeout(100), genusSetUp(false) { }
+    NEATDoop() : timeout(20), genusSetUp(false) { }
 };
 #endif //TESTBENCH_NEATDOOP_H
+
+
+//Check out line ~1145 of wl_agent.cpp for end of level pressing and shit
