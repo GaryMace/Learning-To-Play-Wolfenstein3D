@@ -40,3 +40,11 @@ std::string Gene::backup() {
 bool Gene::compare(const Gene &g1, const Gene &g2) {
     return g1.output < g2.output;
 }
+
+void Gene::~Gene() {
+    delete enabled;
+    delete input;
+    delete output;
+    delete innovation;
+    delete weight;
+}

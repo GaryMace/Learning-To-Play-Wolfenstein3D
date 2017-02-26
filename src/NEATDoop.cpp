@@ -32,9 +32,10 @@ void NEATDoop::setGenomeFitness() {
     int sec = gamestate.TimeCount / 70;
     int kills = gamestate.killcount;
 
-    Genus::currGenomeItr->fitness = MAX_DISTANCE - distFromEnd;
-    Genus::currGenomeItr->fitness += kills * KILL_REWARD;
-    Genus::currGenomeItr->fitness += (distFromSpawn / sec) * TRAVEL_REWARD;
+    Genome* genome = &(*Genus::currGenomeItr);
+    genome->fitness = MAX_DISTANCE - distFromEnd;
+    genome->fitness += kills * KILL_REWARD;
+    genome->fitness += (distFromSpawn / sec) * TRAVEL_REWARD;
 }
 /*
  *
@@ -56,8 +57,10 @@ void NEATDoop::initialiseGenus() {
         //std::cout << Genus::species.size() << std::endl;
         Genus::addToSpecies(basic);
     }
+    Genus::currGenome = 0;
+    Genus::currSpecies = 0;
     Genus::currSpeciesItr = Genus::species.begin();
-    Genus::currGenomeItr = Genus::species.begin()->genomes.begin();
+    Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
     std::cout << "start run" << std::endl;
     initialiseRun();
 }
@@ -195,15 +198,20 @@ void NEATDoop::nextGenome() {
     Genus::currGenomeItr++;
 
     if (Genus::currGenomeItr == Genus::currSpeciesItr->genomes.end()) {
+        std::cout << "New Species" << std::endl;
         Genus::currSpeciesItr++;
+        Genus::currSpecies++;
         if (Genus::currSpeciesItr == Genus::species.end()) {
             std::cout << "New Generation: " << std::endl;
             Genus::newGeneration();
+            Genus::currSpecies = 0;
+            Genus::currGenome = 0;
             Genus::currSpeciesItr = Genus::species.begin();
-            Genus::currGenomeItr = Genus::species.begin()->genomes.begin();
+            Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
         } else {
             std::cout << "Next Genome" << std::endl;
             Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
+            Genus::currGenome = 0;
         }
 
         //std::cout << Genus::currGenomeItr->backup() << std::endl;

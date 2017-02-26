@@ -372,3 +372,13 @@ bool Genome::sameSpecies(Genome genome) {
 
     return dd + dw < DELTA_THRESHOLD;
 }
+
+void Genome::~Genome() {
+    delete mutationRates;
+    delete network;
+    delete genes;
+    delete geneItr;
+    delete maxNeuron;
+    delete globalRank;
+    delete fitness;
+}

@@ -20,5 +20,6 @@ public:
     void calculateAverageFitness();
     Genome crossover(Genome g1, Genome g2);
     Species() : topFitness(0.0), averageFitness(0.0), staleness(0) { }
+    ~Species();
 };
 #endif  //TESTBENCH_SPECIES_H

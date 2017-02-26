@@ -17,5 +17,6 @@ public:
     static double sigmoid(double x);
 
     Neuron() : value(0.0) {}
+    ~Neuron();
 };
 #endif  //TESTBENCH_NEURON_H

@@ -105,14 +105,25 @@ void Genus::newGeneration() {
     cullSpecies(true);  //Cull all but the top member of each species
     while (children.size() + species.size() < POPULATION) {
         int randSpecies = 0 + (rand() % (int)(species.size() - 0 + 1));
-        Species *species1;
+        //Species *species1;
+        std::list<Species>::iterator it = species.begin();
+
+        while(randSpecies > 0) {
+            randSpecies--;
+            it++;
+        }
+        Species *species = &(*it);
+        children.push_back(species->breedChild());
+        /*
         for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
             if (--randSpecies <= 0) {
                 species1 = &(*speciesItr);
+                break;
             }
         }
-        children.push_back(species1->breedChild());
+        children.push_back(species1->breedChild());*/
     }
+
     for (genomeItr = children.begin(); genomeItr != children.end(); genomeItr++)
         addToSpecies(*genomeItr);
     generation++;
@@ -158,7 +169,8 @@ void Genus::removeStaleSpecies() {
     }
 
     species.clear();
-    species.insert(species.begin(), survivors.begin(), survivors.end());    //Copy list B into list A
+    species = survivors;
+    //species.insert(species.begin(), survivors.begin(), survivors.end());    //Copy list B into list A
 }
 
 void Genus::removeWeakSpecies() {
@@ -172,7 +184,8 @@ void Genus::removeWeakSpecies() {
     }
 
     species.clear();
-    species.insert(species.begin(), survivors.begin(), survivors.end());
+    species = survivors;
+    //species.insert(species.begin(), survivors.begin(), survivors.end());
 }
 
 double Genus::totalAverageFitness() {
