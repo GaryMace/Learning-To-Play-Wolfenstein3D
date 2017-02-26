@@ -5,7 +5,7 @@
 #ifndef TESTBENCH_DEF_H
 #define TESTBENCH_DEF_H
 
-#define POPULATION 10           //TODO: refactor
+#define POPULATION 200           //TODO: refactor
 #define STALE_SPECIES 15
 #define TIMEOUT 20 //was 20
 #define MUTATION_TYPES 7        //consider moving later

@@ -95,7 +95,7 @@ void Quit(const char *errorStr, ...);
 #define abs(x) ABS(x)
 
 //{'-'} create a macro definition for distance between two points
-#define distance(x1, x2, y1, y2) (std::sqrt(std::pow(x2 - x1, 2.0) + std::pow(y2 - y1, 2.0)))
+#define MAP_DISTANCE(x1, x2, y1, y2) (std::sqrt(std::pow(x2 - x1, 2.0) + std::pow(y2 - y1, 2.0)))
 /*
 =============================================================================
 

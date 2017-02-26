@@ -1331,7 +1331,7 @@ void Died (void)
     SD_WaitSoundDone ();
     ClearMemory();
 
-    gamestate.lives--;
+    //gamestate.lives--;
 
     if (gamestate.lives > -1)
     {

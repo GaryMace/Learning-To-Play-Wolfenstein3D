@@ -13,12 +13,21 @@
 =
 = {'-'} setGenomeFitness
 =
-= Set up the neural network given it hasn't been done yet already.
+= Called once a genomes' network has finished playing the game. This function gives a score to the Genome
+= based on game statistics with the following weightings.
+=
+= (Low)     Distance from level end
+= (Low)     Distance from spawn with respect to time taken
+= (Medium)  Number enemies killed on map
+= (Medium)  Number unique doors opened
+= (High)    Accuracy
+= (High)    Number of static item pickups
+= (V.High)  Level finished or no?
 =
 =================================
 */
 void NEATDoop::setGenomeFitness() {
-    double distFromEnd = distance(player->x, endxp, player->y, endyp);
+    double distFromEnd = MAP_DISTANCE(player->x, endxp, player->y, endyp);
     double distFromSpawn = std::sqrt(std::pow(spawnxp - player->x, 2.0) + std::pow(spawnxp - player->y, 2.0));
     int sec = gamestate.TimeCount / 70;
     int kills = gamestate.killcount;
@@ -193,7 +202,7 @@ void NEATDoop::nextGenome() {
             Genus::currSpeciesItr = Genus::species.begin();
             Genus::currGenomeItr = Genus::species.begin()->genomes.begin();
         } else {
-            std::cout << "Next genome" << std::endl;
+            std::cout << "Next Genome" << std::endl;
             Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
         }
 
