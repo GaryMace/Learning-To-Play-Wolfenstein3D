@@ -476,6 +476,7 @@ void HealSelf (int points)
     if (gamestate.health>100)
         gamestate.health = 100;
 
+    pickups++;  // {'-'} reward player for picking up a static item
     DrawHealth ();
     DrawFace ();
 }
@@ -627,6 +628,8 @@ void GiveWeapon (int weapon)
         gamestate.bestweapon = gamestate.weapon
         = gamestate.chosenweapon = (weapontype) weapon;
 
+    pickups++;  // {'-'} reward player for picking up a static item
+
     DrawWeapon ();
 }
 
@@ -667,6 +670,9 @@ void GiveAmmo (int ammo)
     gamestate.ammo += ammo;
     if (gamestate.ammo > 99)
         gamestate.ammo = 99;
+
+    pickups++;  // {'-'} reward player for picking up a static item
+
     DrawAmmo ();
 }
 
@@ -683,6 +689,8 @@ void GiveAmmo (int ammo)
 void GiveKey (int key)
 {
     gamestate.keys |= (1<<key);
+
+    pickups++;  // {'-'} reward player for picking up a static item
     DrawKeys ();
 }
 

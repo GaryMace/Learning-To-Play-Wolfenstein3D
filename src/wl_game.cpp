@@ -1269,7 +1269,7 @@ void Died (void)
 
     curangle = player->angle;
 
-    if (clockwise<counter)
+    /*if (clockwise<counter)
     {
         //
         // rotate clockwise
@@ -1312,7 +1312,7 @@ void Died (void)
             ThreeDRefresh ();
             CalcTics ();
         } while (curangle != iangle);
-    }
+    }*/
 
     //
     // fade to red
@@ -1576,6 +1576,9 @@ startplayloop:
                 return;
 
             case ex_victorious:
+                leveldone = true;                   //{'-'} so we can award a whopper score
+                doopAI.setGenomeFitness();
+
                 if(viewsize == 21) DrawPlayScreen();
 #ifndef SPEAR
                 VW_FadeOut ();

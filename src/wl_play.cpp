@@ -1360,21 +1360,21 @@ void PlayLoop (void)
         }
 
         doopAI.timeout--;
-        if (circleTimeoutSet)
-            timeoutTics++;
+        if (circletimeoutset)
+            timeouttics++;
 
         if (MAP_DISTANCE((int)player->tilex, prevxp, (int)player->tiley, prevyp) > 0)
             doopAI.timeout += 50;
-        if (doopAI.timeout <= 0 || killAttempt) {
+        if (doopAI.timeout <= 0 || killattempt) {
             doopAI.setGenomeFitness();
 
             doopAI.timeout = 50;
             doopAI.nextGenome();    //maybe move this to ex_died? i.e. dont start analysis of new genome until after respawn?
             //doopAI.initialiseRun();
             //measure fitness;
-            killAttempt = false;
-            circleTimeoutSet = false;
-            timeoutTics = 0;
+            killattempt = false;
+            circletimeoutset = false;
+            timeouttics = 0;
 
             playstate = ex_died;
         }

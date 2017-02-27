@@ -16,13 +16,13 @@
 = Called once a genomes' network has finished playing the game. This function gives a score to the Genome
 = based on game statistics with the following weightings.
 =
-= (Low)     Distance from level end
-= (Low)     Distance from spawn with respect to time taken
-= (Medium)  Number enemies killed on map
-= (Medium)  Number unique doors opened
+= (Low)     Distance from level end                             DONE
+= (Low)     Distance from spawn with respect to time taken      DONE
+= (Medium)  Number enemies killed on map                        DONE
+= (Medium)  Number unique doors opened                          DONE
 = (High)    Accuracy
-= (High)    Number of static item pickups
-= (V.High)  Level finished or no?
+= (High)    Number of static item pickups                       DONE
+= (V.High)  Level finished or no?                               DONE
 =
 =================================
 */
@@ -39,8 +39,16 @@ void NEATDoop::setGenomeFitness() {
     int kills = gamestate.killcount;
 
     genome->fitness = MAX_DISTANCE - distFromEnd;
-    genome->fitness += kills * KILL_REWARD;
     genome->fitness += (distFromSpawn / sec) * TRAVEL_REWARD;
+
+    if (kills > 0)
+        genome->fitness += kills * KILL_REWARD;
+    if (doorsopened > 0)
+        genome->fitness += doorsopened * DOOR_OPENED_REWARD;
+    if (pickups > 0)
+        genome->fitness += pickups * ITEM_PICKUP_REWARD;
+    if (leveldone)
+        genome->fitness += LVL_DONE_REWARD;
 }
 
 
@@ -202,11 +210,11 @@ void NEATDoop::setUpController(bool* controls) {
 
     if ((controls[FORWARD] || controls[BACK]) &&
             (controls[TURN_LEFT] || controls[TURN_RIGHT])) {
-        if (circleTimeoutSet)
-            if (timeoutTics >= 100)
-                killAttempt = true;
+        if (circletimeoutset)
+            if (timeouttics >= 100)
+                killattempt = true;
         else
-            circleTimeoutSet = true;
+            circletimeoutset = true;
     }
 
     for (bool *usedMem = &controls[0]; usedMem < &controls[9]; usedMem++)   //Free the memory that was allocated

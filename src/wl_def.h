@@ -257,8 +257,12 @@ void Quit(const char *errorStr, ...);
 #define WEAPON4 9
 
 #define MAX_DISTANCE 90.51
-#define KILL_REWARD 50
+#define KILL_REWARD 25
 #define TRAVEL_REWARD 1000
+#define DOOR_OPENED_REWARD 50
+#define ITEM_PICKUP_REWARD 100
+#define LVL_DONE_REWARD 100000
+
 // object flag values
 
 typedef enum
@@ -963,6 +967,8 @@ extern int falg;    //TODO: remove
 
 //might end up 11x25 if locked doors and elevator are teated diff
 extern int inputs[INPUTS][SEARCH_GRID]; // inputs size is [11][25]
+extern int uniquedoors[MAXDOORS];
+
 extern int endxp;
 extern int endyp;
 extern int spawnxp;
@@ -970,9 +976,13 @@ extern int spawnyp;
 extern int prevxp;
 extern int prevyp;
 
-extern bool circleTimeoutSet;
-extern int timeoutTics;
-extern bool killAttempt;
+extern int pickups;
+extern int doorsopened;
+extern bool leveldone;
+
+extern bool circletimeoutset;
+extern int timeouttics;
+extern bool killattempt;
 /*
 =============================================================================
 

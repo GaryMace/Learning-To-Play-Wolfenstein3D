@@ -14,7 +14,7 @@
 
 statobj_t       statobjlist[MAXSTATS];
 statobj_t       *laststatobj;
-
+int             doorsopened = 0;
 
 struct
 {
@@ -413,6 +413,11 @@ void OpenDoor (int door)
         doorobjlist[door].ticcount = 0;         // reset open time
     else
         doorobjlist[door].action = dr_opening;  // start it opening
+
+    if (!uniquedoors[door]) {
+        uniquedoors[door] = 1;
+        doorsopened++;
+    }
 }
 
 
