@@ -98,7 +98,6 @@ void Genome::generateNetwork() {
         Neuron n;
         network.insert(std::make_pair(MAX_NODES + i, n));  //notice output neurons start right after input neurons here
     }
-//    std::sort(genes.begin(), genes.end(), Gene::compare);   //Order genes based on output
     genes.sort(Gene::compare);
 
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
@@ -123,7 +122,7 @@ void Genome::generateNetwork() {
 bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
     for (int i = 0; i < INPUTS; i++)
         for (int j = 0; j < SEARCH_GRID; j++)
-            network[i].value = inputs[i][j];    //Change input values to network
+            network[(i * SEARCH_GRID) + j].value = inputs[i][j];    //Change input values to network
 
     for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
         Neuron& n1 = it->second;    //Neuron& grabs the address of the value from the hashmap
@@ -143,7 +142,7 @@ bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
 
     bool *outputs = new bool[OUTPUTS];
     for (int i = 0; i < OUTPUTS; i++) {
-        std::cout << "Net val: " << static_cast<std::ostringstream*>(&(std::ostringstream() <<network[MAX_NODES + i].value))->str() << std::endl;
+        //std::cout << "Net val: " << static_cast<std::ostringstream*>(&(std::ostringstream() <<network[MAX_NODES + i].value))->str() << std::endl;
         if (network[MAX_NODES + i].value > 0)
             outputs[i] = true;
         else
@@ -371,14 +370,4 @@ bool Genome::sameSpecies(Genome genome) {
     double dw = weights(genome) * DELTA_WEIGHTS;
 
     return dd + dw < DELTA_THRESHOLD;
-}
-
-void Genome::~Genome() {
-    delete mutationRates;
-    delete network;
-    delete genes;
-    delete geneItr;
-    delete maxNeuron;
-    delete globalRank;
-    delete fitness;
 }

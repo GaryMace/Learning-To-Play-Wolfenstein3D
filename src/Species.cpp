@@ -101,11 +101,3 @@ Genome Species::crossover(Genome g1, Genome g2) {
 
     return child;
 }
-
-void Species::~Species() {
-    delete genomes;
-    delete genomeItr;
-    delete topFitness;
-    delete averageFitness;
-    delete staleness;
-}

@@ -105,27 +105,30 @@ void Genus::newGeneration() {
     cullSpecies(true);  //Cull all but the top member of each species
     while (children.size() + species.size() < POPULATION) {
         int randSpecies = 0 + (rand() % (int)(species.size() - 0 + 1));
-        //Species *species1;
-        std::list<Species>::iterator it = species.begin();
+        Species *species1;
+       /* std::list<Species>::iterator it = species.begin();
 
         while(randSpecies > 0) {
             randSpecies--;
             it++;
         }
         Species *species = &(*it);
-        children.push_back(species->breedChild());
-        /*
+        children.push_back(species->breedChild());*/
+
         for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
             if (--randSpecies <= 0) {
                 species1 = &(*speciesItr);
                 break;
             }
         }
-        children.push_back(species1->breedChild());*/
+        children.push_back(species1->breedChild());
     }
 
     for (genomeItr = children.begin(); genomeItr != children.end(); genomeItr++)
         addToSpecies(*genomeItr);
+
+    for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++)
+        std::cout << speciesItr->backup() << std::endl;
     generation++;
     //initialiseRun() ????
 }
@@ -155,7 +158,6 @@ void Genus::removeStaleSpecies() {
     std::list<Species> survivors;
 
     for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
-//        std::sort(speciesItr->genomes.begin(), speciesItr->genomes.end(), Genome::compare);
         speciesItr->genomes.sort(Genome::compare);
 
         if (speciesItr->genomes.begin()->fitness > speciesItr->topFitness) {

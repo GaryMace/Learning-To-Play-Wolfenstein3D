@@ -1354,16 +1354,17 @@ void PlayLoop (void)
         }
 
         doopAI.timeout--;
-        if (MAP_DISTANCE(player->tilex, prevxp, player->tiley, prevyp) > 0)
+        if (MAP_DISTANCE((int)player->tilex, prevxp, (int)player->tiley, prevyp) > 0)
             doopAI.timeout += 50;
         //std::cout << "Timeout: " << static_cast<std::ostringstream*>(&(std::ostringstream() << doopAI.timeout))->str() << std::endl;
         if (doopAI.timeout <= 0) {
             doopAI.setGenomeFitness();
-            playstate = ex_died;
+
             doopAI.timeout = 50;
             doopAI.nextGenome();    //maybe move this to ex_died? i.e. dont start analysis of new genome until after respawn?
             //doopAI.initialiseRun();
             //measure fitness;
+            playstate = ex_died;
         }
         prevxp = player->tilex;
         prevyp = player->tiley;

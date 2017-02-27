@@ -27,12 +27,17 @@
 =================================
 */
 void NEATDoop::setGenomeFitness() {
-    double distFromEnd = MAP_DISTANCE(player->x, endxp, player->y, endyp);
-    double distFromSpawn = std::sqrt(std::pow(spawnxp - player->x, 2.0) + std::pow(spawnxp - player->y, 2.0));
+    Genome* genome = &(*Genus::currGenomeItr);
+    if ((int)player->tilex == spawnxp && (int)player->tiley == spawnyp) {
+        genome->fitness = 0;
+        return;
+    }
+
+    double distFromEnd = MAP_DISTANCE((int)player->tilex, endxp, (int)player->tiley, endyp);
+    double distFromSpawn = std::sqrt(std::pow(spawnxp - (int)player->tilex, 2.0) + std::pow(spawnxp - (int)player->tiley, 2.0));
     int sec = gamestate.TimeCount / 70;
     int kills = gamestate.killcount;
 
-    Genome* genome = &(*Genus::currGenomeItr);
     genome->fitness = MAX_DISTANCE - distFromEnd;
     genome->fitness += kills * KILL_REWARD;
     genome->fitness += (distFromSpawn / sec) * TRAVEL_REWARD;
@@ -61,7 +66,7 @@ void NEATDoop::initialiseGenus() {
     Genus::currSpecies = 0;
     Genus::currSpeciesItr = Genus::species.begin();
     Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
-    std::cout << "start run" << std::endl;
+    //std::cout << "start run" << std::endl;
     initialiseRun();
 }
 
@@ -173,6 +178,8 @@ void NEATDoop::setUpController(bool* controls) {
                 case WEAPON4:
                     buttonstate[bt_readychaingun] = true;
                     break;
+                default:
+                    break;
             }
         } else
             buttonstate[i] = false;    //all other controls we don't care about set to false, i.e. pausing the game
@@ -198,7 +205,7 @@ void NEATDoop::nextGenome() {
     Genus::currGenomeItr++;
 
     if (Genus::currGenomeItr == Genus::currSpeciesItr->genomes.end()) {
-        std::cout << "New Species" << std::endl;
+        //std::cout << "New Species" << std::endl;
         Genus::currSpeciesItr++;
         Genus::currSpecies++;
         if (Genus::currSpeciesItr == Genus::species.end()) {
@@ -209,7 +216,7 @@ void NEATDoop::nextGenome() {
             Genus::currSpeciesItr = Genus::species.begin();
             Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
         } else {
-            std::cout << "Next Genome" << std::endl;
+            //std::cout << "Next Genome" << std::endl;
             Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
             Genus::currGenome = 0;
         }

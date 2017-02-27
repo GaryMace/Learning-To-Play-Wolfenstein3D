@@ -51,6 +51,5 @@ public:
     Genome() : maxNeuron(0), globalRank(0), fitness(0.0) {  //Init Genome instance variables
         initMutationRates();    //I'm not overly fond of this but old C++ doesn't allow array initialisations in class constructors
     }
-    ~Genome();
 };
 #endif  //TESTBENCH_GENOME_H
