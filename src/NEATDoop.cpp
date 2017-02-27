@@ -42,6 +42,8 @@ void NEATDoop::setGenomeFitness() {
     genome->fitness += kills * KILL_REWARD;
     genome->fitness += (distFromSpawn / sec) * TRAVEL_REWARD;
 }
+
+
 /*
  *
 =================================
@@ -149,16 +151,29 @@ void NEATDoop::setUpController(bool* controls) {
         if ((int) *control) {   //If network says push a button
             switch (i) {        //Find what button to press
                 case FORWARD:
-                    Keyboard[dirscan[di_north]] = true;  // dirscan[bt_..] is an index into Keyboard arr
+                    if (!controls[BACK])
+                        Keyboard[dirscan[di_north]] = true;  // dirscan[bt_..] is an index into Keyboard arr
+                    else
+                        Keyboard[dirscan[di_north]] = false;
                     break;
                 case BACK:
-                    Keyboard[dirscan[di_south]] = true;
+                    if (!controls[FORWARD])
+                        Keyboard[dirscan[di_south]] = true;
+                    else
+                        Keyboard[dirscan[di_south]] = false;
                     break;
                 case TURN_LEFT:
-                    Keyboard[dirscan[di_west]] = true;
+                    if (!controls[TURN_RIGHT])
+                        Keyboard[dirscan[di_west]] = true;
+                    else
+                        Keyboard[dirscan[di_west]] = false;
+
                     break;
                 case TURN_RIGHT:
-                    Keyboard[dirscan[di_east]] = true;
+                    if (!controls[TURN_LEFT])
+                        Keyboard[dirscan[di_east]] = true;
+                    else
+                        Keyboard[dirscan[di_east]] = false;
                     break;
                 case SHOOT:
                     buttonstate[bt_attack] = true;
@@ -183,6 +198,15 @@ void NEATDoop::setUpController(bool* controls) {
             }
         } else
             buttonstate[i] = false;    //all other controls we don't care about set to false, i.e. pausing the game
+    }
+
+    if ((controls[FORWARD] || controls[BACK]) &&
+            (controls[TURN_LEFT] || controls[TURN_RIGHT])) {
+        if (circleTimeoutSet)
+            if (timeoutTics >= 100)
+                killAttempt = true;
+        else
+            circleTimeoutSet = true;
     }
 
     for (bool *usedMem = &controls[0]; usedMem < &controls[9]; usedMem++)   //Free the memory that was allocated

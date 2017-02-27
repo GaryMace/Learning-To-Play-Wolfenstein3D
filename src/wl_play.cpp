@@ -45,6 +45,10 @@ byte tilemap[MAPSIZE][MAPSIZE]; // wall values only
 byte spotvis[MAPSIZE][MAPSIZE];
 objtype *actorat[MAPSIZE][MAPSIZE];
 
+
+// {'-'} Doop variables
+int currFitness = 0;
+
 //
 // replacing refresh manager
 //
@@ -525,6 +529,8 @@ void PollControls (void)
             controly *= (int) tics;
         }
     }
+
+    //IN_ClearKeysDown(); //{'-'} experimental, may fuck shit up
 }
 
 
@@ -1354,16 +1360,22 @@ void PlayLoop (void)
         }
 
         doopAI.timeout--;
+        if (circleTimeoutSet)
+            timeoutTics++;
+
         if (MAP_DISTANCE((int)player->tilex, prevxp, (int)player->tiley, prevyp) > 0)
             doopAI.timeout += 50;
-        //std::cout << "Timeout: " << static_cast<std::ostringstream*>(&(std::ostringstream() << doopAI.timeout))->str() << std::endl;
-        if (doopAI.timeout <= 0) {
+        if (doopAI.timeout <= 0 || killAttempt) {
             doopAI.setGenomeFitness();
 
             doopAI.timeout = 50;
             doopAI.nextGenome();    //maybe move this to ex_died? i.e. dont start analysis of new genome until after respawn?
             //doopAI.initialiseRun();
             //measure fitness;
+            killAttempt = false;
+            circleTimeoutSet = false;
+            timeoutTics = 0;
+
             playstate = ex_died;
         }
         prevxp = player->tilex;

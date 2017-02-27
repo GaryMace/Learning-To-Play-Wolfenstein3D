@@ -969,6 +969,10 @@ extern int spawnxp;
 extern int spawnyp;
 extern int prevxp;
 extern int prevyp;
+
+extern bool circleTimeoutSet;
+extern int timeoutTics;
+extern bool killAttempt;
 /*
 =============================================================================
 

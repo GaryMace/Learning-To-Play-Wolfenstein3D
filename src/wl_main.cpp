@@ -55,6 +55,9 @@ visstat *doop_laststatptr;
 int doop_statsvis;
 int inputs[INPUTS][SEARCH_GRID];
 
+bool killAttempt = false;
+bool circleTimeoutSet = false;
+int timeoutTics = 0;
 /*
 =============================================================================
 

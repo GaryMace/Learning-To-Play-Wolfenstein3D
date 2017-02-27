@@ -135,7 +135,7 @@ bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
             sum += incoming.weight * n2.value;  //Get sum of input Genes to this Neuron
         }
         if (!n1.inputs.empty()) {
-            std::cout << static_cast<std::ostringstream*>(&(std::ostringstream() << sum))->str() << std::endl;
+            //std::cout << static_cast<std::ostringstream*>(&(std::ostringstream() << sum))->str() << std::endl;
             it->second.value = Neuron::sigmoid(sum);    //which is needed for this step! i.e. in-place map edit
         }
     }
