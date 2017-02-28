@@ -58,6 +58,7 @@ int inputs[INPUTS][SEARCH_GRID];
 int pickups;
 int uniquedoors[MAXDOORS] = {0};
 
+bool leveldone = false;
 bool killattempt = false;
 bool circletimeoutset = false;
 int timeouttics = 0;

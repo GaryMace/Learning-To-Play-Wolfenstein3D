@@ -68,3 +68,6 @@ GP2X/
 *.default
 *.inc
 *.txt
+
+.idea/
+cmake-build-debug/

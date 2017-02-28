@@ -241,7 +241,7 @@ void NEATDoop::nextGenome() {
         Genus::currSpeciesItr++;
         Genus::currSpecies++;
         if (Genus::currSpeciesItr == Genus::species.end()) {
-            std::cout << "New Generation: " << std::endl;
+            //std::cout << "New Generation: " << std::endl;
             Genus::newGeneration();
             Genus::currSpecies = 0;
             Genus::currGenome = 0;
