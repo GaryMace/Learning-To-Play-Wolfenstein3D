@@ -8,7 +8,7 @@
 #include <sstream>
 
 // instantiate static members
-std::list<Species>::iterator Genus:: currSpeciesItr;
+std::list<Species>::iterator Genus::currSpeciesItr;
 std::list<Genome>::iterator Genus::currGenomeItr;
 std::list<Species>::iterator Genus::speciesItr;
 std::list<Species> Genus::species;
@@ -58,6 +58,7 @@ void Genus::addToSpecies(Genome child) {
     }
     Species childSpecies;
     childSpecies.genomes.push_back(child);
+    childSpecies.topGenome = child;                             // First genome of each species is the top genome
     species.push_back(childSpecies);
 }
 

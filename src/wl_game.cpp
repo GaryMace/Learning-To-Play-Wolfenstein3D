@@ -1331,7 +1331,7 @@ void Died (void)
     SD_WaitSoundDone ();
     ClearMemory();
 
-    //gamestate.lives--;
+    //gamestate.lives--;                // {'-'} so we can kill an attempt over and over without ending the game
 
     if (gamestate.lives > -1)
     {

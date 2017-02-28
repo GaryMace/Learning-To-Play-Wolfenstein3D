@@ -12,6 +12,7 @@ class NEATDoop {
 public:
     bool genusSetUp;
     int timeout;
+    int savedGenomes;
 
     void setGenomeFitness ();
     void initialiseGenus ();
@@ -21,6 +22,8 @@ public:
     void setUpController (bool* controls);
 
     void nextGenome();
+    void saveBestGenome();
+    void readInGenome();
 
     NEATDoop() : timeout(20), genusSetUp(false) { }
 };

@@ -5,9 +5,10 @@
 #include "wl_def.h"
 #include "Genome.h"
 #include "Genus.h"
+
 #include <iostream>
 #include <cmath>
-
+#include <fstream>
 /*
 =================================
 =
@@ -27,15 +28,17 @@
 =================================
 */
 void NEATDoop::setGenomeFitness() {
+    Species* species = &(*Genus::currSpeciesItr);
     Genome* genome = &(*Genus::currGenomeItr);
+
     if ((int)player->tilex == spawnxp && (int)player->tiley == spawnyp) {
         genome->fitness = 0;
         return;
     }
 
     double distFromEnd = MAP_DISTANCE((int)player->tilex, endxp, (int)player->tiley, endyp);
-    double distFromSpawn = std::sqrt(std::pow(spawnxp - (int)player->tilex, 2.0) + std::pow(spawnxp - (int)player->tiley, 2.0));
-    int sec = gamestate.TimeCount / 70;
+    double distFromSpawn = MAP_DISTANCE((int) player->tilex, spawnxp, (int) player->tiley, spawnyp);
+    int sec = gamestate.TimeCount / 60;
     int kills = gamestate.killcount;
 
     genome->fitness = MAX_DISTANCE - distFromEnd;
@@ -49,6 +52,9 @@ void NEATDoop::setGenomeFitness() {
         genome->fitness += pickups * ITEM_PICKUP_REWARD;
     if (leveldone)
         genome->fitness += LVL_DONE_REWARD;
+
+    if (genome->fitness > species->topGenome.fitness)
+        species->topGenome = *genome;
 }
 
 
@@ -97,7 +103,9 @@ void NEATDoop::initialiseRun() {
 
     Genome* genome = &(*Genus::currGenomeItr);
     genome->generateNetwork();
-    evaluateCurrent();
+
+    if (tics % 5 == 0)          //TODO: REAAAALLLLY experimental
+        evaluateCurrent();
 }
 
 /*
@@ -159,14 +167,11 @@ void NEATDoop::setUpController(bool* controls) {
         if ((int) *control) {   //If network says push a button
             switch (i) {        //Find what button to press
                 case FORWARD:
-                    if (!controls[BACK])
-                        Keyboard[dirscan[di_north]] = true;  // dirscan[bt_..] is an index into Keyboard arr
-                    else
-                        Keyboard[dirscan[di_north]] = false;
+                    Keyboard[dirscan[di_north]] = true;  // dirscan[bt_..] is an index into Keyboard arr
                     break;
                 case BACK:
                     if (!controls[FORWARD])
-                        Keyboard[dirscan[di_south]] = true;
+                        Keyboard[dirscan[di_south]] = false;
                     else
                         Keyboard[dirscan[di_south]] = false;
                     break;
@@ -242,6 +247,7 @@ void NEATDoop::nextGenome() {
         Genus::currSpecies++;
         if (Genus::currSpeciesItr == Genus::species.end()) {
             //std::cout << "New Generation: " << std::endl;
+            saveBestGenome();
             Genus::newGeneration();
             Genus::currSpecies = 0;
             Genus::currGenome = 0;
@@ -266,4 +272,26 @@ void NEATDoop::nextGenome() {
             Genus::currSpecies = 0;
         }
     }*/
+}
+
+void NEATDoop::saveBestGenome() {
+    std::string fname = "gen_" + Genus::generation;
+    fname += ".txt";
+
+    std::ofstream genomefile;
+    genomefile.open (fname);
+
+    Genome best;
+    best.fitness = -1;  //TODO: consider refactoring if penalties added to scoring func
+    for (Genus::speciesItr = Genus::species.begin(); Genus::speciesItr != Genus::species.end(); Genus::speciesItr++) {
+        if (Genus::speciesItr->topGenome.fitness > best.fitness)
+            best = Genus::speciesItr->topGenome;
+    }
+    genomefile << best.backup();
+
+    genomefile.close();
+}
+
+void NEATDoop::readInGenome() {
+
 }

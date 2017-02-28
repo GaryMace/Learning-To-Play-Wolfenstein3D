@@ -6,6 +6,8 @@
 #include "Species.h"
 #include "Genus.h"
 
+std::list<Genome>::iterator Species::genomeItr;
+
 std::string Species::backup() {
     std::string out = "\n\t\tSpecies{";
     std::string str;

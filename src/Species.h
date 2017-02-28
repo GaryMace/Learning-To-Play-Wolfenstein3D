@@ -8,8 +8,10 @@
 
 class Species {
 public:
+    static std::list<Genome>::iterator genomeItr;
+
     std::list<Genome> genomes;
-    std::list<Genome>::iterator genomeItr;
+    Genome topGenome;
     double topFitness;
     double averageFitness;
     int staleness;
