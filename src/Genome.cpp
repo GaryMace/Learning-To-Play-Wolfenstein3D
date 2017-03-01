@@ -68,17 +68,14 @@ Genome Genome::clone() {
 }
 
 //returns 0 if cmp == 0, 1 if cmp > 0 and -1 if cmp < 0
-int Genome::compare(const Genome &o1, const Genome &o2) {
-    double cmp = o2.fitness - o1.fitness;
-    return cmp == 0.0 ? 0 : cmp > 0.0 ? 1 : -1;
+int Genome::compare(const Genome &o1, const Genome &o2) {               // Sort from highest fitness to lowest
+    return o1.fitness > o2.fitness;
 }
 
-int Genome::compareByPointer(const Genome *o1, const Genome *o2) {
-    double cmp = o2->fitness - o1->fitness;
-    return cmp == 0.0 ? 0 : cmp > 0.0 ? 1 : -1;
+int Genome::compareByPointer(const Genome *o1, const Genome *o2) {      // Sort from lowest fitness to highest
+    return o1->fitness < o2->fitness;
 }
 
-//#fixed
 void Genome::initMutationRates() {
     this->mutationRates[CONNECTIONS] = MUTATE_CONNECTIONS_CHANCE;
     this->mutationRates[LINK] = MUTATE_LINK_CHANCE;

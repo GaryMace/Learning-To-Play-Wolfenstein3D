@@ -132,7 +132,6 @@ void Genus::newGeneration() {
     //for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++)
     //    std::cout << speciesItr->backup() << std::endl;
     Genus::generation++;
-    //initialiseRun() ????
 }
 
 void Genus::rankGlobally() {
@@ -143,12 +142,8 @@ void Genus::rankGlobally() {
         for (genomeItr = speciesItr->genomes.begin(); genomeItr != speciesItr->genomes.end(); genomeItr++)
             global.push_back(&(*genomeItr));  //Push address to original Genomes
 
-    //Sort by pointer, since we're directly editing original list later
-//    std::sort(global.begin(), global.end(), Genome::compareByPointer);
     global.sort(Genome::compareByPointer);
-/*
-    for (int i = 0; i < global.size(); i++)
-        global[i]->globalRank = i;  //Direct edits on original list*/
+
     int idx = 0;
     for (std::list<Genome*>::iterator globalItr = global.begin(); globalItr!= global.end(); globalItr++) {
         Genome *g = &(**globalItr);
@@ -174,7 +169,6 @@ void Genus::removeStaleSpecies() {
 
     species.clear();
     species = survivors;
-    //species.insert(species.begin(), survivors.begin(), survivors.end());    //Copy list B into list A
 }
 
 void Genus::removeWeakSpecies() {
@@ -189,7 +183,6 @@ void Genus::removeWeakSpecies() {
 
     species.clear();
     species = survivors;
-    //species.insert(species.begin(), survivors.begin(), survivors.end());
 }
 
 double Genus::totalAverageFitness() {

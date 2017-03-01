@@ -32,7 +32,7 @@ void NEATDoop::setGenomeFitness() {
     Genome* genome = &(*Genus::currGenomeItr);
 
     if ((int)player->tilex == spawnxp && (int)player->tiley == spawnyp) {
-        genome->fitness = 0;
+        genome->fitness = -1;
         return;
     }
 
@@ -57,8 +57,16 @@ void NEATDoop::setGenomeFitness() {
         species->topGenome = *genome;
     if (genome->fitness > Genus::maxFitness)
         Genus::maxFitness = genome->fitness;
+    if (genome->fitness == 0)
+        genome->fitness = -1;
 }
 
+bool NEATDoop::fitnessAlreadyMeasured() {
+    Species& species = *Genus::currSpeciesItr;
+    Genome& genome = *Genus::currGenomeItr;
+
+    return genome.fitness != 0;
+}
 
 /*
 =================================
@@ -96,8 +104,7 @@ void NEATDoop::initialiseGenus() {
  */
 void NEATDoop::initialiseRun() {
     //timeout = TIMEOUT;
-    int rightmist = 0;  //???
-    //clearControls();  //Don't think I need this, doesn't Wolfenstein does it for us?
+    int rightmost = 0;  //???
 
     Genome* genome = &(*Genus::currGenomeItr);
     genome->generateNetwork();

@@ -15,6 +15,7 @@ public:
     int savedGenomes;
 
     void setGenomeFitness ();
+    bool fitnessAlreadyMeasured ();
     void initialiseGenus ();
     void initialiseRun ();
     void clearControls ();

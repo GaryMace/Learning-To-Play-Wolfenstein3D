@@ -1366,8 +1366,14 @@ void PlayLoop (void)
         if (MAP_DISTANCE((int)player->tilex, prevxp, (int)player->tiley, prevyp) > 0)
             doopAI.timeout += 30;
         if (doopAI.timeout <= 0 || killattempt) {
-            doopAI.setGenomeFitness();
-            doopAI.nextGenome();    //maybe move this to ex_died? i.e. dont start analysis of new genome until after respawn?
+            doopAI.setGenomeFitness();  //if fitness already measured...
+
+            Genus::currSpecies = 0;
+            Genus::currGenome = 0;
+            Genus::currSpeciesItr = Genus::species.begin();
+            Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
+            while (doopAI.fitnessAlreadyMeasured())
+                doopAI.nextGenome();    //maybe move this to ex_died? i.e. dont start analysis of new genome until after respawn?
             killattempt = false;
             circletimeoutset = false;
 
