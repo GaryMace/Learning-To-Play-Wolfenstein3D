@@ -38,7 +38,7 @@ void NEATDoop::setGenomeFitness() {
 
     double distFromEnd = MAP_DISTANCE((int) player->tilex, endxp, (int) player->tiley, endyp);
     double distFromSpawn = MAP_DISTANCE((int) player->tilex, spawnxp, (int) player->tiley, spawnyp);
-    int sec = gamestate.TimeCount / 60;
+    int sec = gamestate.TimeCount / 70;                                                                 //70 fps so divide by 70, counter intuitive I know
     int kills = gamestate.killcount;
 
     genome->fitness = MAX_DISTANCE - distFromEnd;
@@ -61,7 +61,6 @@ void NEATDoop::setGenomeFitness() {
 
 
 /*
- *
 =================================
 =
 = {'-'} initialiseGenus

@@ -11,6 +11,7 @@
 #include "Def.h"
 
 //used as indexes to mutationRates arr
+//TODO: is this wasteful? can't we just put it in Def.h? why does every genome get these....??
 #define CONNECTIONS 0
 #define LINK 1
 #define BIAS  2
@@ -35,18 +36,18 @@ public:
     static int compareByPointer(const Genome *o1, const Genome *o2);
 
     void initMutationRates();
-    void generateNetwork(); //has Genome param in marIO
-    bool* evaluateNetwork(int inputs[][SEARCH_GRID]);  //Has network, inputs param in MarIO
-    void nodeMutate();  //MarIO: genome
-    void linkMutate(bool forceBias);  //MarIO: genome, forceBias(bool)
-    void pointMutate(); //MarIO: genome
-    void mutate();      //MarIO: genome
-    void mutateEnableDisable(bool enable);  //MarIO: genome, enable
-    bool containsLink(Gene link);   //MarIO: genes[], link
-    double disjoint(Genome genome); //MarIO: genes1[], genes2[]
-    int randomNeuron(bool nonInput, bool nonOutput);    //MarIO: genes[], nonInput
-    double weights(Genome genome);   //MarIO: genes1[], genes2[]
-    bool sameSpecies(Genome genome);    //MarIO: genome1, genome2
+    void generateNetwork();
+    bool* evaluateNetwork(int inputs[][SEARCH_GRID]);
+    void nodeMutate();
+    void linkMutate(bool forceBias);
+    void pointMutate();
+    void mutate();
+    void mutateEnableDisable(bool enable);
+    bool containsLink(Gene link);
+    double disjoint(Genome genome);
+    int randomNeuron(bool nonInput, bool nonOutput);
+    double weights(Genome genome);
+    bool sameSpecies(Genome genome);
 
     Genome() : maxNeuron(0), globalRank(0), fitness(0) {  //Init Genome instance variables
         initMutationRates();    //I'm not overly fond of this but old C++ doesn't allow array initialisations in class constructors

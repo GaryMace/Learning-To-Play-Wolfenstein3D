@@ -130,19 +130,14 @@ bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
         for (n1.geneItr = n1.inputs.begin(); n1.geneItr != n1.inputs.end(); n1.geneItr++) {
             Gene incoming = *n1.geneItr;   //for each Gene of Neurons inputs
             Neuron n2 = network[incoming.input];
-            //std::cout << network[incoming.input].backup() << std::endl;
-            //Sleep(5000);
             sum += incoming.weight * n2.value;  //Get sum of input Genes to this Neuron
         }
-        if (!n1.inputs.empty()) {
-            //std::cout << static_cast<std::ostringstream*>(&(std::ostringstream() << sum))->str() << std::endl;
+        if (!n1.inputs.empty())
             it->second.value = Neuron::sigmoid(sum);    //which is needed for this step! i.e. in-place map edit
-        }
     }
 
     bool *outputs = new bool[OUTPUTS];
     for (int i = 0; i < OUTPUTS; i++) {
-        //std::cout << "Net val: " << static_cast<std::ostringstream*>(&(std::ostringstream() <<network[MAX_NODES + i].value))->str() << std::endl;
         if (network[MAX_NODES + i].value > 0)
             outputs[i] = true;
         else

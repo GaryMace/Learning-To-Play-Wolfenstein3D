@@ -28,6 +28,3 @@ public:
     NEATDoop() : timeout(20), genusSetUp(false) { }
 };
 #endif //TESTBENCH_NEATDOOP_H
-
-
-//Check out line ~1145 of wl_agent.cpp for end of level pressing and shit

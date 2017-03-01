@@ -5,13 +5,13 @@
 #ifndef TESTBENCH_DEF_H
 #define TESTBENCH_DEF_H
 
-#define POPULATION 200           //TODO: refactor
+#define POPULATION 50           //TODO: refactor
 #define STALE_SPECIES 15
-#define TIMEOUT 20 //was 20
-#define MUTATION_TYPES 7        //consider moving later
+#define TIMEOUT 50
+#define MUTATION_TYPES 7        // consider moving later
 #define INPUTS 11               // doors, walls, walk space, enemies, ammo, health, keys, guns, push walls, locked doors, elevator
-#define SEARCH_GRID 25          //5x5 grid
-#define OUTPUTS 10              //{forward, backward, left, right, shoot, space, weap1, weap2, weap3, weap4}
+#define SEARCH_GRID 25          // 5x5 grid
+#define OUTPUTS 10              // {forward, backward, left, right, shoot, space, weap1, weap2, weap3, weap4}
 
 #define DELTA_DISJOINT 2.0
 #define DELTA_WEIGHTS  0.4
