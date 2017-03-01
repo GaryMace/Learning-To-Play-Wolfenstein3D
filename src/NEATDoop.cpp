@@ -7,8 +7,8 @@
 #include "Genus.h"
 
 #include <iostream>
-#include <cmath>
 #include <fstream>
+#include <cmath>
 /*
 =================================
 =
@@ -36,7 +36,7 @@ void NEATDoop::setGenomeFitness() {
         return;
     }
 
-    double distFromEnd = MAP_DISTANCE((int)player->tilex, endxp, (int)player->tiley, endyp);
+    double distFromEnd = MAP_DISTANCE((int) player->tilex, endxp, (int) player->tiley, endyp);
     double distFromSpawn = MAP_DISTANCE((int) player->tilex, spawnxp, (int) player->tiley, spawnyp);
     int sec = gamestate.TimeCount / 60;
     int kills = gamestate.killcount;
@@ -55,6 +55,8 @@ void NEATDoop::setGenomeFitness() {
 
     if (genome->fitness > species->topGenome.fitness)
         species->topGenome = *genome;
+    if (genome->fitness > Genus::maxFitness)
+        Genus::maxFitness = genome->fitness;
 }
 
 
@@ -72,10 +74,7 @@ void NEATDoop::initialiseGenus() {
     for (int i = 0; i < POPULATION; i++) {  //initial population
         Genome basic;
         basic.maxNeuron = TOTAL_INPUTS;     // See wl_def.h for a description on this constant.
-        //std::cout << basic.backup()<< std::endl;
         basic.mutate();
-        //std::cout << basic.backup() <<std::endl;
-        //std::cout << Genus::species.size() << std::endl;
         Genus::addToSpecies(basic);
     }
     Genus::currGenome = 0;
@@ -104,7 +103,7 @@ void NEATDoop::initialiseRun() {
     Genome* genome = &(*Genus::currGenomeItr);
     genome->generateNetwork();
 
-    if (tics % 5 == 0)          //TODO: REAAAALLLLY experimental
+    //if (tics % 5 == 0)          //TODO: REAAAALLLLY experimental
         evaluateCurrent();
 }
 
@@ -170,10 +169,7 @@ void NEATDoop::setUpController(bool* controls) {
                     Keyboard[dirscan[di_north]] = true;  // dirscan[bt_..] is an index into Keyboard arr
                     break;
                 case BACK:
-                    if (!controls[FORWARD])
-                        Keyboard[dirscan[di_south]] = false;
-                    else
-                        Keyboard[dirscan[di_south]] = false;
+                    Keyboard[dirscan[di_south]] = false;
                     break;
                 case TURN_LEFT:
                     if (!controls[TURN_RIGHT])
@@ -222,9 +218,9 @@ void NEATDoop::setUpController(bool* controls) {
             circletimeoutset = true;
     }
 
-    for (bool *usedMem = &controls[0]; usedMem < &controls[9]; usedMem++)   //Free the memory that was allocated
-        delete usedMem;
-
+    delete[] controls;   //Free the memory that was allocated
+    //for (bool *usedMem = &controls[0]; usedMem < &controls[9]; usedMem++)
+    //    delete usedMem;
 }
 
 /*
@@ -245,41 +241,26 @@ void NEATDoop::nextGenome() {
         //std::cout << "New Species" << std::endl;
         Genus::currSpeciesItr++;
         Genus::currSpecies++;
+
         if (Genus::currSpeciesItr == Genus::species.end()) {
-            //std::cout << "New Generation: " << std::endl;
+            std::cout << "New Generation: " << std::endl;
             saveBestGenome();
             Genus::newGeneration();
             Genus::currSpecies = 0;
-            Genus::currGenome = 0;
             Genus::currSpeciesItr = Genus::species.begin();
-            Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
-        } else {
-            //std::cout << "Next Genome" << std::endl;
-            Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
-            Genus::currGenome = 0;
         }
-
-        //std::cout << Genus::currGenomeItr->backup() << std::endl;
-        //Sleep(5000);
-        // timeout = TIMEOUT;
-    }
-
-    /*if (Genus::currGenome >= Genus::species[Genus::currSpecies].genomes.size()) {    //TODO: >= or > ?
+        Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
         Genus::currGenome = 0;
-        Genus::currSpecies++;
-        if (Genus::currSpecies >= Genus::species.size()) {
-            Genus::newGeneration();
-            Genus::currSpecies = 0;
-        }
-    }*/
+    }
 }
 
 void NEATDoop::saveBestGenome() {
-    std::string fname = "gen_" + Genus::generation;
-    fname += ".txt";
+    /*char buffer[32];
+    snprintf(buffer, sizeof(char) * 32, "gen_%i.txt", Genus::generation);
 
-    std::ofstream genomefile;
-    genomefile.open (fname);
+    std::filebuf fb;
+    fb.open(buffer, std::ios::out);
+    std::ostream genomefile(&fb);*/
 
     Genome best;
     best.fitness = -1;  //TODO: consider refactoring if penalties added to scoring func
@@ -287,9 +268,9 @@ void NEATDoop::saveBestGenome() {
         if (Genus::speciesItr->topGenome.fitness > best.fitness)
             best = Genus::speciesItr->topGenome;
     }
-    genomefile << best.backup();
-
-    genomefile.close();
+    //genomefile << best.backup();
+    std::cout << best.backup() << std::endl;
+    //fb.close();
 }
 
 void NEATDoop::readInGenome() {
