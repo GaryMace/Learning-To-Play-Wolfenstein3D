@@ -11,7 +11,13 @@
 #include "wl_def.h"
 
 /*
- * Outputs string representation of the Genome class
+=================================
+=
+= {'-'} Genome::backup
+=
+= Outputs a json style string representation of a genome.
+=
+=================================
  */
 std::string Genome::backup() {
     std::string out = "\n\t\t\t\tGenome{";
@@ -53,7 +59,15 @@ std::string Genome::backup() {
     return out;
 }
 
-//Duplicate this Genome into a new identical one that has a different reference
+/*
+=================================
+=
+= {'-'} Genome::clone
+=
+= Returns a deep copy of the genome clone is invoked on.
+=
+=================================
+ */
 Genome Genome::clone() {
     Genome genome;
 
@@ -67,7 +81,16 @@ Genome Genome::clone() {
     return genome;
 }
 
-//returns 0 if cmp == 0, 1 if cmp > 0 and -1 if cmp < 0
+/*
+=================================
+=
+= {'-'} Genome::compare / Genome::compareByPointer
+=
+= compare is used for sorting in descending order, compareByPointer is used to sort a list of pointers
+= in ascending order.
+=
+=================================
+ */
 int Genome::compare(const Genome &o1, const Genome &o2) {               // Sort from highest fitness to lowest
     return o1.fitness > o2.fitness;
 }
@@ -76,6 +99,16 @@ int Genome::compareByPointer(const Genome *o1, const Genome *o2) {      // Sort 
     return o1->fitness < o2->fitness;
 }
 
+/*
+=================================
+=
+= {'-'} Genome::initMutationRates
+=
+= The older version of C++ used for Wolfenstein doesn't allow array instantiation in headers. This method
+= is invoked from the constructor as a hack to get around this problem.
+=
+=================================
+ */
 void Genome::initMutationRates() {
     this->mutationRates[CONNECTIONS] = MUTATE_CONNECTIONS_CHANCE;
     this->mutationRates[LINK] = MUTATE_LINK_CHANCE;
@@ -86,6 +119,16 @@ void Genome::initMutationRates() {
     this->mutationRates[STEP] = STEP_SIZE;
 }
 
+/*
+=================================
+=
+= {'-'} Genome::generateNetwork
+=
+= Generates the input and output Neurons for a Genome's network. It also adds all the curr Genome's
+= Genes to each output Neuron if the Gene is enabled.
+=
+=================================
+ */
 void Genome::generateNetwork() {
     for (int i = 0; i < TOTAL_INPUTS; i++) {  //Make Neurons for all inputs
         Neuron n;
@@ -116,6 +159,17 @@ void Genome::generateNetwork() {
     }
 }
 
+/*
+=================================
+=
+= {'-'} Genome::evaluateNetwork
+=
+= Takes an 10x25 matrix of inputs and assigns its values to the corresponding Neurons in a Genome's network.
+= Also, The value of a Neuron is assigned the sigmoid of the sum of its inputs and finally if the value on an
+= output Neuron is greater than 0 then the corresponding game button to that Neuron is set to be activated.
+=
+=================================
+ */
 bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
     for (int i = 0; i < INPUTS; i++)
         for (int j = 0; j < SEARCH_GRID; j++)
@@ -143,6 +197,15 @@ bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
     return outputs;
 }
 
+/*
+=================================
+=
+= {'-'} Genome::nodeMutate
+=
+= Obtains a random Gene from genes list, disables it if not already adds a new node to the hidden layer.
+=
+=================================
+ */
 void Genome::nodeMutate() {
     if (genes.empty())
         return;
@@ -176,6 +239,15 @@ void Genome::nodeMutate() {
     genes.push_back(gene2);
 }
 
+/*
+=================================
+=
+= {'-'} Genome::pointMutate
+=
+= Mutates the weights on a Genome's Genes.
+=
+=================================
+ */
 void Genome::pointMutate() {
     double step = mutationRates[STEP];
 
@@ -187,6 +259,15 @@ void Genome::pointMutate() {
     }
 }
 
+/*
+=================================
+=
+= {'-'} Genome::clone
+=
+= Creates a new link between two Neurons. (Genes are essentially the Synapse of these Networks)
+=
+=================================
+ */
 void Genome::linkMutate(bool forceBias) {
     int neuron1 = randomNeuron(false, true);
     int neuron2 = randomNeuron(true, false);

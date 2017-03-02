@@ -1383,6 +1383,7 @@ void PlayLoop (void)
         }
         prevxp = (int) player->tilex;
         prevyp = (int) player->tiley;
+        frames = (frames + 1) % INT32_MAX;
     }
     while (!playstate && !startgame);
 

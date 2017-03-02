@@ -109,7 +109,7 @@ void NEATDoop::initialiseRun() {
     Genome* genome = &(*Genus::currGenomeItr);
     genome->generateNetwork();
 
-    if ((int) tics % 5 == 0)          //TODO: REAAAALLLLY experimental
+    if (frames % 5 == 0)          //TODO: REAAAALLLLY experimental
         evaluateCurrent();
 }
 

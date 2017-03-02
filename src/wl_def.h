@@ -983,6 +983,8 @@ extern bool leveldone;
 extern bool circletimeoutset;
 extern int timeouttics;
 extern bool killattempt;
+
+extern int frames;
 /*
 =============================================================================
 

@@ -62,6 +62,8 @@ bool leveldone = false;
 bool killattempt = false;
 bool circletimeoutset = false;
 int timeouttics = 0;
+
+int frames = 0;
 /*
 =============================================================================
 
