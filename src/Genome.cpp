@@ -397,7 +397,7 @@ int Genome::randomNeuron(bool nonInput, bool nonOutput) {
             neurons[i] = true;
     
     if (!nonOutput)
-        for (int i = 0; i < OUTPUTS; ++i) 
+        for (int i = 0; i < OUTPUTS; i++)
             neurons[MAX_NODES + i] = true;
 
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {

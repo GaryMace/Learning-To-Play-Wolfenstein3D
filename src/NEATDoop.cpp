@@ -44,7 +44,7 @@ void NEATDoop::setGenomeFitness() {
     genome->fitness = MAX_DISTANCE - distFromEnd;
     genome->fitness += (distFromSpawn / sec) * TRAVEL_REWARD;
 
-    if (kills > 0)
+    /*if (kills > 0)
         genome->fitness += kills * KILL_REWARD;
     if (doorsopened > 0)
         genome->fitness += doorsopened * DOOR_OPENED_REWARD;
@@ -53,11 +53,11 @@ void NEATDoop::setGenomeFitness() {
     if (leveldone)
         genome->fitness += LVL_DONE_REWARD;
 
-    if (genome->fitness > species->topGenome.fitness)
+    if (genome->fitness > species->topGenome.fitness)   //this is messed stuff up i think
         species->topGenome = *genome;
     if (genome->fitness > Genus::maxFitness)
         Genus::maxFitness = genome->fitness;
-    if (genome->fitness == 0)
+    */if (genome->fitness == 0)
         genome->fitness = -1;
 }
 

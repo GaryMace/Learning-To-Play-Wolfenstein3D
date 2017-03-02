@@ -13,9 +13,8 @@
   <component name="ChangeListManager">
     <list default="true" id="f3627d11-ecaa-4711-8dd5-1016497df221" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Genome.cpp" afterPath="$PROJECT_DIR$/src/Genome.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NEATDoop.cpp" afterPath="$PROJECT_DIR$/src/NEATDoop.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NEATDoop.h" afterPath="$PROJECT_DIR$/src/NEATDoop.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/wl_play.cpp" afterPath="$PROJECT_DIR$/src/wl_play.cpp" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,8 +33,8 @@
       <file leaf-file-name="Genome.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Genome.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="8711">
-              <caret line="281" column="17" lean-forward="false" selection-start-line="281" selection-start-column="17" selection-end-line="281" selection-end-column="17" />
+            <state relative-caret-position="727">
+              <caret line="414" column="21" lean-forward="true" selection-start-line="414" selection-start-column="21" selection-end-line="414" selection-end-column="21" />
               <folding>
                 <element signature="e#38#58#0" expanded="true" />
                 <element signature="e#138#157#0" expanded="true" />
@@ -47,8 +46,8 @@
       <file leaf-file-name="Genus.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Genus.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3131">
-              <caret line="101" column="31" lean-forward="false" selection-start-line="101" selection-start-column="31" selection-end-line="101" selection-end-column="31" />
+            <state relative-caret-position="231">
+              <caret line="87" column="32" lean-forward="true" selection-start-line="87" selection-start-column="32" selection-end-line="87" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -77,8 +76,8 @@
       <file leaf-file-name="wl_play.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/wl_play.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="807">
-              <caret line="1390" column="0" lean-forward="true" selection-start-line="1390" selection-start-column="0" selection-end-line="1390" selection-end-column="0" />
+            <state relative-caret-position="634">
+              <caret line="1368" column="8" lean-forward="false" selection-start-line="1368" selection-start-column="8" selection-end-line="1368" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -107,8 +106,8 @@
       <file leaf-file-name="NEATDoop.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/NEATDoop.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="2" lean-forward="true" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
+            <state relative-caret-position="868">
+              <caret line="55" column="89" lean-forward="false" selection-start-line="55" selection-start-column="89" selection-end-line="55" selection-end-column="89" />
               <folding>
                 <element signature="e#38#59#0" expanded="true" />
               </folding>
@@ -170,13 +169,13 @@
         <option value="$PROJECT_DIR$/src/Genome.h" />
         <option value="$PROJECT_DIR$/src/Def.h" />
         <option value="$USER_HOME$/Desktop/FYP/Doop out/stdout.txt" />
-        <option value="$PROJECT_DIR$/src/Genus.cpp" />
-        <option value="$PROJECT_DIR$/src/Genome.cpp" />
         <option value="$PROJECT_DIR$/src/wl_def.h" />
         <option value="$PROJECT_DIR$/src/wl_main.cpp" />
         <option value="$PROJECT_DIR$/src/NEATDoop.h" />
-        <option value="$PROJECT_DIR$/src/NEATDoop.cpp" />
+        <option value="$PROJECT_DIR$/src/Genus.cpp" />
+        <option value="$PROJECT_DIR$/src/Genome.cpp" />
         <option value="$PROJECT_DIR$/src/wl_play.cpp" />
+        <option value="$PROJECT_DIR$/src/NEATDoop.cpp" />
       </list>
     </option>
   </component>
@@ -443,12 +442,12 @@
       <workItem from="1488395857675" duration="3833000" />
       <workItem from="1488443303071" duration="7423000" />
       <workItem from="1488458561476" duration="1414000" />
-      <workItem from="1488481770986" duration="740000" />
+      <workItem from="1488481770986" duration="4526000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="70555000" />
+    <option name="totallyTimeSpent" value="74341000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="3198" height="1748" extended-state="0" />
@@ -458,7 +457,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32987687" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32987687" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -761,6 +760,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="651">
           <caret line="21" column="110" lean-forward="false" selection-start-line="21" selection-start-column="110" selection-end-line="21" selection-end-column="110" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -819,25 +819,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Genome.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8711">
-          <caret line="281" column="17" lean-forward="false" selection-start-line="281" selection-start-column="17" selection-end-line="281" selection-end-column="17" />
-          <folding>
-            <element signature="e#38#58#0" expanded="true" />
-            <element signature="e#138#157#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Genus.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3131">
-          <caret line="101" column="31" lean-forward="false" selection-start-line="101" selection-start-column="31" selection-end-line="101" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Species.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2201">
@@ -862,20 +843,39 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Genus.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="87" column="32" lean-forward="true" selection-start-line="87" selection-start-column="32" selection-end-line="87" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/NEATDoop.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="2" lean-forward="true" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
+        <state relative-caret-position="868">
+          <caret line="55" column="89" lean-forward="false" selection-start-line="55" selection-start-column="89" selection-end-line="55" selection-end-column="89" />
           <folding>
             <element signature="e#38#59#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/Genome.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="727">
+          <caret line="414" column="21" lean-forward="true" selection-start-line="414" selection-start-column="21" selection-end-line="414" selection-end-column="21" />
+          <folding>
+            <element signature="e#38#58#0" expanded="true" />
+            <element signature="e#138#157#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/wl_play.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="807">
-          <caret line="1390" column="0" lean-forward="true" selection-start-line="1390" selection-start-column="0" selection-end-line="1390" selection-end-column="0" />
+        <state relative-caret-position="634">
+          <caret line="1368" column="8" lean-forward="false" selection-start-line="1368" selection-start-column="8" selection-end-line="1368" selection-end-column="8" />
           <folding />
         </state>
       </provider>
