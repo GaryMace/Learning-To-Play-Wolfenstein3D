@@ -18,7 +18,6 @@ public:
     bool fitnessAlreadyMeasured ();
     void initialiseGenus ();
     void initialiseRun ();
-    void clearControls ();
     void evaluateCurrent ();
     void setUpController (bool* controls);
 

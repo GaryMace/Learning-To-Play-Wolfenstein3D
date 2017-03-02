@@ -109,26 +109,8 @@ void NEATDoop::initialiseRun() {
     Genome* genome = &(*Genus::currGenomeItr);
     genome->generateNetwork();
 
-    //if (tics % 5 == 0)          //TODO: REAAAALLLLY experimental
+    if ((int) tics % 5 == 0)          //TODO: REAAAALLLLY experimental
         evaluateCurrent();
-}
-
-/*
-=================================
-=
-= {'-'} clearControls
-=
-= Reset the controller buttons so no accidental buttons are activate next frame.
-=
-=================================
- */
-void NEATDoop::clearControls() {
-    std::vector<bool> controls;
-    for (int i = 0; i < OUTPUTS; i++)
-        controls[i] = false;
-
-    //set this equal to the buttonstate[] array later
-    //TODO: turns out probs dont need it....maybe?
 }
 
 /*
@@ -182,7 +164,6 @@ void NEATDoop::setUpController(bool* controls) {
                         Keyboard[dirscan[di_west]] = true;
                     else
                         Keyboard[dirscan[di_west]] = false;
-
                     break;
                 case TURN_RIGHT:
                     if (!controls[TURN_LEFT])
