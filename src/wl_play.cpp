@@ -1363,27 +1363,25 @@ void PlayLoop (void)
         if (circletimeoutset)
             timeouttics++;
 
-        if (MAP_DISTANCE((int)player->tilex, prevxp, (int)player->tiley, prevyp) > 0)
+        if (MAP_DISTANCE((int)player->tilex, prevxp, (int)player->tiley, prevyp) >= 1)
             doopAI.timeout += 30;
+
         if (doopAI.timeout <= 0 || killattempt) {
             doopAI.setGenomeFitness();  //if fitness already measured...
 
-            Genus::currSpecies = 0;
-            Genus::currGenome = 0;
-            Genus::currSpeciesItr = Genus::species.begin();
-            Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
-            while (doopAI.fitnessAlreadyMeasured())
-                doopAI.nextGenome();    //maybe move this to ex_died? i.e. dont start analysis of new genome until after respawn?
+            doopAI.nextGenome();    //maybe move this to ex_died? i.e. dont start analysis of new genome until after respawn?
+            if (doopAI.fitnessAlreadyMeasured())
+                doopAI.nextGenome();
+
             killattempt = false;
             circletimeoutset = false;
-
             timeouttics = 0;
             doopAI.timeout = 50;
             playstate = ex_died;
         }
         prevxp = (int) player->tilex;
         prevyp = (int) player->tiley;
-        frames = (frames + 1) % INT32_MAX;
+        //frames++;
     }
     while (!playstate && !startgame);
 

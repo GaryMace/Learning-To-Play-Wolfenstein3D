@@ -25,6 +25,6 @@ public:
     void saveBestGenome();
     void readInGenome();
 
-    NEATDoop() : timeout(20), genusSetUp(false) { }
+    NEATDoop() : timeout(50), genusSetUp(false) { }
 };
 #endif //TESTBENCH_NEATDOOP_H

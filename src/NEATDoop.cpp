@@ -105,11 +105,12 @@ void NEATDoop::initialiseGenus() {
 void NEATDoop::initialiseRun() {
     //timeout = TIMEOUT;
     int rightmost = 0;  //???
+    //frames = 0;
 
     Genome* genome = &(*Genus::currGenomeItr);
     genome->generateNetwork();
 
-    if (frames % 5 == 0)          //TODO: REAAAALLLLY experimental
+    //if (frames % 5 == 0)          //TODO: REAAAALLLLY experimental
         evaluateCurrent();
 }
 
@@ -205,9 +206,9 @@ void NEATDoop::setUpController(bool* controls) {
             circletimeoutset = true;
     }
 
-    delete[] controls;   //Free the memory that was allocated
-    //for (bool *usedMem = &controls[0]; usedMem < &controls[9]; usedMem++)
-    //    delete usedMem;
+    //delete[] controls;   //Free the memory that was allocated
+    for (bool *usedMem = &controls[0]; usedMem < &controls[9]; usedMem++)
+        delete usedMem;
 }
 
 /*
@@ -230,8 +231,8 @@ void NEATDoop::nextGenome() {
         Genus::currSpecies++;
 
         if (Genus::currSpeciesItr == Genus::species.end()) {
-            std::cout << "New Generation: " << std::endl;
-            saveBestGenome();
+            //std::cout << "New Generation: " << std::endl;
+            //saveBestGenome();
             Genus::newGeneration();
             Genus::currSpecies = 0;
             Genus::currSpeciesItr = Genus::species.begin();
@@ -250,7 +251,7 @@ void NEATDoop::saveBestGenome() {
     std::ostream genomefile(&fb);*/
 
     Genome best;
-    best.fitness = -1;  //TODO: consider refactoring if penalties added to scoring func
+    best.fitness = -2;  //TODO: consider refactoring if penalties added to scoring func
     for (Genus::speciesItr = Genus::species.begin(); Genus::speciesItr != Genus::species.end(); Genus::speciesItr++) {
         if (Genus::speciesItr->topGenome.fitness > best.fitness)
             best = Genus::speciesItr->topGenome;
