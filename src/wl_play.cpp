@@ -1372,7 +1372,7 @@ void PlayLoop (void)
             doopAI.setGenomeFitness();  //if fitness already measured...
 
             doopAI.nextGenome();    //maybe move this to ex_died? i.e. dont start analysis of new genome until after respawn?
-            if (doopAI.fitnessAlreadyMeasured())
+            while (doopAI.fitnessAlreadyMeasured())
                 doopAI.nextGenome();
 
             killattempt = false;

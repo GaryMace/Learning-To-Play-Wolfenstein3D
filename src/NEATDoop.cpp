@@ -213,7 +213,7 @@ void NEATDoop::setUpController(bool* controls) {
             buttonstate[i] = false;    //all other controls we don't care about set to false, i.e. pausing the game
     }
 
-    if ((controls[FORWARD] || controls[BACK]) &&
+    if (controls[FORWARD] &&
             (controls[TURN_LEFT] || controls[TURN_RIGHT])) {
         if (circletimeoutset) {
             if (timeouttics >= 100)

@@ -111,7 +111,7 @@ void Genus::newGeneration() {
 
     Genus::cullSpecies(true);  //Cull all but the top member of each species
     while (children.size() + species.size() < POPULATION) {
-        int randSpecies = 0 + (rand() % (int)(species.size() - 0 + 1));
+        int randSpecies = rand() % (int) species.size();
         Species *species1;
        /* std::list<Species>::iterator it = species.begin();
 

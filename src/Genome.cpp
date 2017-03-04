@@ -218,7 +218,7 @@ void Genome::nodeMutate() {
     if (genes.empty())
         return;
 
-    int randGene =  0 + (rand() % (int)(genes.size() - 0 + 1));
+    int randGene =  rand() % (int) genes.size();
     Gene *gene;
 
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
@@ -360,7 +360,7 @@ void Genome::mutateEnableDisable(bool enable) {
         return;
 
     //pointer to obj ref from original vector
-    int randGene =  0 + (rand() % (int)(candidates.size() - 0 + 1));
+    int randGene = rand() % (int) candidates.size();
     Gene *gene;
     for (geneItr2 = candidates.begin(); geneItr2 != candidates.end(); geneItr2++)
         if (--randGene <= 0)
@@ -396,7 +396,7 @@ double Genome::disjoint(Genome genome) {
             isDisjoint = true;
         }
     }
-    int max = std::max(genes.size(), genome.genes.size());
+    int max = std::max((int) genes.size(), (int) genome.genes.size());
     if (disjointGenes == 0 || max  == 0)
        return 0;
     else
@@ -426,7 +426,7 @@ int Genome::randomNeuron(bool nonInput, bool nonOutput) {
     for (std::map<int, bool>::iterator it = neurons.begin(); it != neurons.end(); it++)   //get size of map
         size++;
 
-    int n = (rand() % size) + 1;
+    int n = rand() % size;
     for (std::map<int, bool>::iterator it = neurons.begin(); it != neurons.end(); it++)   //get random neuron in there (Not a hidden one)
         if (--n == 0)
             return it->first;
