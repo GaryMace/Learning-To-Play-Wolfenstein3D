@@ -7,6 +7,7 @@
 #include "Genus.h"
 
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <cmath>
 /*
@@ -36,29 +37,42 @@ void NEATDoop::setGenomeFitness() {
         return;
     }
 
-    double distFromEnd = MAP_DISTANCE((int) player->tilex, endxp, (int) player->tiley, endyp);
-    double distFromSpawn = MAP_DISTANCE((int) player->tilex, spawnxp, (int) player->tiley, spawnyp);
+    double distFromEnd = getDistance((int) player->tilex, endxp, (int) player->tiley, endyp);
+    double distFromSpawn = getDistance((int) player->tilex, spawnxp, (int) player->tiley, spawnyp);
     int sec = gamestate.TimeCount / 70;                                                                 //70 fps so divide by 70, counter intuitive I know
     int kills = gamestate.killcount;
 
     genome->fitness = MAX_DISTANCE - distFromEnd;
-    genome->fitness += (distFromSpawn / sec) * TRAVEL_REWARD;
+    if (sec != 0 && distFromSpawn != 0)
+       genome->fitness += (distFromSpawn / sec) * TRAVEL_REWARD;
 
-    /*if (kills > 0)
+    if (kills > 0)
         genome->fitness += kills * KILL_REWARD;
     if (doorsopened > 0)
         genome->fitness += doorsopened * DOOR_OPENED_REWARD;
     if (pickups > 0)
         genome->fitness += pickups * ITEM_PICKUP_REWARD;
+    //std::cout << static_cast<std::ostringstream*>(&(std::ostringstream() << genome->fitness))->str() << std::endl;
     if (leveldone)
         genome->fitness += LVL_DONE_REWARD;
-
-    if (genome->fitness > species->topGenome.fitness)   //this is messed stuff up i think
-        species->topGenome = *genome;
+    
     if (genome->fitness > Genus::maxFitness)
         Genus::maxFitness = genome->fitness;
+    /*if (genome->fitness > species->topGenome.fitness)   //this is messed stuff up i think
+        species->topGenome = *genome;
     */if (genome->fitness == 0)
         genome->fitness = -1;
+}
+
+int NEATDoop::getDistance(int x1, int x2, int y1, int y2) {
+    int dist = 0;
+    int xDist = std::abs(x2 - x1) - 1;
+    
+    dist = std::abs(y2 - y1);
+    if (xDist > 0) 
+       dist += xDist;
+       
+    return dist;   
 }
 
 bool NEATDoop::fitnessAlreadyMeasured() {
@@ -78,6 +92,8 @@ bool NEATDoop::fitnessAlreadyMeasured() {
 =================================
  */
 void NEATDoop::initialiseGenus() {
+    srand(time(NULL));  //TODO: is this necessary?
+     
     for (int i = 0; i < POPULATION; i++) {  //initial population
         Genome basic;
         basic.maxNeuron = TOTAL_INPUTS;     // See wl_def.h for a description on this constant.
@@ -105,13 +121,13 @@ void NEATDoop::initialiseGenus() {
 void NEATDoop::initialiseRun() {
     //timeout = TIMEOUT;
     int rightmost = 0;  //???
-    //frames = 0;
+    frames = 0;
 
     Genome* genome = &(*Genus::currGenomeItr);
     genome->generateNetwork();
-
-    //if (frames % 5 == 0)          //TODO: REAAAALLLLY experimental
-        evaluateCurrent();
+    if (!initRun)
+       evaluateCurrent();
+    doopAI.initRun = false;
 }
 
 /*
@@ -199,11 +215,12 @@ void NEATDoop::setUpController(bool* controls) {
 
     if ((controls[FORWARD] || controls[BACK]) &&
             (controls[TURN_LEFT] || controls[TURN_RIGHT])) {
-        if (circletimeoutset)
+        if (circletimeoutset) {
             if (timeouttics >= 100)
                 killattempt = true;
-        else
+        } else {
             circletimeoutset = true;
+        }
     }
 
     //delete[] controls;   //Free the memory that was allocated
@@ -243,6 +260,7 @@ void NEATDoop::nextGenome() {
 }
 
 void NEATDoop::saveBestGenome() {
+    std::list<Species>::iterator speciesItr;
     /*char buffer[32];
     snprintf(buffer, sizeof(char) * 32, "gen_%i.txt", Genus::generation);
 
@@ -252,9 +270,9 @@ void NEATDoop::saveBestGenome() {
 
     Genome best;
     best.fitness = -2;  //TODO: consider refactoring if penalties added to scoring func
-    for (Genus::speciesItr = Genus::species.begin(); Genus::speciesItr != Genus::species.end(); Genus::speciesItr++) {
-        if (Genus::speciesItr->topGenome.fitness > best.fitness)
-            best = Genus::speciesItr->topGenome;
+    for (speciesItr = Genus::species.begin(); speciesItr != Genus::species.end(); speciesItr++) {
+        if (speciesItr->topGenome.fitness > best.fitness)
+            best = speciesItr->topGenome;
     }
     //genomefile << best.backup();
     std::cout << best.backup() << std::endl;

@@ -256,7 +256,7 @@ void Quit(const char *errorStr, ...);
 #define WEAPON3 8
 #define WEAPON4 9
 
-#define MAX_DISTANCE 90.51
+#define MAX_DISTANCE 125
 #define KILL_REWARD 25
 #define TRAVEL_REWARD 1000
 #define DOOR_OPENED_REWARD 50

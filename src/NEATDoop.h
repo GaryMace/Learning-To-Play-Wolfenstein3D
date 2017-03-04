@@ -11,10 +11,12 @@
 class NEATDoop {
 public:
     bool genusSetUp;
+    bool initRun;
     int timeout;
     int savedGenomes;
 
     void setGenomeFitness ();
+    int  getDistance (int x1, int x2, int y1, int y2);
     bool fitnessAlreadyMeasured ();
     void initialiseGenus ();
     void initialiseRun ();
@@ -25,6 +27,6 @@ public:
     void saveBestGenome();
     void readInGenome();
 
-    NEATDoop() : timeout(50), genusSetUp(false) { }
+    NEATDoop() : timeout(50), genusSetUp(false), initRun(false){ }
 };
 #endif //TESTBENCH_NEATDOOP_H

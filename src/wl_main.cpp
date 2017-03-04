@@ -1682,7 +1682,7 @@ static void DemoLoop()
         if (!doopAI.genusSetUp) {
             doopAI.initialiseGenus();
             doopAI.genusSetUp = true;
-            doopAI.timeout = 50;
+            doopAI.timeout = 35;
         }
 
         if (startgame || loadedgame)

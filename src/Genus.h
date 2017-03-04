@@ -17,7 +17,6 @@ private:
 
 public:
     static std::list<Species> species;
-    static std::list<Species>::iterator speciesItr;
     static std::list<Species>::iterator currSpeciesItr;     //Maintain a ref to current species/ genome for faster access
     static std::list<Genome>::iterator currGenomeItr;
     static int generation;

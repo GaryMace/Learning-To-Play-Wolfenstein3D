@@ -10,7 +10,6 @@
 // instantiate static members
 std::list<Species>::iterator Genus::currSpeciesItr;
 std::list<Genome>::iterator Genus::currGenomeItr;
-std::list<Species>::iterator Genus::speciesItr;
 std::list<Species> Genus::species;
 int Genus::innovation = OUTPUTS;
 double Genus::maxFitness = 0.0;
@@ -23,6 +22,7 @@ void Genus::loadSaveState(std::string saveState) {
 }
 
 std::string Genus::backup() {
+    std::list<Species>::iterator speciesItr;
     std::string out = "Genus{";
     std::string str;
 
@@ -50,6 +50,8 @@ double Genus::nextDouble() {
 }
 
 void Genus::addToSpecies(Genome child) {
+    std::list<Species>::iterator speciesItr;
+
     for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
         if (child.sameSpecies(*speciesItr->genomes.begin())) {  //child.sameSpecies(First node in list in curr species)
             speciesItr->genomes.push_back(child);
@@ -63,6 +65,7 @@ void Genus::addToSpecies(Genome child) {
 }
 
 void Genus::cullSpecies(bool cutToOne) {
+    std::list<Species>::iterator speciesItr;
     std::list<Genome>::iterator removeItr;
 
     for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
@@ -83,6 +86,8 @@ void Genus::cullSpecies(bool cutToOne) {
 }
 
 void Genus::newGeneration() {
+    std::list<Species>::iterator speciesItr;
+
     Genus::cullSpecies(false); //Cull bottom half of each species
     Genus::rankGlobally();
     Genus::removeStaleSpecies();
@@ -135,6 +140,7 @@ void Genus::newGeneration() {
 }
 
 void Genus::rankGlobally() {
+    std::list<Species>::iterator speciesItr;
     std::list<Genome>::iterator genomeItr;
     std::list<Genome*> global;
 
@@ -152,6 +158,7 @@ void Genus::rankGlobally() {
 }
 
 void Genus::removeStaleSpecies() {
+    std::list<Species>::iterator speciesItr;
     std::list<Species> survivors;
 
     for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
@@ -172,6 +179,7 @@ void Genus::removeStaleSpecies() {
 }
 
 void Genus::removeWeakSpecies() {
+    std::list<Species>::iterator speciesItr;
     std::list<Species> survivors;
 
     double sum = Genus::totalAverageFitness();
@@ -186,6 +194,7 @@ void Genus::removeWeakSpecies() {
 }
 
 double Genus::totalAverageFitness() {
+    std::list<Species>::iterator speciesItr;
     double total = 0;
 
     for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++)

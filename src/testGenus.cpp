@@ -5,6 +5,8 @@
 // Created by gary on 11/01/17.
 //
 int main() {
+    std::list<Species>::iterator speciesItr;
+    std::list<Genome>::iterator genomeItr;
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genus::nextDouble()" << std::endl;
     std::cout << "Genus rand double (expected 0 <= x <= 1): " << Genus::nextDouble() << "\n" << std::endl;
@@ -62,12 +64,12 @@ int main() {
     std::cout << "// Genus::removeStaleSpecies()" << std::endl;
     int i = 0;
 
-    for (Genus::speciesItr = Genus::species.begin(); Genus::speciesItr != Genus::species.end(); Genus::speciesItr++) {
-        Species* s = &(*Genus::speciesItr);
+    for (speciesItr = Genus::species.begin(); speciesItr != Genus::species.end(); speciesItr++) {
+        Species* s = &(*speciesItr);
     //for (int j = 0; j < Genus::species.size(); j++) {
-        for (s->genomeItr = s->genomes.begin(); s->genomeItr != s->genomes.end(); s->genomeItr++) {
+        for (genomeItr = s->genomes.begin(); genomeItr != s->genomes.end(); genomeItr++) {
             //for (int k = 0; k < s.genomes.size(); k++) {
-            s->genomeItr->fitness = i++;
+            genomeItr->fitness = i++;
         }
     }
 
@@ -81,9 +83,9 @@ int main() {
 
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genus::cullSpecies()" << std::endl;
-    for (Genus::speciesItr = Genus::species.begin(); Genus::speciesItr != Genus::species.end(); Genus::speciesItr++) {
+    for (speciesItr = Genus::species.begin(); speciesItr != Genus::species.end(); speciesItr++) {
         //for (int j = 0; j < Genus::species.size(); j++) {
-        Species* s = &(*Genus::speciesItr);
+        Species* s = &(*speciesItr);
         Genome g;   //Add extra Genomes for testing
         s->genomes.push_back(g);
     }

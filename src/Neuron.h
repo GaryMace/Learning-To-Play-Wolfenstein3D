@@ -11,7 +11,6 @@ class Neuron {
 public:
     double value;
     std::list<Gene> inputs;
-    std::list<Gene>::iterator geneItr;
 
     std::string backup();
     static double sigmoid(double x);

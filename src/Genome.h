@@ -25,7 +25,6 @@ public:
     double mutationRates[MUTATION_TYPES];
     std::map<int, Neuron> network;
     std::list<Gene> genes;
-    std::list<Gene>::iterator geneItr;
     int maxNeuron;
     int globalRank;
     double fitness; //this will be set in the game loop

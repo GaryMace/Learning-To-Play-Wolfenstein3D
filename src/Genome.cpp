@@ -20,6 +20,7 @@
 =================================
  */
 std::string Genome::backup() {
+    std::list<Gene>::iterator geneItr;
     std::string out = "\n\t\t\t\tGenome{";
     std::string str;
 
@@ -69,6 +70,7 @@ std::string Genome::backup() {
 =================================
  */
 Genome Genome::clone() {
+    std::list<Gene>::iterator geneItr;
     Genome genome;
 
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++)
@@ -130,6 +132,8 @@ void Genome::initMutationRates() {
 =================================
  */
 void Genome::generateNetwork() {
+    std::list<Gene>::iterator geneItr;
+
     for (int i = 0; i < TOTAL_INPUTS; i++) {  //Make Neurons for all inputs
         Neuron n;
         network.insert(std::make_pair(i, n));
@@ -171,6 +175,8 @@ void Genome::generateNetwork() {
 =================================
  */
 bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
+    std::list<Gene>::iterator geneItr;
+
     for (int i = 0; i < INPUTS; i++)
         for (int j = 0; j < SEARCH_GRID; j++)
             network[(i * SEARCH_GRID) + j].value = inputs[i][j];    //Change input values to network
@@ -178,8 +184,8 @@ bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
     for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
         Neuron& n1 = it->second;    //Neuron& grabs the address of the value from the hashmap
         double sum = 0.0;
-        for (n1.geneItr = n1.inputs.begin(); n1.geneItr != n1.inputs.end(); n1.geneItr++) {
-            Gene incoming = *n1.geneItr;   //for each Gene of Neurons inputs
+        for (geneItr = n1.inputs.begin(); geneItr != n1.inputs.end(); geneItr++) {
+            Gene incoming = *geneItr;   //for each Gene of Neurons inputs
             Neuron n2 = network[incoming.input];
             sum += incoming.weight * n2.value;  //Get sum of input Genes to this Neuron
         }
@@ -207,6 +213,8 @@ bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
 =================================
  */
 void Genome::nodeMutate() {
+    std::list<Gene>::iterator geneItr;
+
     if (genes.empty())
         return;
 
@@ -249,6 +257,7 @@ void Genome::nodeMutate() {
 =================================
  */
 void Genome::pointMutate() {
+    std::list<Gene>::iterator geneItr;
     double step = mutationRates[STEP];
 
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
@@ -339,6 +348,7 @@ void Genome::mutate() {
 }
 
 void Genome::mutateEnableDisable(bool enable) {
+    std::list<Gene>::iterator geneItr;
     std::list<Gene*>::iterator geneItr2;
     std::list<Gene*> candidates;  //vector of pointers
 
@@ -360,6 +370,8 @@ void Genome::mutateEnableDisable(bool enable) {
 }
 
 bool Genome::containsLink(Gene link) {
+    std::list<Gene>::iterator geneItr;
+
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++)
         if (geneItr->input == link.input && geneItr->output == link.output)
             return true;
@@ -367,6 +379,7 @@ bool Genome::containsLink(Gene link) {
 }
 
 double Genome::disjoint(Genome genome) {
+    std::list<Gene>::iterator geneItr;
     std::list<Gene>::iterator geneItr2; //Gene 2 iterator
     double disjointGenes = 0.0;
     bool isDisjoint = true;
@@ -383,14 +396,17 @@ double Genome::disjoint(Genome genome) {
             isDisjoint = true;
         }
     }
-
-    return disjointGenes / std::max(genes.size(), genome.genes.size());
+    int max = std::max(genes.size(), genome.genes.size());
+    if (disjointGenes == 0 || max  == 0)
+       return 0;
+    else
+        return disjointGenes / max;
 }
 
 //TODO: revisit this method
 int Genome::randomNeuron(bool nonInput, bool nonOutput) {
+    std::list<Gene>::iterator geneItr;
     std::map<int, bool> neurons;
-    srand(time(NULL));  //TODO: is this necessary?
     
     if (!nonInput)
         for (int i = 0; i < TOTAL_INPUTS; i++) 
@@ -419,6 +435,7 @@ int Genome::randomNeuron(bool nonInput, bool nonOutput) {
 }
 
 double Genome::weights(Genome genome) {
+    std::list<Gene>::iterator geneItr;
     std::list<Gene>::iterator geneItr2; //Gene 2 iterator
     double coincident = 0.0;
     double sum = 0.0;
@@ -428,6 +445,7 @@ double Genome::weights(Genome genome) {
             if (geneItr->innovation == geneItr2->innovation) {
                 sum += std::fabs(geneItr->weight - geneItr2->weight); //std::fabs is abs() on a float, too bad it doesn't exist pre C++11
                 coincident++;
+                //std::cout << "weights same" << std::endl;
                 break;
             }
         }

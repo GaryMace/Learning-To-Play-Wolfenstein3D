@@ -5,10 +5,10 @@
 #include <sstream>
 #include "Species.h"
 #include "Genus.h"
-
-std::list<Genome>::iterator Species::genomeItr;
+#include <iostream>
 
 std::string Species::backup() {
+    std::list<Genome>::iterator genomeItr;
     std::string out = "\n\t\tSpecies{";
     std::string str;
 
@@ -30,8 +30,8 @@ std::string Species::backup() {
 }
 
 Genome Species::breedChild() {
+    std::list<Genome>::iterator genomeItr;
     Genome child;
-
     if (Genus::nextDouble() < CROSSOVER_CHANCE) {
         int randGenome1 =  0 + (rand() % (int)(genomes.size() - 0 + 1));
         int randGenome2 =  0 + (rand() % (int)(genomes.size() - 0 + 1));
@@ -47,8 +47,9 @@ Genome Species::breedChild() {
                 g2 = genomeItr->clone();
                 break;
             }
-
+        //std::cout << "Crossing over" << std::endl;
         child = crossover(g1, g2);
+        //std::cout << "Cross over success" << std::endl;
     } else {
         int randGenome = 0 + (rand() % (int)(genomes.size() - 0 + 1));
 
@@ -59,11 +60,11 @@ Genome Species::breedChild() {
             }
     }
     child.mutate();
-
     return child;
 }
 
 void Species::calculateAverageFitness() {
+    std::list<Genome>::iterator genomeItr;
     double total = 0.0;
 
     for (genomeItr = genomes.begin(); genomeItr != genomes.end(); genomeItr++)
@@ -73,6 +74,8 @@ void Species::calculateAverageFitness() {
 }
 
 Genome Species::crossover(Genome g1, Genome g2) {
+    std::list<Gene>::iterator geneItr;
+    std::list<Gene>::iterator geneItr2;
     if (g2.fitness > g1.fitness) {
         Genome tmp = g1;
         g1 = g2;
@@ -81,18 +84,18 @@ Genome Species::crossover(Genome g1, Genome g2) {
     Genome child;   //The new child
     bool skipDoup = false;  //Some genes are identical across g1 & g2, this avoids adding them twice
 
-    for (g1.geneItr = g1.genes.begin(); g1.geneItr != g1.genes.end(); g1.geneItr++) {
-        for (g2.geneItr = g2.genes.begin(); g2.geneItr != g2.genes.end(); g2.geneItr++) {
-            if (g1.geneItr->innovation == g2.geneItr->innovation) {
-                if (rand() % 2 == 1 && g2.geneItr->enabled) {  //if true
-                    child.genes.push_back(g2.geneItr->clone());
+    for (geneItr = g1.genes.begin(); geneItr != g1.genes.end(); geneItr++) {
+        for (geneItr2 = g2.genes.begin(); geneItr2 != g2.genes.end(); geneItr2++) {
+            if (geneItr->innovation == geneItr2->innovation) {
+                if (rand() % 2 == 1 && geneItr2->enabled) {  //if true
+                    child.genes.push_back(geneItr2->clone());
                     skipDoup = true;
                     break;
                 }
             }
         }
         if (!skipDoup)   //prevents adding the same gene twice
-            child.genes.push_back(g1.geneItr->clone());
+            child.genes.push_back(geneItr->clone());
         else
             skipDoup = false;
     }

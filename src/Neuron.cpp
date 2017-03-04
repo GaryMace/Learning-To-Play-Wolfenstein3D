@@ -7,6 +7,7 @@
 
 
 std::string Neuron::backup() {
+    std::list<Gene>::iterator geneItr;
     std::string out = "\n\t\t\t\t\t\t\tNeuron{";
 
     std::string str =

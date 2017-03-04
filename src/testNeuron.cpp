@@ -5,6 +5,7 @@
 #include "Neuron.h"
 
 int main() {
+    std::list<Gene>::iterator geneItr;
     Neuron n;
 
     for (int i = 0;  i < 10; i++)  {
@@ -14,8 +15,8 @@ int main() {
     }
 
     std::cout << "Neuron genes (expected 0 1 ... 9): ";
-    for (n.geneItr = n.inputs.begin(); n.geneItr != n.inputs.end(); n.geneItr++) {
-        std::cout << n.geneItr->innovation << " ";
+    for (geneItr = n.inputs.begin(); geneItr != n.inputs.end(); geneItr++) {
+        std::cout << geneItr->innovation << " ";
     }
     std::cout << std::endl;
 
