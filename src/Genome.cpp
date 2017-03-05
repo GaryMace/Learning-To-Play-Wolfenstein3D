@@ -183,14 +183,14 @@ bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
             network[(i * SEARCH_GRID) + j].value = inputs[i][j];    //Change input values to network
 
     for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
-        Neuron& n1 = it->second;    //Neuron& grabs the address of the value from the hashmap
+        //Neuron& n1 = (*it).second;    //Neuron& grabs the address of the value from the hashmap
         double sum = 0.0;
-        for (geneItr = n1.inputs.begin(); geneItr != n1.inputs.end(); geneItr++) {
+        for (geneItr = it->second.inputs.begin(); geneItr != it->second.inputs.end(); geneItr++) {
             Gene incoming = *geneItr;   //for each Gene of Neurons inputs
             Neuron n2 = network[incoming.input];
             sum += incoming.weight * n2.value;  //Get sum of input Genes to this Neuron
         }
-        if (!n1.inputs.empty())
+        if (!it->second.inputs.empty())
             it->second.value = Neuron::sigmoid(sum);    //which is needed for this step! i.e. in-place map edit
     }
 
@@ -219,7 +219,7 @@ void Genome::nodeMutate() {
     if (genes.empty())
         return;
 
-    int randGene =  rand() % (int) genes.size();
+    int randGene = rand() % (int) genes.size();
     Gene *gene;
 
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
@@ -234,7 +234,7 @@ void Genome::nodeMutate() {
     gene->enabled = false;
     maxNeuron++;
 
-    Gene gene1 = gene->clone();  //TODO: is this not just making a copy and putting it at the end?
+    Gene gene1 = gene->clone();
     gene1.output = maxNeuron;
     gene1.weight = 1.0;
     gene1.innovation = Genus::newInnovation();
@@ -362,12 +362,13 @@ void Genome::mutateEnableDisable(bool enable) {
 
     //pointer to obj ref from original vector
     int randGene = rand() % (int) candidates.size();
-    Gene *gene;
-    for (geneItr2 = candidates.begin(); geneItr2 != candidates.end(); geneItr2++)
-        if (randGene-- == 0)
-            gene = *geneItr2;
 
-    gene->enabled = !gene->enabled; //change value via pointer
+    for (geneItr2 = candidates.begin(); geneItr2 != candidates.end(); geneItr2++) {
+        if (randGene-- == 0) {
+            geneItr->enabled = !geneItr->enabled;   //change value via pointer
+            break;
+        }
+    }
 }
 
 bool Genome::containsLink(Gene link) {
@@ -410,17 +411,18 @@ int Genome::randomNeuron(bool nonInput) {
     std::map<int, bool> neurons;
     
     if (!nonInput)
-        for (int i = 0; i < TOTAL_INPUTS; i++) 
-            neurons[i] = true;
-    
+        for (int i = 0; i < TOTAL_INPUTS; i++)
+            neurons.insert(std::make_pair(i, true)); //make new entry
+
     for (int i = 0; i < OUTPUTS; i++)
-        neurons[MAX_NODES + i] = true;
+        neurons.insert(std::make_pair(MAX_NODES + i, true)); //make new entry
+
 
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
         if (!nonInput || geneItr->input >= TOTAL_INPUTS)
-            neurons[geneItr->input] = true;
+            neurons.insert(std::make_pair(geneItr->input, true));
         if (!nonInput || geneItr->output >= TOTAL_INPUTS)
-            neurons[geneItr->output] = true;
+            neurons.insert(std::make_pair(geneItr->output, true));
     }
 
     int randNeuron = rand() % (int) neurons.size();

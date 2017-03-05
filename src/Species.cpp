@@ -38,16 +38,18 @@ Genome Species::breedChild() {
         int randGenome2 = rand() % (int) genomes.size();
         Genome g1;
         Genome g2;
-        for (genomeItr = genomes.begin(); genomeItr != genomes.end(); genomeItr++)
+        for (genomeItr = genomes.begin(); genomeItr != genomes.end(); genomeItr++) {
             if (randGenome1-- == 0) {
                 g1 = genomeItr->clone();
                 break;
             }
-        for (genomeItr = genomes.begin(); genomeItr != genomes.end(); genomeItr++)
+        }
+        for (genomeItr = genomes.begin(); genomeItr != genomes.end(); genomeItr++) {
             if (randGenome2-- == 0) {
                 g2 = genomeItr->clone();
                 break;
             }
+        }
         child = crossover(g1, g2);
     } else {
         int randGenome = rand() % (int) genomes.size();
@@ -75,6 +77,7 @@ void Species::calculateAverageFitness() {
 Genome Species::crossover(Genome g1, Genome g2) {
     std::list<Gene>::iterator geneItr;
     std::list<Gene>::iterator geneItr2;
+
     if (g2.fitness > g1.fitness) {
         Genome tmp = g1;
         g1 = g2;

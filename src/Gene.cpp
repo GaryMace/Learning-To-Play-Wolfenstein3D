@@ -7,11 +7,11 @@
 
 Gene Gene::clone() {
     Gene copy;
-    copy.enabled = this->enabled;
-    copy.input = this->input;
-    copy.output = this->output;
-    copy.innovation = this->innovation;
-    copy.weight = this->weight;
+    copy.enabled = enabled;
+    copy.input = input;
+    copy.output = output;
+    copy.innovation = innovation;
+    copy.weight = weight;
 
     return copy;
 }
