@@ -104,7 +104,7 @@ void Genus::newGeneration() {
 
     for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
         Species& species = *speciesItr;
-        double breed = std::floor(species.averageFitness / sum * POPULATION) - 1.0;
+        double breed = std::floor(species.averageFitness / sum * POPULATION) - 1;
         for (int j = 0; j < breed; j++)
             children.push_back(species.breedChild());
     }
@@ -123,7 +123,7 @@ void Genus::newGeneration() {
         children.push_back(species->breedChild());*/
 
         for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
-            if (--randSpecies <= 0) {
+            if (randSpecies-- == 0) {
                 species1 = &(*speciesItr);
                 break;
             }

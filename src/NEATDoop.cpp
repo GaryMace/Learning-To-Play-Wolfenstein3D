@@ -96,7 +96,7 @@ void NEATDoop::initialiseGenus() {
      
     for (int i = 0; i < POPULATION; i++) {  //initial population
         Genome basic;
-        basic.maxNeuron = TOTAL_INPUTS;     // See wl_def.h for a description on this constant.
+        //basic.maxNeuron = TOTAL_INPUTS;     // See wl_def.h for a description on this constant.
         basic.mutate();
         Genus::addToSpecies(basic);
     }
@@ -104,7 +104,7 @@ void NEATDoop::initialiseGenus() {
     Genus::currSpecies = 0;
     Genus::currSpeciesItr = Genus::species.begin();
     Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
-    //std::cout << "start run" << std::endl;
+
     initialiseRun();
 }
 
@@ -127,7 +127,7 @@ void NEATDoop::initialiseRun() {
     genome->generateNetwork();
     if (!initRun)
        evaluateCurrent();
-    doopAI.initRun = false;
+    initRun = false;
 }
 
 /*

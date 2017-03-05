@@ -1678,12 +1678,6 @@ static void DemoLoop()
 #else
         US_ControlPanel (0);
 #endif
-        // TODO: {'-'} set up the network, may need to be moved
-        if (!doopAI.genusSetUp) {
-            doopAI.initialiseGenus();
-            doopAI.genusSetUp = true;
-            doopAI.timeout = 35;
-        }
 
         if (startgame || loadedgame)
         {
@@ -1981,6 +1975,11 @@ int main (int argc, char *argv[])
 
     InitGame();
 
+    if (!doopAI.genusSetUp) {
+        doopAI.initialiseGenus();
+        doopAI.genusSetUp = true;
+        doopAI.timeout = 35;
+    }
     DemoLoop();
 
     Quit("Demo loop exited???");

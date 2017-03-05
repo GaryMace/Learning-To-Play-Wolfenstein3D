@@ -32,29 +32,28 @@ std::string Species::backup() {
 Genome Species::breedChild() {
     std::list<Genome>::iterator genomeItr;
     Genome child;
+
     if (Genus::nextDouble() < CROSSOVER_CHANCE) {
         int randGenome1 = rand() % (int) genomes.size();
         int randGenome2 = rand() % (int) genomes.size();
         Genome g1;
         Genome g2;
         for (genomeItr = genomes.begin(); genomeItr != genomes.end(); genomeItr++)
-            if (--randGenome1 <= 0) {
+            if (randGenome1-- == 0) {
                 g1 = genomeItr->clone();
                 break;
             }
         for (genomeItr = genomes.begin(); genomeItr != genomes.end(); genomeItr++)
-            if (--randGenome2 <= 0) {
+            if (randGenome2-- == 0) {
                 g2 = genomeItr->clone();
                 break;
             }
-        //std::cout << "Crossing over" << std::endl;
         child = crossover(g1, g2);
-        //std::cout << "Cross over success" << std::endl;
     } else {
         int randGenome = rand() % (int) genomes.size();
 
         for (genomeItr = genomes.begin(); genomeItr != genomes.end(); genomeItr++)
-            if (--randGenome <= 0) {
+            if (randGenome-- == 0) {
                 child = genomeItr->clone();
                 break;
             }
