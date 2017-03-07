@@ -5,7 +5,7 @@
 #include <sstream>
 #include <iostream>
 #include <cmath>
-//#include <windows.h>
+#include <windows.h>
 #include "Genome.h"
 #include "Genus.h"
 #include "wl_def.h"
@@ -46,7 +46,7 @@ std::string Genome::backup() {
         out += geneItr->backup() + ",";
     out = out.substr(0, out.length() - 1);  //Remove last ","
     out += "\n\t\t\t\t\t},";
-
+    std::cout << "ne size" << network.size() << std::endl;
     out += "\n\t\t\t\t\tnetwork={";
     for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
         str = static_cast<std::ostringstream*>(&(std::ostringstream() << it->first))->str();
@@ -136,28 +136,32 @@ void Genome::generateNetwork() {
 
     for (int i = 0; i < TOTAL_INPUTS; i++) {  //Make Neurons for all inputs
         Neuron n;
+        //network[i] = n;
         network.insert(std::make_pair(i, n));
     }
     for (int i = 0; i < OUTPUTS; i++) { //Make Neurons for all outputs
         Neuron n;
+        //network[MAX_NODES + i] = n;
         network.insert(std::make_pair(MAX_NODES + i, n));  //notice output neurons start right after input neurons here
     }
-    if (!genes.empty())
-        genes.sort(Gene::compare);
+    
+    genes.sort(Gene::compare);
 
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
         if (geneItr->enabled) { //If this Gene is enabled
             std::map<int, Neuron>::iterator it = network.find(geneItr->output);
             if (it == network.end()) {  //If key gene.output doesn't exist
                 Neuron n;
+                //network[geneItr->output] = n;
                 network.insert(std::make_pair(geneItr->output, n)); //make new entry
             }
             Neuron& n = network[geneItr->output];   //add this Gene to entry
             n.inputs.push_back(*geneItr);
 
             std::map<int, Neuron>::iterator it2 = network.find(geneItr->input);
-            if (it == network.end()) {  //If key gene.input doesn't exist
+            if (it2 == network.end()) {  //If key gene.input doesn't exist
                 Neuron n2;
+                //network[geneItr->input] = n2;
                 network.insert(std::make_pair(geneItr->input, n2));
             }
         }
@@ -177,18 +181,18 @@ void Genome::generateNetwork() {
  */
 bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
     std::list<Gene>::iterator geneItr;
-
+    std::cout << "Eval start" << std::endl;
     for (int i = 0; i < INPUTS; i++)
         for (int j = 0; j < SEARCH_GRID; j++)
             network[(i * SEARCH_GRID) + j].value = inputs[i][j];    //Change input values to network
 
     for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
-        //Neuron& n1 = (*it).second;    //Neuron& grabs the address of the value from the hashmap
+        //Neuron& neuron = it->second;    //Neuron& grabs the address of the value from the hashmap
         double sum = 0.0;
         for (geneItr = it->second.inputs.begin(); geneItr != it->second.inputs.end(); geneItr++) {
             Gene incoming = *geneItr;   //for each Gene of Neurons inputs
-            Neuron n2 = network[incoming.input];
-            sum += incoming.weight * n2.value;  //Get sum of input Genes to this Neuron
+            Neuron other = network[incoming.input];
+            sum += incoming.weight * other.value;  //Get sum of input Genes to this Neuron
         }
         if (!it->second.inputs.empty())
             it->second.value = Neuron::sigmoid(sum);    //which is needed for this step! i.e. in-place map edit
@@ -201,6 +205,7 @@ bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
         else
             outputs[i] = false;
     }
+    std::cout << "Eval done" << std::endl;
     return outputs;
 }
 
@@ -292,7 +297,6 @@ void Genome::linkMutate(bool forceBias) {
     Gene newLink;
     newLink.input = neuron1;
     newLink.output = neuron2;
-
     if (forceBias)
         newLink.input = TOTAL_INPUTS - 1;
 
@@ -417,11 +421,12 @@ int Genome::randomNeuron(bool nonInput) {
     for (int i = 0; i < OUTPUTS; i++)
         neurons.insert(std::make_pair(MAX_NODES + i, true)); //make new entry
 
-
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
         if (!nonInput || geneItr->input >= TOTAL_INPUTS)
+            //neurons[geneItr->input] = true;
             neurons.insert(std::make_pair(geneItr->input, true));
         if (!nonInput || geneItr->output >= TOTAL_INPUTS)
+            //neurons[geneItr->output] = true;
             neurons.insert(std::make_pair(geneItr->output, true));
     }
 
@@ -444,7 +449,6 @@ double Genome::weights(Genome genome) {
             if (geneItr->innovation == geneItr2->innovation) {
                 sum += std::fabs(geneItr->weight - geneItr2->weight); //std::fabs is abs() on a float, too bad it doesn't exist pre C++11
                 coincident++;
-                //std::cout << "weights same" << std::endl;
                 break;
             }
         }

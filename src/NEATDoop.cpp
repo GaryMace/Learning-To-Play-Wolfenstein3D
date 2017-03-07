@@ -58,9 +58,9 @@ void NEATDoop::setGenomeFitness() {
     
     if (genome->fitness > Genus::maxFitness)
         Genus::maxFitness = genome->fitness;
-    /*if (genome->fitness > species->topGenome.fitness)   //this is messed stuff up i think
-        species->topGenome = *genome;
-    */if (genome->fitness == 0)
+    //if (genome->fitness > species->topGenome.fitness)   //this is messed stuff up i think
+    //    species->topGenome = *genome;
+    if (genome->fitness == 0)
         genome->fitness = -1;
 }
 
@@ -275,7 +275,7 @@ void NEATDoop::saveBestGenome() {
             best = speciesItr->topGenome;
     }
     //genomefile << best.backup();
-    std::cout << best.backup() << std::endl;
+    //std::cout << best.backup() << std::endl;
     //fb.close();
 }
 

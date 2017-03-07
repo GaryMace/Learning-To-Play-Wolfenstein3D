@@ -436,7 +436,7 @@ void PollControls (void)
 
     if (doopAI.initRun)
        doopAI.initialiseRun();
-    if (frames % 10 == 0)          //TODO: REAAAALLLLY experimental
+    if (frames % 35 == 0)          //TODO: REAAAALLLLY experimental
         doopAI.evaluateCurrent();
     if (demoplayback)
     {
@@ -1366,7 +1366,7 @@ void PlayLoop (void)
             timeouttics++;
 
         if (doopAI.getDistance((int)player->tilex, prevxp, (int)player->tiley, prevyp) > 0)
-            doopAI.timeout += 10;
+            doopAI.timeout += 45;
 
         if (doopAI.timeout <= 0 || killattempt) {
             doopAI.setGenomeFitness();  //if fitness already measured...
@@ -1378,7 +1378,7 @@ void PlayLoop (void)
             killattempt = false;
             circletimeoutset = false;
             timeouttics = 0;
-            doopAI.timeout = 35;
+            doopAI.timeout = 45;
             doopAI.initRun = true;
             
             playstate = ex_died;

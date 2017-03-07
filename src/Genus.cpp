@@ -124,6 +124,7 @@ void Genus::newGeneration() {
 
         for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
             if (randSpecies-- == 0) {
+                //children.push_back(speciesItr->breedChild());
                 species1 = &(*speciesItr);
                 break;
             }

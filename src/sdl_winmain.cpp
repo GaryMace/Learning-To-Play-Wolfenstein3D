@@ -252,10 +252,11 @@ int console_main(int argc, char *argv[])
 int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPWSTR szCmdLine, int sw)
 //int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPWSTR szCmdLine, int sw)
 #else
-int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPWSTR szCmdLine, int sw)
+int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
 //int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
 #endif
-{
+{   
+    RedirectIOToConsole();
 	HINSTANCE handle;
 	char **argv;
 	int argc;
