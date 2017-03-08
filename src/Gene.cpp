@@ -37,6 +37,16 @@ std::string Gene::backup() {
     return out;
 }
 
+std::string Gene::backupnew() {
+    std::string out =
+            static_cast<std::ostringstream*>(&(std::ostringstream() << input))->str() +
+            "," + static_cast<std::ostringstream*>(&(std::ostringstream() << output))->str() +
+            "," + static_cast<std::ostringstream*>(&(std::ostringstream() << enabled))->str() +
+            "," + static_cast<std::ostringstream*>(&(std::ostringstream() << innovation))->str() +
+            "," + static_cast<std::ostringstream*>(&(std::ostringstream() << weight))->str();
+    return out;
+}
+
 bool Gene::compare(const Gene &g1, const Gene &g2) {
     return g1.output < g2.output;
 }

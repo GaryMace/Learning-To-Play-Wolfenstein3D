@@ -32,6 +32,7 @@ public:
 
     Genome clone();
     std::string backup();
+    std::string backupnew();
     static int compare(const Genome &o1, const Genome &o2);
     static int compareByPointer(const Genome *o1, const Genome *o2);
 

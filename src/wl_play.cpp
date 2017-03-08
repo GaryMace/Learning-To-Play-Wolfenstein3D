@@ -1370,8 +1370,11 @@ void PlayLoop (void)
             doopAI.timeout += 150;
 
         if (doopAI.timeout <= 0 || killattempt || gamestate.TimeCount > 8400)
-            playstate = ex_died;
-          
+            if (playbest)
+                playstate = ex_victorious;
+            else
+                playstate = ex_died;
+
         prevxp = (int) player->tilex;
         prevyp = (int) player->tiley;
         frames++;

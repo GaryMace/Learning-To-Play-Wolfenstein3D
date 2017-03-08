@@ -107,6 +107,17 @@ void NEATDoop::initialiseGenus() {
     initialiseRun();
 }
 
+void NEATDoop::playBest() {
+    Genus::addToSpecies(best);
+
+    Genus::currGenome = 0;
+    Genus::currSpecies = 0;
+    Genus::currSpeciesItr = Genus::species.begin();
+    Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
+
+    initialiseRun();
+}
+
 /*
 =================================
 =
@@ -233,7 +244,6 @@ void NEATDoop::nextGenome() {
     Genus::currGenomeItr++;
 
     if (Genus::currGenomeItr == Genus::currSpeciesItr->genomes.end()) {
-        //std::cout << "New Species" << std::endl;
         Genus::currSpeciesItr++;
         Genus::currSpecies++;
 
@@ -268,6 +278,71 @@ void NEATDoop::saveBestGenome() {
     //fb.close();
 }
 
-void NEATDoop::readInGenome() {
+template<typename Out> void split(const std::string &s, char delim, Out result) {
+    std::stringstream ss;
+    ss.str(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        *(result++) = item;
+    }
+}
 
+std::list<std::string> split(const std::string &s, char delim) {
+    std::list<std::string> elems;
+    split(s, delim, std::back_inserter(elems));
+    return elems;
+}
+
+void NEATDoop::readInGenome() {
+    std::ifstream input;
+    std::string filename;
+
+    std::cout << "Enter the file name: ";
+    std::cin >> filename;
+    if (filename == "none") {
+        playbest = false;
+        return;
+    }
+
+    playbest = true;
+    std::string filepath = "..//" + filename;
+    input.open(filepath.c_str());
+    while(input.fail()) {
+        input.clear();
+        std::cout << "Incorrect filename, please enter again: ";
+        std::cin >> filename;
+        filepath = "..//" + filename;
+        input.open(filepath);
+    }
+
+    std::string line;
+    Genome best;
+    int idx = 0;
+
+    input >> best.fitness;
+    input >> best.globalRank;
+    input >> best.maxNeuron;
+    input >> line;
+
+    std::list<std::string> mutationRates = split(line, ',');
+
+    for (std::list<std::string>::iterator it = mutationRates.begin(); it != mutationRates.end(); it++)
+        best.mutationRates[idx++] = std::atof(it->c_str());
+
+    while (std::getline(input, line)) {
+        if (!line.empty()) {
+            Gene gene;
+            std::list<std::string> geneLine = split(line, ',');
+            std::list<std::string>::iterator it = geneLine.begin();
+
+            gene.input = (int) std::atof((it++)->c_str());
+            gene.output = (int) std::atof((it++)->c_str());
+            gene.enabled = (bool) std::atof((it++)->c_str());
+            gene.innovation = (int) std::atof((it++)->c_str());
+            gene.weight = std::atof((it)->c_str());
+            best.genes.push_back(gene);
+        }
+    }
+
+    doopAI.best = best;
 }

@@ -64,6 +64,7 @@ bool circletimeoutset = false;
 int timeouttics = 0;
 
 int frames = 0;
+bool playbest = false;
 /*
 =============================================================================
 
@@ -1975,11 +1976,16 @@ int main (int argc, char *argv[])
 
     InitGame();
 
-    if (!doopAI.genusSetUp) {
-        doopAI.initialiseGenus();
-        doopAI.genusSetUp = true;
-        doopAI.timeout = 150;
-    }
+    doopAI.readInGenome();
+    if (playbest)
+        doopAI.playBest();
+    else
+        if (!doopAI.genusSetUp) {
+            doopAI.initialiseGenus();
+            doopAI.genusSetUp = true;
+            doopAI.timeout = 150;
+        }
+
     DemoLoop();
 
     Quit("Demo loop exited???");

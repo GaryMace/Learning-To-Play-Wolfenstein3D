@@ -985,6 +985,7 @@ extern int timeouttics;
 extern bool killattempt;
 
 extern int frames;
+extern bool playbest;
 /*
 =============================================================================
 
