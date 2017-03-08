@@ -77,7 +77,7 @@ void Species::calculateAverageFitness() {
 Genome Species::crossover(Genome g1, Genome g2) {
     std::list<Gene>::iterator geneItr;
     std::list<Gene>::iterator geneItr2;
-
+    
     if (g2.fitness > g1.fitness) {
         Genome tmp = g1;
         g1 = g2;
@@ -85,7 +85,7 @@ Genome Species::crossover(Genome g1, Genome g2) {
     }
     Genome child;   //The new child
     bool skipDoup = false;  //Some genes are identical across g1 & g2, this avoids adding them twice
-
+    
     for (geneItr = g1.genes.begin(); geneItr != g1.genes.end(); geneItr++) {
         for (geneItr2 = g2.genes.begin(); geneItr2 != g2.genes.end(); geneItr2++) {
             if (geneItr->innovation == geneItr2->innovation) {
@@ -100,7 +100,7 @@ Genome Species::crossover(Genome g1, Genome g2) {
             child.genes.push_back(geneItr->clone());
         else
             skipDoup = false;
-    }
+    } 
     child.maxNeuron = std::max(g1.maxNeuron, g2.maxNeuron);
 
     for (int i = 0;  i < MUTATION_TYPES; i++)

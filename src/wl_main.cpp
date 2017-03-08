@@ -1978,7 +1978,7 @@ int main (int argc, char *argv[])
     if (!doopAI.genusSetUp) {
         doopAI.initialiseGenus();
         doopAI.genusSetUp = true;
-        doopAI.timeout = 45;
+        doopAI.timeout = 150;
     }
     DemoLoop();
 

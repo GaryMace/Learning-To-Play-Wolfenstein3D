@@ -6,6 +6,7 @@
 #include <cmath>
 #include <iostream>
 #include <sstream>
+#include <windows.h>
 
 // instantiate static members
 std::list<Species>::iterator Genus::currSpeciesItr;
@@ -77,7 +78,7 @@ void Genus::cullSpecies(bool cutToOne) {
             remaining = 1.0;
 
         removeItr = species.genomes.end();
-        while (species.genomes.size() > remaining) {
+        while (species.genomes.size() > remaining || removeItr != species.genomes.begin()) {
             if (removeItr != species.genomes.end())
                 species.genomes.erase(removeItr);   //Remove weak species from end
             removeItr--;
@@ -87,9 +88,11 @@ void Genus::cullSpecies(bool cutToOne) {
 
 void Genus::newGeneration() {
     std::list<Species>::iterator speciesItr;
-
+    
     Genus::cullSpecies(false); //Cull bottom half of each species
+    std::cout << "start rank glob" << std::endl;
     Genus::rankGlobally();
+    std::cout << "Emd rank" << std::endl;
     Genus::removeStaleSpecies();
     Genus::rankGlobally();
     for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
@@ -97,8 +100,11 @@ void Genus::newGeneration() {
         species.calculateAverageFitness();
     }
     Genus::removeWeakSpecies();
-
+    
     double sum = Genus::totalAverageFitness();
+    if (sum == 0){ 
+       sum = 1;
+    }
     std::list<Genome> children;
     std::list<Genome>::iterator genomeItr;
 
@@ -113,30 +119,19 @@ void Genus::newGeneration() {
     while (children.size() + species.size() < POPULATION) {
         int randSpecies = rand() % (int) species.size();
         Species *species1;
-       /* std::list<Species>::iterator it = species.begin();
-
-        while(randSpecies > 0) {
-            randSpecies--;
-            it++;
-        }
-        Species *species = &(*it);
-        children.push_back(species->breedChild());*/
 
         for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
             if (randSpecies-- == 0) {
-                //children.push_back(speciesItr->breedChild());
                 species1 = &(*speciesItr);
                 break;
             }
         }
         children.push_back(species1->breedChild());
     }
+    for (genomeItr = children.begin(); genomeItr != children.end(); genomeItr++) {
+        Genus::addToSpecies(*genomeItr);   
+    }
 
-    for (genomeItr = children.begin(); genomeItr != children.end(); genomeItr++)
-        Genus::addToSpecies(*genomeItr);
-
-    //for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++)
-    //    std::cout << speciesItr->backup() << std::endl;
     Genus::generation++;
 }
 
@@ -151,10 +146,10 @@ void Genus::rankGlobally() {
 
     global.sort(Genome::compareByPointer);
 
-    int idx = 0;
+    int idx = 1;
     for (std::list<Genome*>::iterator globalItr = global.begin(); globalItr!= global.end(); globalItr++) {
-        Genome *g = &(**globalItr);
-        g->globalRank = idx++;
+        Genome &g = *(&**globalItr);
+        g.globalRank = idx++;
     }
 }
 
@@ -184,6 +179,8 @@ void Genus::removeWeakSpecies() {
     std::list<Species> survivors;
 
     double sum = Genus::totalAverageFitness();
+    if (sum == 0) 
+       sum = 1;
     for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
         double breed = std::floor(speciesItr->averageFitness / sum * POPULATION);    // A/B * C or A/(B * C) ?
         if (breed >= 1.0)

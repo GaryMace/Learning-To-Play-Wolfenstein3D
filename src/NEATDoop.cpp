@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <windows.h>
 #include <fstream>
 #include <cmath>
 /*
@@ -52,7 +53,6 @@ void NEATDoop::setGenomeFitness() {
         genome->fitness += doorsopened * DOOR_OPENED_REWARD;
     if (pickups > 0)
         genome->fitness += pickups * ITEM_PICKUP_REWARD;
-    //std::cout << static_cast<std::ostringstream*>(&(std::ostringstream() << genome->fitness))->str() << std::endl;
     if (leveldone)
         genome->fitness += LVL_DONE_REWARD;
     
@@ -92,11 +92,10 @@ bool NEATDoop::fitnessAlreadyMeasured() {
 =================================
  */
 void NEATDoop::initialiseGenus() {
-    srand(time(NULL));  //TODO: is this necessary?
-     
+    srand(1488900454);
+
     for (int i = 0; i < POPULATION; i++) {  //initial population
         Genome basic;
-        //basic.maxNeuron = TOTAL_INPUTS;     // See wl_def.h for a description on this constant.
         basic.mutate();
         Genus::addToSpecies(basic);
     }
@@ -119,12 +118,11 @@ void NEATDoop::initialiseGenus() {
 =================================
  */
 void NEATDoop::initialiseRun() {
-    //timeout = TIMEOUT;
-    int rightmost = 0;  //???
     frames = 0;
 
     Genome* genome = &(*Genus::currGenomeItr);
     genome->generateNetwork();
+
     if (!initRun)
        evaluateCurrent();
     initRun = false;
@@ -142,14 +140,8 @@ void NEATDoop::initialiseRun() {
  */
 void NEATDoop::evaluateCurrent() {
     Genome* genome = &(*Genus::currGenomeItr);
+
     bool *controls = genome->evaluateNetwork(inputs);
-    //std::cout << genome->backup() << std::endl;
-    //Sleep(5000);
-
-    //for (bool *i = &controls[0]; i != &controls[9]; i++)
-    //    std::cout << "Val: " << (int) *i << std::endl;
-
-    //Sleep(1000);
     setUpController(controls);
 }
 
@@ -215,17 +207,15 @@ void NEATDoop::setUpController(bool* controls) {
 
     if (controls[FORWARD] &&
             (controls[TURN_LEFT] || controls[TURN_RIGHT])) {
-        if (circletimeoutset) {
-            if (timeouttics >= 100)
-                killattempt = true;
-        } else {
-            circletimeoutset = true;
-        }
+            if (!circletimeoutset) {
+                circletimeoutset = true;
+            }
     }
+    
+    if (circletimeoutset && timeouttics >= 100)
+       killattempt = true;
 
-    //delete[] controls;   //Free the memory that was allocated
-    for (bool *usedMem = &controls[0]; usedMem < &controls[9]; usedMem++)
-        delete usedMem;
+    delete[] controls;   //Free the memory that was allocated
 }
 
 /*
@@ -248,7 +238,6 @@ void NEATDoop::nextGenome() {
         Genus::currSpecies++;
 
         if (Genus::currSpeciesItr == Genus::species.end()) {
-            //std::cout << "New Generation: " << std::endl;
             //saveBestGenome();
             Genus::newGeneration();
             Genus::currSpecies = 0;

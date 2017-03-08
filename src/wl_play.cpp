@@ -436,7 +436,7 @@ void PollControls (void)
 
     if (doopAI.initRun)
        doopAI.initialiseRun();
-    if (frames % 35 == 0)          //TODO: REAAAALLLLY experimental
+    if (frames % 20 == 0)          //TODO: REAAAALLLLY experimental
         doopAI.evaluateCurrent();
     if (demoplayback)
     {
@@ -1361,31 +1361,21 @@ void PlayLoop (void)
             }
         }
 
+        //{'-'} Doop things
         doopAI.timeout--;
         if (circletimeoutset)
             timeouttics++;
 
         if (doopAI.getDistance((int)player->tilex, prevxp, (int)player->tiley, prevyp) > 0)
-            doopAI.timeout += 45;
+            doopAI.timeout += 150;
 
-        if (doopAI.timeout <= 0 || killattempt) {
-            doopAI.setGenomeFitness();  //if fitness already measured...
-
-            doopAI.nextGenome();    //maybe move this to ex_died? i.e. dont start analysis of new genome until after respawn?
-            while (doopAI.fitnessAlreadyMeasured())
-                doopAI.nextGenome();
-
-            killattempt = false;
-            circletimeoutset = false;
-            timeouttics = 0;
-            doopAI.timeout = 45;
-            doopAI.initRun = true;
-            
+        if (doopAI.timeout <= 0 || killattempt || gamestate.TimeCount > 8400)
             playstate = ex_died;
-        }
+          
         prevxp = (int) player->tilex;
         prevyp = (int) player->tiley;
         frames++;
+        //{'-'} End of Doop things
     }
     while (!playstate && !startgame);
 

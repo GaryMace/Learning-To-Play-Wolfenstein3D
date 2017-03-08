@@ -136,12 +136,10 @@ void Genome::generateNetwork() {
 
     for (int i = 0; i < TOTAL_INPUTS; i++) {  //Make Neurons for all inputs
         Neuron n;
-        //network[i] = n;
         network.insert(std::make_pair(i, n));
     }
     for (int i = 0; i < OUTPUTS; i++) { //Make Neurons for all outputs
         Neuron n;
-        //network[MAX_NODES + i] = n;
         network.insert(std::make_pair(MAX_NODES + i, n));  //notice output neurons start right after input neurons here
     }
     
@@ -152,7 +150,6 @@ void Genome::generateNetwork() {
             std::map<int, Neuron>::iterator it = network.find(geneItr->output);
             if (it == network.end()) {  //If key gene.output doesn't exist
                 Neuron n;
-                //network[geneItr->output] = n;
                 network.insert(std::make_pair(geneItr->output, n)); //make new entry
             }
             Neuron& n = network[geneItr->output];   //add this Gene to entry
@@ -161,7 +158,6 @@ void Genome::generateNetwork() {
             std::map<int, Neuron>::iterator it2 = network.find(geneItr->input);
             if (it2 == network.end()) {  //If key gene.input doesn't exist
                 Neuron n2;
-                //network[geneItr->input] = n2;
                 network.insert(std::make_pair(geneItr->input, n2));
             }
         }
@@ -181,7 +177,6 @@ void Genome::generateNetwork() {
  */
 bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
     std::list<Gene>::iterator geneItr;
-    std::cout << "Eval start" << std::endl;
     for (int i = 0; i < INPUTS; i++)
         for (int j = 0; j < SEARCH_GRID; j++)
             network[(i * SEARCH_GRID) + j].value = inputs[i][j];    //Change input values to network
@@ -205,7 +200,6 @@ bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
         else
             outputs[i] = false;
     }
-    std::cout << "Eval done" << std::endl;
     return outputs;
 }
 
@@ -423,10 +417,8 @@ int Genome::randomNeuron(bool nonInput) {
 
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
         if (!nonInput || geneItr->input >= TOTAL_INPUTS)
-            //neurons[geneItr->input] = true;
             neurons.insert(std::make_pair(geneItr->input, true));
         if (!nonInput || geneItr->output >= TOTAL_INPUTS)
-            //neurons[geneItr->output] = true;
             neurons.insert(std::make_pair(geneItr->output, true));
     }
 
