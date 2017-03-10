@@ -1283,18 +1283,18 @@ void CalcTics (void)
         lasttimecount = GetTimeCount();    // if the game was paused a LONG time
 
     uint32_t curtime = SDL_GetTicks();
-    tics = (curtime * 7) / 100 - lasttimecount;
+    tics = (curtime * 21) / 100 - lasttimecount;
     if(!tics)
     {
         // wait until end of current tic
-        SDL_Delay(((lasttimecount + 1) * 100) / 7 - curtime);
+        SDL_Delay(((lasttimecount + 1) * 100) / 21 - curtime);
         tics = 1;
     }
 
     lasttimecount += tics;
 
     if (tics>MAXTICS)
-        tics = MAXTICS;
+        tics = 12;
 }
 
 

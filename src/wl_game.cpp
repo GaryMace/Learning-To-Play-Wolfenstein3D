@@ -1556,21 +1556,19 @@ startplayloop:
 
                 //{'-'} Doop things
                 if (!playbest) {
-                    doopAI.setGenomeFitness();  //if fitness already measured...
+                   doopAI.setGenomeFitness();  //if fitness already measured...
 
-                    doopAI.nextGenome();    //maybe move this to ex_died? i.e. dont start analysis of new genome until after respawn?
-                    while (doopAI.fitnessAlreadyMeasured())
-                        doopAI.nextGenome();
-
-                    killattempt = false;
-                    circletimeoutset = false;
-                    timeouttics = 0;
-                    doopAI.timeout = 150;
-                    doopAI.initRun = true;
-
-                    //{'-'} end of Doop things
+                   doopAI.nextGenome();    //maybe move this to ex_died? i.e. dont start analysis of new genome until after respawn?
+                   while (doopAI.fitnessAlreadyMeasured())
+                         doopAI.nextGenome();
+                   
+                   killattempt = false;
+                   circletimeoutset = false;
+                   timeouttics = 0;
+                   doopAI.timeout = 150;
+                   doopAI.initRun = true;
                 }
-
+                //{'-'} end of Doop things
                 died = true;                    // don't "get psyched!"
 
                 if (gamestate.lives > -1)

@@ -85,7 +85,8 @@ void Quit(const char *errorStr, ...);
 
 #include "wl_menu.h"
 #include "NEATDoop.h"
-
+//class Genome;
+//Genome *genome;
 #define MAPSPOT(x,y,plane) (mapsegs[plane][((y)<<mapshift)+(x)])
 
 #define SIGN(x)         ((x)>0?1:-1)

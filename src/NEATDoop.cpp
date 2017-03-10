@@ -58,8 +58,8 @@ void NEATDoop::setGenomeFitness() {
     
     if (genome->fitness > Genus::maxFitness)
         Genus::maxFitness = genome->fitness;
-    //if (genome->fitness > species->topGenome.fitness)   //this is messed stuff up i think
-    //    species->topGenome = *genome;
+    if (genome->fitness > species->topGenome.fitness)   //this is messed stuff up i think
+        species->topGenome = *genome;
     if (genome->fitness == 0)
         genome->fitness = -1;
 }
@@ -108,8 +108,8 @@ void NEATDoop::initialiseGenus() {
 }
 
 void NEATDoop::playBest() {
-    Genus::addToSpecies(best);
-
+    Genus::addToSpecies(Genus::best);
+    
     Genus::currGenome = 0;
     Genus::currSpecies = 0;
     Genus::currSpeciesItr = Genus::species.begin();
@@ -117,7 +117,6 @@ void NEATDoop::playBest() {
 
     initialiseRun();
 }
-
 /*
 =================================
 =
@@ -244,11 +243,13 @@ void NEATDoop::nextGenome() {
     Genus::currGenomeItr++;
 
     if (Genus::currGenomeItr == Genus::currSpeciesItr->genomes.end()) {
+        //std::cout << "New Species" << std::endl;
         Genus::currSpeciesItr++;
         Genus::currSpecies++;
 
         if (Genus::currSpeciesItr == Genus::species.end()) {
-            //saveBestGenome();
+            std::cout << "gen: " << Genus::generation << std::endl;
+            saveBestGenome();
             Genus::newGeneration();
             Genus::currSpecies = 0;
             Genus::currSpeciesItr = Genus::species.begin();
@@ -274,7 +275,7 @@ void NEATDoop::saveBestGenome() {
             best = speciesItr->topGenome;
     }
     //genomefile << best.backup();
-    //std::cout << best.backup() << std::endl;
+    std::cout << best.backupnew() << std::endl;
     //fb.close();
 }
 
@@ -303,46 +304,49 @@ void NEATDoop::readInGenome() {
         playbest = false;
         return;
     }
-
     playbest = true;
-    std::string filepath = "..//" + filename;
-    input.open(filepath.c_str());
-    while(input.fail()) {
+    input.open(filename.c_str(), std::ifstream::binary);
+    
+    while(!input.is_open()) {
         input.clear();
         std::cout << "Incorrect filename, please enter again: ";
         std::cin >> filename;
-        filepath = "..//" + filename;
-        input.open(filepath);
+        
+        input.open(filename.c_str(), std::ifstream::binary);
     }
 
     std::string line;
-    Genome best;
     int idx = 0;
-
-    input >> best.fitness;
-    input >> best.globalRank;
-    input >> best.maxNeuron;
+    
+    input >> Genus::best.fitness;
+    input >> Genus::best.globalRank;
+    input >> Genus::best.maxNeuron;
     input >> line;
-
+    std::cout << Genus::best.fitness << std::endl;
+    
+    std::cout << Genus::best.maxNeuron << std::endl;
+    std::cout << Genus::best.globalRank << std::endl;
+    std::cout << line << std::endl;
+    //Sleep(2000);
     std::list<std::string> mutationRates = split(line, ',');
 
     for (std::list<std::string>::iterator it = mutationRates.begin(); it != mutationRates.end(); it++)
-        best.mutationRates[idx++] = std::atof(it->c_str());
-
-    while (std::getline(input, line)) {
+        Genus::best.mutationRates[idx++] = std::atof(it->c_str());
+    Gene newGene;
+    std::list<Gene> genes;
+    while (input >> line) {
         if (!line.empty()) {
-            Gene gene;
             std::list<std::string> geneLine = split(line, ',');
             std::list<std::string>::iterator it = geneLine.begin();
 
-            gene.input = (int) std::atof((it++)->c_str());
-            gene.output = (int) std::atof((it++)->c_str());
-            gene.enabled = (bool) std::atof((it++)->c_str());
-            gene.innovation = (int) std::atof((it++)->c_str());
-            gene.weight = std::atof((it)->c_str());
-            best.genes.push_back(gene);
+            //Gene newGene;
+            newGene.input = (int) std::atof((it++)->c_str());
+            newGene.output = (int) std::atof((it++)->c_str());
+            newGene.enabled = (bool) std::atof((it++)->c_str());
+            newGene.innovation = (int) std::atof((it++)->c_str());
+            newGene.weight = std::atof((it)->c_str());
+            genes.push_back(newGene);
         }
     }
-
-    doopAI.best = best;
+    Genus::best.addGenesToSelf(genes);
 }

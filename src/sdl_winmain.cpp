@@ -297,29 +297,29 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
 //from here
 
 
-//#ifdef _WIN32_WCE
-//	wcsncpy( stdoutPath, path, SDL_arraysize(stdoutPath) );
-//	wcsncat( stdoutPath, DIR_SEPERATOR STDOUT_FILE, SDL_arraysize(stdoutPath) );
-//#else
-//	SDL_strlcpy( stdoutPath, path, SDL_arraysize(stdoutPath) );
-//	SDL_strlcat( stdoutPath, DIR_SEPERATOR STDOUT_FILE, SDL_arraysize(stdoutPath) );
-//#endif
-//
-//	/* Redirect standard input and standard output */
-//	newfp = freopen(stdoutPath, TEXT("w"), stdout);
-//
-//#ifndef _WIN32_WCE
-//	if ( newfp == NULL ) {	/* This happens on NT */
-//#if !defined(stdout)
-//		stdout = fopen(stdoutPath, TEXT("w"));
-//#else
-//		newfp = fopen(stdoutPath, TEXT("w"));
-//		if ( newfp ) {
-//			*stdout = *newfp;
-//		}
-//#endif
-//	}
-//#endif /* _WIN32_WCE */
+#ifdef _WIN32_WCE
+	wcsncpy( stdoutPath, path, SDL_arraysize(stdoutPath) );
+	wcsncat( stdoutPath, DIR_SEPERATOR STDOUT_FILE, SDL_arraysize(stdoutPath) );
+#else
+	SDL_strlcpy( stdoutPath, path, SDL_arraysize(stdoutPath) );
+	SDL_strlcat( stdoutPath, DIR_SEPERATOR STDOUT_FILE, SDL_arraysize(stdoutPath) );
+#endif
+
+	/* Redirect standard input and standard output */
+	newfp = freopen(stdoutPath, TEXT("w"), stdout);
+
+#ifndef _WIN32_WCE
+	if ( newfp == NULL ) {	/* This happens on NT */
+#if !defined(stdout)
+		stdout = fopen(stdoutPath, TEXT("w"));
+#else
+		newfp = fopen(stdoutPath, TEXT("w"));
+		if ( newfp ) {
+			*stdout = *newfp;
+		}
+#endif
+	}
+#endif /* _WIN32_WCE */
 
 //to here
 
@@ -345,7 +345,7 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
 	}
 #endif /* _WIN32_WCE */
 
-	//setvbuf(stdout, NULL, _IOLBF, BUFSIZ);	/* Line buffered */
+	setvbuf(stdout, NULL, _IOLBF, BUFSIZ);	/* Line buffered */
 	setbuf(stderr, NULL);			/* No buffering */
 #endif /* !NO_STDIO_REDIRECT */
 

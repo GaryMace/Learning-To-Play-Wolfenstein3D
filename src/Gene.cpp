@@ -38,12 +38,11 @@ std::string Gene::backup() {
 }
 
 std::string Gene::backupnew() {
-    std::string out =
-            static_cast<std::ostringstream*>(&(std::ostringstream() << input))->str() +
-            "," + static_cast<std::ostringstream*>(&(std::ostringstream() << output))->str() +
-            "," + static_cast<std::ostringstream*>(&(std::ostringstream() << enabled))->str() +
-            "," + static_cast<std::ostringstream*>(&(std::ostringstream() << innovation))->str() +
-            "," + static_cast<std::ostringstream*>(&(std::ostringstream() << weight))->str();
+            std::string out = static_cast<std::ostringstream*>(&(std::ostringstream() << input))->str() + ",";
+            out += static_cast<std::ostringstream*>(&(std::ostringstream() << output))->str() + ",";
+            out += static_cast<std::ostringstream*>(&(std::ostringstream() << enabled))->str() + ",";
+            out += static_cast<std::ostringstream*>(&(std::ostringstream() << innovation))->str() + ",";
+            out += static_cast<std::ostringstream*>(&(std::ostringstream() << weight))->str();
     return out;
 }
 

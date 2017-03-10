@@ -1369,12 +1369,13 @@ void PlayLoop (void)
         if (doopAI.getDistance((int)player->tilex, prevxp, (int)player->tiley, prevyp) > 0)
             doopAI.timeout += 150;
 
-        if (doopAI.timeout <= 0 || killattempt || gamestate.TimeCount > 8400)
-            if (playbest)
-                playstate = ex_victorious;
-            else
-                playstate = ex_died;
-
+        if (doopAI.timeout <= 0 || killattempt || gamestate.TimeCount > 8400) {
+           if (playbest) {
+               playstate = ex_victorious;
+           } else {
+               playstate = ex_died;
+           }
+        }
         prevxp = (int) player->tilex;
         prevyp = (int) player->tiley;
         frames++;

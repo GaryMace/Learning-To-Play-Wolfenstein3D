@@ -9,7 +9,6 @@
 
 #include "Neuron.h"
 #include "Def.h"
-#include "wl_def.h"
 
 //used as indexes to mutationRates arr
 //TODO: is this wasteful? can't we just put it in Def.h? why does every genome get these....??
@@ -49,6 +48,7 @@ public:
     int randomNeuron(bool nonInput);
     double weights(Genome genome);
     bool sameSpecies(Genome genome);
+    void addGenesToSelf(std::list<Gene> ingenes);
 
     Genome() : maxNeuron(TOTAL_INPUTS - 1), globalRank(0), fitness(0) {  //Init Genome instance variables
         initMutationRates();    //I'm not overly fond of this but old C++ doesn't allow array initialisations in class constructors

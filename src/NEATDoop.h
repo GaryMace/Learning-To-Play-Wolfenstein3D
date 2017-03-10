@@ -7,11 +7,9 @@
 
 #include <vector>
 #include "Def.h"
-#include "Genome.h"
 
 class NEATDoop {
 public:
-    Genome best;
     bool genusSetUp;
     bool initRun;
     int timeout;

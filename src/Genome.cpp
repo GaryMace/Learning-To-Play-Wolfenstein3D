@@ -62,17 +62,19 @@ std::string Genome::backup() {
 
 std::string Genome::backupnew() {
     std::list<Gene>::iterator geneItr;
+    
     std::string out;
     out += static_cast<std::ostringstream*>(&(std::ostringstream() << fitness))->str() + "\n" +
            static_cast<std::ostringstream*>(&(std::ostringstream() << globalRank))->str() + "\n" +
            static_cast<std::ostringstream*>(&(std::ostringstream() << maxNeuron))->str() + "\n";
+   
     for (int i = 0; i < MUTATION_TYPES; i++)
         out += static_cast<std::ostringstream*>(&(std::ostringstream() << mutationRates[i]))->str() + ",";
     out = out.substr(0, out.length() - 1);
 
     out += "\n";
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++)
-        out += geneItr->backupnew() + ",\n";
+        out += geneItr->backupnew() + "\n";
 
     if (!genes.empty())
         out = out.substr(0, out.length() - 2);
@@ -80,6 +82,11 @@ std::string Genome::backupnew() {
     return out;
 }
 
+void Genome::addGenesToSelf (std::list<Gene> ingenes) {
+     std::list<Gene>::iterator geneItr; 
+     genes.clear();
+     genes = ingenes;
+}
 /*
 =================================
 =
