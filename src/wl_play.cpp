@@ -532,7 +532,7 @@ void PollControls (void)
         }
     }
 
-    //IN_ClearKeysDown(); //{'-'} experimental, may fuck shit up
+    //IN_ClearKeysDown(); //{'-'} experimental 
 }
 
 
