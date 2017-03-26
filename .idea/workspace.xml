@@ -13,19 +13,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f3627d11-ecaa-4711-8dd5-1016497df221" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Def.h" afterPath="$PROJECT_DIR$/src/Def.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Gene.cpp" afterPath="$PROJECT_DIR$/src/Gene.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Genome.cpp" afterPath="$PROJECT_DIR$/src/Genome.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Genome.h" afterPath="$PROJECT_DIR$/src/Genome.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Genus.cpp" afterPath="$PROJECT_DIR$/src/Genus.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Genus.h" afterPath="$PROJECT_DIR$/src/Genus.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NEATDoop.cpp" afterPath="$PROJECT_DIR$/src/NEATDoop.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/NEATDoop.h" afterPath="$PROJECT_DIR$/src/NEATDoop.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sdl_winmain.cpp" afterPath="$PROJECT_DIR$/src/sdl_winmain.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/wl_def.h" afterPath="$PROJECT_DIR$/src/wl_def.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/wl_draw.cpp" afterPath="$PROJECT_DIR$/src/wl_draw.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/wl_game.cpp" afterPath="$PROJECT_DIR$/src/wl_game.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/wl_play.cpp" afterPath="$PROJECT_DIR$/src/wl_play.cpp" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -44,7 +31,7 @@
       <file leaf-file-name="NEATDoop.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/NEATDoop.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="47">
+            <state relative-caret-position="2790">
               <caret line="90" column="1" lean-forward="false" selection-start-line="90" selection-start-column="1" selection-end-line="90" selection-end-column="1" />
               <folding />
             </state>
@@ -54,7 +41,7 @@
       <file leaf-file-name="Genus.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Genus.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="822">
+            <state relative-caret-position="1984">
               <caret line="64" column="41" lean-forward="false" selection-start-line="64" selection-start-column="41" selection-end-line="64" selection-end-column="41" />
               <folding />
             </state>
@@ -64,7 +51,7 @@
       <file leaf-file-name="wl_main.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/wl_main.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
+            <state relative-caret-position="60915">
               <caret line="1965" column="0" lean-forward="false" selection-start-line="1965" selection-start-column="0" selection-end-line="1965" selection-end-column="0" />
               <folding />
             </state>
@@ -74,7 +61,7 @@
       <file leaf-file-name="wl_game.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/wl_game.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1070">
+            <state relative-caret-position="48639">
               <caret line="1569" column="17" lean-forward="false" selection-start-line="1569" selection-start-column="17" selection-end-line="1569" selection-end-column="17" />
               <folding>
                 <marker date="1489182240000" expanded="false" signature="41025:41045" ph="..." />
@@ -84,21 +71,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="wl_play.cpp" pinned="false" current-in-tab="false">
+      <file leaf-file-name="wl_play.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/wl_play.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="796">
-              <caret line="426" column="8" lean-forward="false" selection-start-line="426" selection-start-column="8" selection-end-line="426" selection-end-column="8" />
+            <state relative-caret-position="1013">
+              <caret line="436" column="23" lean-forward="true" selection-start-line="436" selection-start-column="23" selection-end-line="436" selection-end-column="23" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="wl_draw.cpp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="wl_draw.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/wl_draw.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="579">
-              <caret line="1287" column="5" lean-forward="true" selection-start-line="1287" selection-start-column="5" selection-end-line="1287" selection-end-column="5" />
+            <state relative-caret-position="40548">
+              <caret line="1308" column="37" lean-forward="false" selection-start-line="1308" selection-start-column="37" selection-end-line="1308" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -107,7 +94,7 @@
       <file leaf-file-name="wl_def.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/wl_def.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1442">
+            <state relative-caret-position="7254">
               <caret line="234" column="0" lean-forward="false" selection-start-line="234" selection-start-column="0" selection-end-line="234" selection-end-column="0" />
               <folding>
                 <element signature="e#1333#1351#0" expanded="true" />
@@ -129,7 +116,7 @@
       <file leaf-file-name="Genome.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Genome.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1070">
+            <state relative-caret-position="1488">
               <caret line="48" column="34" lean-forward="false" selection-start-line="48" selection-start-column="34" selection-end-line="48" selection-end-column="34" />
               <folding>
                 <element signature="e#93#108#0" expanded="true" />
@@ -141,7 +128,7 @@
       <file leaf-file-name="Genome.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Genome.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3333">
+            <state relative-caret-position="8184">
               <caret line="264" column="23" lean-forward="false" selection-start-line="264" selection-start-column="23" selection-end-line="264" selection-end-column="23" />
               <folding>
                 <marker date="1489183788000" expanded="true" signature="2068:2113" ph="{...}" />
@@ -515,12 +502,13 @@
       <workItem from="1488984857961" duration="2892000" />
       <workItem from="1488999811690" duration="9106000" />
       <workItem from="1489048857923" duration="2432000" />
-      <workItem from="1489170900473" duration="7652000" />
+      <workItem from="1489170900473" duration="7740000" />
+      <workItem from="1489378431376" duration="686000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="135689000" />
+    <option name="totallyTimeSpent" value="136463000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-2" y="0" width="3204" height="1750" extended-state="6" />
@@ -570,7 +558,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="217">
           <caret line="7" column="22" lean-forward="false" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -624,7 +611,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -834,7 +820,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="775">
           <caret line="25" column="32" lean-forward="true" selection-start-line="25" selection-start-column="32" selection-end-line="25" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -858,7 +843,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/wl_def.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1442">
+        <state relative-caret-position="7254">
           <caret line="234" column="0" lean-forward="false" selection-start-line="234" selection-start-column="0" selection-end-line="234" selection-end-column="0" />
           <folding>
             <element signature="e#1333#1351#0" expanded="true" />
@@ -868,7 +853,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Genome.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1070">
+        <state relative-caret-position="1488">
           <caret line="48" column="34" lean-forward="false" selection-start-line="48" selection-start-column="34" selection-end-line="48" selection-end-column="34" />
           <folding>
             <element signature="e#93#108#0" expanded="true" />
@@ -878,7 +863,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Genome.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3333">
+        <state relative-caret-position="8184">
           <caret line="264" column="23" lean-forward="false" selection-start-line="264" selection-start-column="23" selection-end-line="264" selection-end-column="23" />
           <folding>
             <marker date="1489183788000" expanded="true" signature="2068:2113" ph="{...}" />
@@ -919,7 +904,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Genus.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="822">
+        <state relative-caret-position="1984">
           <caret line="64" column="41" lean-forward="false" selection-start-line="64" selection-start-column="41" selection-end-line="64" selection-end-column="41" />
           <folding />
         </state>
@@ -927,7 +912,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/wl_main.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
+        <state relative-caret-position="60915">
           <caret line="1965" column="0" lean-forward="false" selection-start-line="1965" selection-start-column="0" selection-end-line="1965" selection-end-column="0" />
           <folding />
         </state>
@@ -935,7 +920,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/wl_game.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1070">
+        <state relative-caret-position="48639">
           <caret line="1569" column="17" lean-forward="false" selection-start-line="1569" selection-start-column="17" selection-end-line="1569" selection-end-column="17" />
           <folding>
             <marker date="1489182240000" expanded="false" signature="41025:41045" ph="..." />
@@ -946,7 +931,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/NEATDoop.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="47">
+        <state relative-caret-position="2790">
           <caret line="90" column="1" lean-forward="false" selection-start-line="90" selection-start-column="1" selection-end-line="90" selection-end-column="1" />
           <folding />
         </state>
@@ -960,18 +945,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/wl_play.cpp">
+    <entry file="file://$PROJECT_DIR$/src/wl_draw.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="796">
-          <caret line="426" column="8" lean-forward="false" selection-start-line="426" selection-start-column="8" selection-end-line="426" selection-end-column="8" />
+        <state relative-caret-position="40548">
+          <caret line="1308" column="37" lean-forward="false" selection-start-line="1308" selection-start-column="37" selection-end-line="1308" selection-end-column="37" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/wl_draw.cpp">
+    <entry file="file://$PROJECT_DIR$/src/wl_play.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="579">
-          <caret line="1287" column="5" lean-forward="true" selection-start-line="1287" selection-start-column="5" selection-end-line="1287" selection-end-column="5" />
+        <state relative-caret-position="1013">
+          <caret line="436" column="23" lean-forward="true" selection-start-line="436" selection-start-column="23" selection-end-line="436" selection-end-column="23" />
           <folding />
         </state>
       </provider>
