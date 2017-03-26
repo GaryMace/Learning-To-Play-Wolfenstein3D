@@ -15,7 +15,7 @@
 statobj_t       statobjlist[MAXSTATS];
 statobj_t       *laststatobj;
 int             doorsopened = 0;
-
+int             prevnumdoorsopened = doorsopened;
 struct
 {
     short      picnum;

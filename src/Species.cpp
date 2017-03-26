@@ -85,7 +85,6 @@ Genome Species::crossover(Genome g1, Genome g2) {
     }
     Genome child;   //The new child
     bool skipDoup = false;  //Some genes are identical across g1 & g2, this avoids adding them twice
-    
     for (geneItr = g1.genes.begin(); geneItr != g1.genes.end(); geneItr++) {
         for (geneItr2 = g2.genes.begin(); geneItr2 != g2.genes.end(); geneItr2++) {
             if (geneItr->innovation == geneItr2->innovation) {

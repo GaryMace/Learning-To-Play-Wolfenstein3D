@@ -47,10 +47,14 @@ objtype        *LastAttacker;
 =============================================================================
 */
 // {'-'} spawn position definitions
-int spawnxp;
-int spawnyp;
-int prevxp;
-int prevyp;
+double  accuracy        = 0;
+int     shotstaken      = 0;
+int     shotsontarget   = 0;
+
+int     spawnxp;
+int     spawnyp;
+int     prevxp;
+int     prevyp;
 
 void    T_Player (objtype *ob);
 void    T_Attack (objtype *ob);
@@ -1287,6 +1291,7 @@ void    GunAttack (objtype *ob)
     }
 
     madenoise = true;
+    shotstaken++;       //{'-'} increment total shots taken
 
     //
     // find potential targets
@@ -1324,6 +1329,12 @@ void    GunAttack (objtype *ob)
     //
     // hit something
     //
+    // {'-'} Increment accuracy of Doop, he hit something.
+    if (ob == player) {
+        shotsontarget++;
+        accuracy = shotsontarget / shotstaken;
+    }
+
     dx = ABS(closest->tilex - player->tilex);
     dy = ABS(closest->tiley - player->tiley);
     dist = dx>dy ? dx:dy;

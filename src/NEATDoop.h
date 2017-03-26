@@ -19,7 +19,6 @@ public:
     int  getDistance (int x1, int x2, int y1, int y2);
     bool fitnessAlreadyMeasured ();
     void initialiseGenus ();
-    void playBest ();
     void initialiseRun ();
     void evaluateCurrent ();
     void setUpController (bool* controls);

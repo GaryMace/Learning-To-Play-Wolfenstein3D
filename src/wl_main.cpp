@@ -41,7 +41,7 @@ extern byte signon[];
 #define VIEWWIDTH       256                     // size of view window
 #define VIEWHEIGHT      144
 
-//{'-'} provide the extern definitions
+//{'-'} provide the extern definitions of doop variables
 NEATDoop doopAI;
 
 visactor doop_vislist[MAXACTORS];
@@ -53,9 +53,11 @@ visstat doop_visstat[MAXSTATS];
 visstat *doop_statptr;
 visstat *doop_laststatptr;
 int doop_statsvis;
-int inputs[INPUTS][SEARCH_GRID];
+int gameinputs[INPUTS][SEARCH_GRID];
 
-int pickups;
+int pickups = 0;
+int prevnumpickups = pickups;
+int prevkillcount = 0;
 int uniquedoors[MAXDOORS] = {0};
 
 bool leveldone = false;
@@ -64,7 +66,6 @@ bool circletimeoutset = false;
 int timeouttics = 0;
 
 int frames = 0;
-bool playbest = false;
 /*
 =============================================================================
 
@@ -1976,16 +1977,11 @@ int main (int argc, char *argv[])
 
     InitGame();
 
-    doopAI.readInGenome();
-    if (playbest)
-        doopAI.playBest();
-    else
-        if (!doopAI.genusSetUp) {
-            doopAI.initialiseGenus();
-            doopAI.genusSetUp = true;
-            doopAI.timeout = 150;
-        }
-
+    if (!doopAI.genusSetUp) {
+        doopAI.initialiseGenus();
+        doopAI.genusSetUp = true;
+        doopAI.timeout = 150;
+    }
     DemoLoop();
 
     Quit("Demo loop exited???");

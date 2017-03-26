@@ -889,7 +889,6 @@ typedef struct
 visobj_t vislist[MAXVISABLE];
 visobj_t *visptr,*visstep,*farthest;
 
-int falg = 0;
 //WL_GAME ~line 675 is how walls are made and stored!!
 void DrawScaleds (void)
 {
@@ -960,7 +959,6 @@ void DrawScaleds (void)
             doop_statptr->tiley = statptr->tiley;
             doop_statptr->flags = statptr->flags;
             doop_statptr->itemnumber = statptr->itemnumber;
-            doop_statptr->visspot = statptr->visspot;
 
             if (doop_statptr < &doop_visstat[MAXSTATS - 1]) {    // {'-'} dont fall off the edge
                 doop_statptr++;
@@ -1021,7 +1019,6 @@ void DrawScaleds (void)
                 doop_visptr->tilex = obj->tilex;
                 doop_visptr->tiley = obj->tiley;
                 doop_visptr->hitpoints = obj->hitpoints;
-                doop_visptr->actstate = obj->state;
                 if (doop_visptr < &doop_vislist[MAXVISABLE - 1]) {  // {'-'} prevents overflow
                     doop_visptr++;                                  // {'-'} Increment the address pointed to
                     doop_lastactptr = doop_visptr;
@@ -1049,7 +1046,7 @@ void DrawScaleds (void)
         else
             obj->flags &= ~FL_VISABLE;  // ~ is a class deconstructor?
     }
-    //memset(inputs, 0, sizeof(inputs[0][0]) * TOTAL_INPUTS); //reset values of inputs to 0?
+    //memset(gameinputs, 0, sizeof(gameinputs[0][0]) * TOTAL_INPUTS); //reset values of gameinputs to 0?
     GetInputs();
 
 //
@@ -1091,7 +1088,7 @@ void DrawScaleds (void)
 =
 = {'-'} GetInputs
 =
-= Populates a 2D array of inputs for the Network to process later.
+= Populates a 2D array of gameinputs for the Network to process later.
 =
 =================================
  */
@@ -1103,24 +1100,24 @@ void GetInputs (void) {
             int xp = (int) player->tilex + row;     //x position
             int yp = (int) player->tiley + col;     //y position
             if ((xp < 0 || xp > MAPSIZE) || (yp < 0 || yp > MAPSIZE)) {
-                inputs[WALLS][idx] = 1; //Map position out of bounds, just make it a 0 input
-                inputs[WALK_SPACE][idx++] = 0;
+                gameinputs[WALLS][idx] = 1; //Map position out of bounds, just make it a 0 input
+                gameinputs[WALK_SPACE][idx++] = 0;
                 continue;
             }
             int pos = (int) tilemap[xp][yp];
             if (pos == ELEVATORTILE) {  //end of level tile.
-                inputs[ELEVATOR][idx] = 1;
+                gameinputs[ELEVATOR][idx] = 1;
                 endxp = xp;
                 endyp = yp;
             }
 
             //0 if map pos is a wall or out of bounds area
             //1 if player can walk on area
-            (pos > 0) ? (inputs[WALK_SPACE][idx] = 0, inputs[WALLS][idx] = 1) : (inputs[WALK_SPACE][idx] = 1, inputs[WALLS][idx] = 0);
+            (pos > 0) ? (gameinputs[WALK_SPACE][idx] = 0, gameinputs[WALLS][idx] = 1) : (gameinputs[WALK_SPACE][idx] = 1, gameinputs[WALLS][idx] = 0);
 
             for (visactor *visact = &doop_vislist[0]; visact != doop_lastactptr; visact++) {    //for each enemy nearby (vis for visible)
                 if ((int) visact->tilex == xp && (int) visact->tiley == yp) {    //There's an enemy on a position in a 5x5 grid around player
-                    inputs[ENEMYS][idx] = 1;
+                    gameinputs[ENEMYS][idx] = 1;
                     break;
                 }
             }
@@ -1145,7 +1142,7 @@ void GetInputs (void) {
     //    std::cout << "Matrix type: " << k << std::endl;
     //    for (int i = 0; i < 5; i++) {
     //        for (int j = 0; j < 5; j++) {
-    //            std::cout << inputs[k][j + (i * 5)] << " ";
+    //            std::cout << gameinputs[k][j + (i * 5)] << " ";
     //        }
     //        std::cout << std::endl;
     //    }
@@ -1170,19 +1167,23 @@ void AddItemToInput (visstat *item, int idx) {
         case bo_key2:
         case bo_key3:
         case bo_key4:
-            inputs[KEY][idx] = 1;       //treat all keys the same way
+            gameinputs[KEY][idx] = 1;       //treat all keys the same way
             break;
         case bo_food:
         case bo_fullheal:
-            inputs[HEALTH][idx] = 1;    //treat all health pick-ups the same way
+            gameinputs[HEALTH][idx] = 1;    //treat all health pick-ups the same way
             break;
         case bo_clip:
         case bo_clip2:
-            inputs[AMMO][idx] = 1;      //you get the idea
+            gameinputs[AMMO][idx] = 1;      //you get the idea
             break;
         case bo_machinegun:
         case bo_chaingun:
-            inputs[GUN][idx] = 1;
+            gameinputs[GUN][idx] = 1;
+            break;
+        default:
+            gameinputs[WALLS][idx] = 1;
+            gameinputs[WALK_SPACE][idx] = 0;
             break;
     }
 }
@@ -1200,25 +1201,25 @@ void AddItemToInput (visstat *item, int idx) {
  */
 void CheckDoorState(doorobj_t *door, int idx) {
     int lock = door->lock;
-    inputs[WALLS][idx] = 0;                                 //It is no longer to be treated as a wall
+    gameinputs[WALLS][idx] = 0;                                 //It is no longer to be treated as a wall
 
     if (lock >= dr_lock1 && lock <= dr_lock4) {             //locked door
         if (!(gamestate.keys & (1 << (lock - dr_lock1)))) { //player doesn't have the key
-            inputs[LOCKED_DOOR][idx] = 1;
-            inputs[DOORS][idx] = 0;
+            gameinputs[LOCKED_DOOR][idx] = 1;
+            gameinputs[DOORS][idx] = 0;
         } else {
-            inputs[LOCKED_DOOR][idx] = 0;
-            inputs[DOORS][idx] = 1;
+            gameinputs[LOCKED_DOOR][idx] = 0;
+            gameinputs[DOORS][idx] = 1;
         }
         return;
     }
 
     if (door->action == dr_closed || door->action == dr_closing) {
-        inputs[DOORS][idx] = 1;         //this position is no longer a "wall" (it's assumed to be prior to this step)
-        inputs[WALK_SPACE][idx] = 0;
+        gameinputs[DOORS][idx] = 1;         //this position is no longer a "wall" (it's assumed to be prior to this step)
+        gameinputs[WALK_SPACE][idx] = 0;
     } else if (door->action == dr_open || door->action == dr_opening){
-        inputs[DOORS][idx] = 0;
-        inputs[WALK_SPACE][idx] = 1;
+        gameinputs[DOORS][idx] = 0;
+        gameinputs[WALK_SPACE][idx] = 1;
     }
 }
 
@@ -1282,19 +1283,33 @@ void CalcTics (void)
     if (lasttimecount > (int32_t) GetTimeCount())
         lasttimecount = GetTimeCount();    // if the game was paused a LONG time
 
-    uint32_t curtime = SDL_GetTicks();
-    tics = (curtime * 21) / 100 - lasttimecount;
+    /*uint32_t curtime = SDL_GetTicks();
+    tics = (curtime * 7) / 100 - lasttimecount;
     if(!tics)
     {
         // wait until end of current tic
-        SDL_Delay(((lasttimecount + 1) * 100) / 21 - curtime);
+        SDL_Delay(((lasttimecount + 1) * 100) / 7 - curtime);
         tics = 1;
     }
 
     lasttimecount += tics;
 
     if (tics>MAXTICS)
-        tics = 12;
+        tics = MAXTICS;*/
+
+    uint32_t curtime = SDL_GetTicks();
+    tics = (curtime * 70) / 100 - lasttimecount;
+    if(!tics)
+    {
+        // wait until end of current tic
+        SDL_Delay(((lasttimecount + 1) * 100) / 70 - curtime);
+        tics = 1;
+    }
+    lasttimecount += tics;
+    if (tics>MAXTICS)
+        tics = MAXTICS;
+
+    //
 }
 
 
@@ -1845,7 +1860,13 @@ void    ThreeDRefresh (void)
         fps_frames++;
         fps_time+=tics;
 
-        if(fps_time>35)
+        /*if(fps_time>35)
+        {
+            fps_time-=35;
+            fps=fps_frames<<1;
+            fps_frames=0;
+        }*/
+        if(fps_time>35)    //was 1750 = 35 *50 i.e. 50 speed
         {
             fps_time-=35;
             fps=fps_frames<<1;

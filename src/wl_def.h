@@ -85,8 +85,7 @@ void Quit(const char *errorStr, ...);
 
 #include "wl_menu.h"
 #include "NEATDoop.h"
-//class Genome;
-//Genome *genome;
+
 #define MAPSPOT(x,y,plane) (mapsegs[plane][((y)<<mapshift)+(x)])
 
 #define SIGN(x)         ((x)>0?1:-1)
@@ -105,7 +104,7 @@ void Quit(const char *errorStr, ...);
 =============================================================================
 */
 
-#define MAXTICS 10
+#define MAXTICS         10
 #define DEMOTICS        4
 
 #define MAXACTORS       150         // max number of nazis, etc / map
@@ -247,20 +246,20 @@ void Quit(const char *errorStr, ...);
 
 // {'-'} Doop constants for button pressing look-ups
 #define FORWARD 0
-#define BACK 1
-#define TURN_RIGHT 2
-#define TURN_LEFT 3
-#define SHOOT 4
-#define USE_ACTION 5
-#define WEAPON1 6
-#define WEAPON2 7
-#define WEAPON3 8
-#define WEAPON4 9
+#define TURN_RIGHT 1
+#define TURN_LEFT 2
+#define SHOOT 3
+#define USE_ACTION 4
+#define WEAPON1 5
+#define WEAPON2 6
+#define WEAPON3 7
+#define WEAPON4 8
 
 #define MAX_DISTANCE 125
-#define KILL_REWARD 25
-#define TRAVEL_REWARD 1000
-#define DOOR_OPENED_REWARD 50
+#define KILL_REWARD 50
+#define TRAVEL_REWARD 10
+#define ACCURACY_REWARD 10;
+#define DOOR_OPENED_REWARD 25
 #define ITEM_PICKUP_REWARD 100
 #define LVL_DONE_REWARD 100000
 
@@ -934,59 +933,57 @@ extern int mapon;
 
 =============================================================================
 */
-extern NEATDoop doopAI;
-//maybe add an int flag field so that if we get the chance to demo what Doop can see later it will be
-//easier to id what color box to display?
 typedef struct visactorstruct {
-    statetype   *actstate;             //Is it a guard, officer, dog etc... if so what state is it in
-    uint32_t    flags;              // FL_SHOOTABLE, etc
-    word        tilex,tiley;
-    short       hitpoints;
+    uint32_t    flags;                                      // FL_SHOOTABLE (can i see the actor without obstructions in the way), etc
+    word        tilex,tiley;                                //position in map of actor (x,y co-ords)
+    short       hitpoints;                                  //Health of actor
 } visactor;
 
 typedef struct visstatstruct {
-    byte      tilex,tiley;
-    short     shapenum;           // if shapenum == -1 the obj has been removed
-    byte      *visspot;
+    byte      tilex,tiley;                                  //position in map of item (x,y co-ords)
+    short     shapenum;                                     // if shapenum == -1 the obj has been removed from list
     uint32_t  flags;
-    byte      itemnumber;
+    byte      itemnumber;                                   //Is the item a gun? ammo? health? etc..
 } visstat;
 
-extern boolean buttoons[NUMBUTTONS];            //Duplicate of buttonstate, will replace buttonstate later
+extern NEATDoop     doopAI;                                 //The game AI
 
-extern visactor doop_vislist[MAXACTORS];             //visible actor list
-extern visactor *doop_lastactptr;
-extern visactor *doop_visptr;
+extern visactor     doop_vislist[MAXACTORS];                //visible actor list for this frame
+extern visactor     *doop_lastactptr;                       //pointer to last item in doop_vislist
+extern visactor     *doop_visptr;                           //pointer to current item of interest in doop_vislist
 
-extern visstat doop_visstat[MAXSTATS];               //visible pickups list
-extern visstat *doop_laststatptr;
-extern visstat *doop_statptr;
+extern visstat      doop_visstat[MAXSTATS];                 //visible pickups list for this frame
+extern visstat      *doop_laststatptr;                      //pointer to last item in doop_visstat
+extern visstat      *doop_statptr;                          //pointer to current item of interest in doop_visstat
 
-extern int doop_actsvis;
-extern int doop_statsvis;
-extern int falg;    //TODO: remove
+extern int          doop_actsvis;                           //total number of enemies visible in this frame
+extern int          doop_statsvis;                          //total number of
 
-//might end up 11x25 if locked doors and elevator are teated diff
-extern int inputs[INPUTS][SEARCH_GRID]; // inputs size is [11][25]
-extern int uniquedoors[MAXDOORS];
+extern int          gameinputs[INPUTS][SEARCH_GRID];        // gameinputs size is [11][25]
+extern int          uniquedoors[MAXDOORS];                  // This allows extra play time to be given to AI if it opens doors
 
-extern int endxp;
-extern int endyp;
-extern int spawnxp;
-extern int spawnyp;
-extern int prevxp;
-extern int prevyp;
+extern int          endxp;                                  //End x position in current level
+extern int          endyp;                                  //End y position in current level
+extern int          spawnxp;                                //Spawn x position in current level
+extern int          spawnyp;                                //Spawn y position in current level
+extern int          prevxp;                                 //AI previous x position last frame
+extern int          prevyp;                                 //AI previous y position last frame
 
-extern int pickups;
-extern int doorsopened;
-extern bool leveldone;
+extern double       accuracy;
+extern int          shotstaken;
+extern int          shotsontarget;
+extern int          pickups;                                //Current number pickups AI has in current frame
+extern int          prevnumpickups;                         //Num pickups AI had picked-up last frame
+extern int          doorsopened;                            //Current number of doors opened by AI in current frame
+extern int          prevnumdoorsopened;                     //Num doors AI had opened last frame
+extern bool         leveldone;                              //Did the AI finish the level?
+extern int          prevkillcount;                          //Num kills AI had last frame
 
-extern bool circletimeoutset;
-extern int timeouttics;
-extern bool killattempt;
+extern bool         circletimeoutset;                       //Is the AI pressing buttons that will cause it to run in circles?
+extern int          timeouttics;                            //The timeout for the AI
+extern bool         killattempt;                            //AI running in circle for too long, kill the attempt
 
-extern int frames;
-extern bool playbest;
+extern int          frames;                                 //The number of frames for this attempt at playing
 /*
 =============================================================================
 
@@ -1490,7 +1487,7 @@ static inline fixed FixedMul(fixed a, fixed b)
 #endif
 #define DEMOCOND_SDL                   (!DEMOCOND_ORIG)
 
-#define GetTicks() ((SDL_GetTicks()*7)/100)
+#define GetTicks() ((SDL_GetTicks()*70)/100)
 
 #define ISPOINTER(x) ((((uintptr_t)(x)) & ~0xffff) != 0)
 

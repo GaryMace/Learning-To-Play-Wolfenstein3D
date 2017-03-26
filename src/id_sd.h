@@ -10,7 +10,7 @@
 
 #define alOut(n,b) YM3812Write(0, n, b)
 
-#define TickBase        70      // 70Hz per tick - used as a base for timer 0
+#define TickBase        700      // 70Hz per tick - used as a base for timer 0, 3500 for 50 speed
 
 typedef enum
 {
@@ -119,11 +119,11 @@ extern  SMMode          MusicMode;
 extern  int             DigiMap[];
 extern  int             DigiChannel[];
 
-#define GetTimeCount()  ((SDL_GetTicks()*7)/100)
+#define GetTimeCount()  ((SDL_GetTicks()*70)/100)   //350
 
 inline void Delay(int wolfticks)
 {
-    if(wolfticks>0) SDL_Delay(wolfticks * 100 / 7);
+    if(wolfticks>0) SDL_Delay(wolfticks * 100 / 70);    //350
 }
 
 // Function prototypes

@@ -82,11 +82,6 @@ std::string Genome::backupnew() {
     return out;
 }
 
-void Genome::addGenesToSelf (std::list<Gene> ingenes) {
-     std::list<Gene>::iterator geneItr; 
-     genes.clear();
-     genes = ingenes;
-}
 /*
 =================================
 =
@@ -161,21 +156,21 @@ void Genome::initMutationRates() {
 void Genome::generateNetwork() {
     std::list<Gene>::iterator geneItr;
 
-    for (int i = 0; i < TOTAL_INPUTS; i++) {  //Make Neurons for all inputs
+    for (int i = 0; i < TOTAL_INPUTS; i++) {                //Make Neurons for all gameinputs
         Neuron n;
         network.insert(std::make_pair(i, n));
     }
-    for (int i = 0; i < OUTPUTS; i++) { //Make Neurons for all outputs
+    for (int i = 0; i < OUTPUTS; i++) {                     //Make Neurons for all outputs
         Neuron n;
-        network.insert(std::make_pair(MAX_NODES + i, n));  //notice output neurons start right after input neurons here
+        network.insert(std::make_pair(MAX_NODES + i, n));   //notice output neurons start right after input neurons here
     }
     
     genes.sort(Gene::compare);
 
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
-        if (geneItr->enabled) { //If this Gene is enabled
+        if (geneItr->enabled) {                     //If this Gene is enabled
             std::map<int, Neuron>::iterator it = network.find(geneItr->output);
-            if (it == network.end()) {  //If key gene.output doesn't exist
+            if (it == network.end()) {              //If key gene.output doesn't exist
                 Neuron n;
                 network.insert(std::make_pair(geneItr->output, n)); //make new entry
             }
@@ -183,7 +178,7 @@ void Genome::generateNetwork() {
             n.inputs.push_back(*geneItr);
 
             std::map<int, Neuron>::iterator it2 = network.find(geneItr->input);
-            if (it2 == network.end()) {  //If key gene.input doesn't exist
+            if (it2 == network.end()) {             //If key gene.input doesn't exist
                 Neuron n2;
                 network.insert(std::make_pair(geneItr->input, n2));
             }
@@ -196,8 +191,8 @@ void Genome::generateNetwork() {
 =
 = {'-'} Genome::evaluateNetwork
 =
-= Takes an 10x25 matrix of inputs and assigns its values to the corresponding Neurons in a Genome's network.
-= Also, The value of a Neuron is assigned the sigmoid of the sum of its inputs and finally if the value on an
+= Takes an 10x25 matrix of gameinputs and assigns its values to the corresponding Neurons in a Genome's network.
+= Also, The value of a Neuron is assigned the sigmoid of the sum of its gameinputs and finally if the value on an
 = output Neuron is greater than 0 then the corresponding game button to that Neuron is set to be activated.
 =
 =================================
@@ -209,14 +204,14 @@ bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
             network[(i * SEARCH_GRID) + j].value = inputs[i][j];    //Change input values to network
 
     for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
-        //Neuron& neuron = it->second;    //Neuron& grabs the address of the value from the hashmap
+        //Neuron& neuron = it->second;                  //Neuron& grabs the address of the value from the hashmap
         double sum = 0.0;
         for (geneItr = it->second.inputs.begin(); geneItr != it->second.inputs.end(); geneItr++) {
-            Gene incoming = *geneItr;   //for each Gene of Neurons inputs
+            Gene incoming = *geneItr;                   //for each Gene of Neurons gameinputs
             Neuron other = network[incoming.input];
-            sum += incoming.weight * other.value;  //Get sum of input Genes to this Neuron
+            sum += incoming.weight * other.value;       // Sum: input_gene * activation (1 or 0)
         }
-        if (!it->second.inputs.empty())
+        if (!it->second.inputs.empty()) 
             it->second.value = Neuron::sigmoid(sum);    //which is needed for this step! i.e. in-place map edit
     }
 

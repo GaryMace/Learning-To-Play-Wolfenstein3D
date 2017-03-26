@@ -17,7 +17,6 @@ double Genus::maxFitness = 0.0;
 int Genus::currSpecies = 0;
 int Genus::generation = 0;
 int Genus::currGenome = 0;
-Genome Genus::best;
 
 void Genus::loadSaveState(std::string saveState) {
 
@@ -68,41 +67,41 @@ void Genus::addToSpecies(Genome child) {
 
 void Genus::cullSpecies(bool cutToOne) {
     std::list<Species>::iterator speciesItr;
-    std::list<Genome>::iterator removeItr;
+    std::list<Genome>::iterator survivedItr;
 
     for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
+        std::list<Genome> survived;
         Species& species = *speciesItr;
-        species.genomes.sort(Genome::compare);   //sort based on fitness
+        species.genomes.sort(Genome::compare);                          //sort based on fitness
 
-        double remaining  = std::ceil(species.genomes.size() / 2.0); //TODO: why does this need to be a double?
+        double remaining  = std::ceil(species.genomes.size() / 2.0);    //TODO: why does this need to be a double?
         if (cutToOne)
             remaining = 1.0;
 
-        removeItr = species.genomes.end();
-        while (species.genomes.size() > remaining || removeItr != species.genomes.begin()) {
-            if (removeItr != species.genomes.end())
-                species.genomes.erase(removeItr);   //Remove weak species from end
-            removeItr--;
+        survivedItr = species.genomes.begin();
+        while (survived.size() < remaining && survivedItr != species.genomes.end()) {
+            survived.push_back(*survivedItr);
+            survivedItr++;
+
         }
+
+        species.genomes.clear();
+        species.genomes = survived;
     }
 }
 
 void Genus::newGeneration() {
     std::list<Species>::iterator speciesItr;
-    
-    Genus::cullSpecies(false); //Cull bottom half of each species
-    std::cout << "start rank glob" << std::endl;
+    Genus::cullSpecies(false);                      //Cull bottom half of each species
     Genus::rankGlobally();
-    std::cout << "Emd rank" << std::endl;
     Genus::removeStaleSpecies();
     Genus::rankGlobally();
     for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
         Species& species = *speciesItr;
-        species.calculateAverageFitness();
+        species.calculateAverageFitness();          // total of global rank / genome size
     }
     Genus::removeWeakSpecies();
-    
-    double sum = Genus::totalAverageFitness();
+    double sum = Genus::totalAverageFitness();      // all average fitnesses added
     if (sum == 0){ 
        sum = 1;
     }
@@ -115,12 +114,11 @@ void Genus::newGeneration() {
         for (int j = 0; j < breed; j++)
             children.push_back(species.breedChild());
     }
-
-    Genus::cullSpecies(true);  //Cull all but the top member of each species
+    Genus::cullSpecies(true);                       //Cull all but the top member of each species
     while (children.size() + species.size() < POPULATION) {
         int randSpecies = rand() % (int) species.size();
         Species *species1;
-
+        
         for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
             if (randSpecies-- == 0) {
                 species1 = &(*speciesItr);
@@ -143,7 +141,7 @@ void Genus::rankGlobally() {
 
     for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++)
         for (genomeItr = speciesItr->genomes.begin(); genomeItr != speciesItr->genomes.end(); genomeItr++)
-            global.push_back(&(*genomeItr));  //Push address to original Genomes
+            global.push_back(&(*genomeItr));        //Push address to original Genomes
 
     global.sort(Genome::compareByPointer);
 
@@ -159,10 +157,10 @@ void Genus::removeStaleSpecies() {
     std::list<Species> survivors;
 
     for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
-        speciesItr->genomes.sort(Genome::compare);
+        speciesItr->genomes.sort(Genome::compare); 
 
         if (speciesItr->genomes.begin()->fitness > speciesItr->topFitness) {
-            speciesItr->topFitness = speciesItr->genomes.begin()->fitness;
+            speciesItr->topFitness = speciesItr->genomes.begin()->fitness; 
             speciesItr->staleness = 0;
         } else
             speciesItr->staleness++;
@@ -170,9 +168,8 @@ void Genus::removeStaleSpecies() {
         if (speciesItr->staleness < STALE_SPECIES || speciesItr->topFitness >= maxFitness)
             survivors.push_back(*speciesItr);
     }
-
-    species.clear();
-    species = survivors;
+    Genus::species.clear();
+    Genus::species = survivors;
 }
 
 void Genus::removeWeakSpecies() {
@@ -183,13 +180,13 @@ void Genus::removeWeakSpecies() {
     if (sum == 0) 
        sum = 1;
     for (speciesItr = species.begin(); speciesItr != species.end(); speciesItr++) {
-        double breed = std::floor(speciesItr->averageFitness / sum * POPULATION);    // A/B * C or A/(B * C) ?
+        double breed = std::floor(speciesItr->averageFitness / sum * POPULATION);
         if (breed >= 1.0)
             survivors.push_back(*speciesItr);
     }
 
-    species.clear();
-    species = survivors;
+    Genus::species.clear();
+    Genus::species = survivors;
 }
 
 double Genus::totalAverageFitness() {

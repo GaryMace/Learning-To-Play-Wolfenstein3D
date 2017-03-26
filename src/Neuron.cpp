@@ -22,6 +22,6 @@ std::string Neuron::backup() {
     return out;
 }
 
-double Neuron::sigmoid(double x) {
+double Neuron::sigmoid(double x) {      //can this even be 0?
     return 2.0 / (1.0 + std::exp(-4.9 * x)) - 1.0;
 }

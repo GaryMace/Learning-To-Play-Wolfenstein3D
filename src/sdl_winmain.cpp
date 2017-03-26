@@ -52,10 +52,10 @@
 # endif
 #endif
 
-#include <iostream>
-#include <fstream>
-#include <conio.h>
-#include "guicon.h"
+//#include <iostream>
+//#include <fstream>
+//#include <conio.h>
+//#include "guicon.h"
 
 #if defined(_WIN32_WCE) && _WIN32_WCE < 300
 /* seems to be undefined in Win CE although in online help */
@@ -163,7 +163,7 @@ static void cleanup_output(void)
             if(readbytes != 0)
             {
                 buf[readbytes] = 0;     // cut after last byte (<=16383)
-                MessageBox(NULL, buf, "Wolf4SDL", MB_OK);
+                //MessageBox(NULL, buf, "Wolf4SDL", MB_OK);
             }
             else
                 remove(stdoutPath);     // remove empty file
@@ -179,7 +179,7 @@ static void cleanup_output(void)
             if(readbytes != 0)
             {
                 buf[readbytes] = 0;     // cut after last byte (<=16383)
-                MessageBox(NULL, buf, "Wolf4SDL", MB_OK);
+                //MessageBox(NULL, buf, "Wolf4SDL", MB_OK);
             }
             else
                 remove(stderrPath);     // remove empty file
@@ -249,14 +249,14 @@ int console_main(int argc, char *argv[])
 
 /* This is where execution begins [windowed apps] */
 #ifdef _WIN32_WCE
-int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPWSTR szCmdLine, int sw)
-//int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPWSTR szCmdLine, int sw)
+//int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPWSTR szCmdLine, int sw)
+int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPWSTR szCmdLine, int sw)
 #else
-int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
-//int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
+//int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
+int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
 #endif
 {   
-    RedirectIOToConsole();
+    //RedirectIOToConsole();
 	HINSTANCE handle;
 	char **argv;
 	int argc;

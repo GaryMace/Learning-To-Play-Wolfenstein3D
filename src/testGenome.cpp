@@ -20,8 +20,8 @@ int main() {
     std::cout << "g1 network size on init (expected 0): " << g1.network.size() << std::endl;
     g1.generateNetwork();
 
-    //std::list<double> inputs = {1,2,3,4};
-    //std::vector<double> out = g1.evaluateNetwork(inputs);
+    //std::list<double> gameinputs = {1,2,3,4};
+    //std::vector<double> out = g1.evaluateNetwork(gameinputs);
     //std::cout << "g1 evalNetwork size (expected 8): " << out.size() << std::endl;
     //std::cout << "g1 output vals (expected eight default vals i.e. 0): ";
     //for (int i = 0; i < out.size(); i++)

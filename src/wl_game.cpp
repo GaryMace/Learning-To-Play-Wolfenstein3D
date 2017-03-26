@@ -3,6 +3,7 @@
 #include <math.h>
 #include "wl_def.h"
 #include <SDL_mixer.h>
+#include <iostream>
 #pragma hdrstop
 
 #ifdef MYPROFILE
@@ -1380,7 +1381,7 @@ restartgame:
     DrawPlayScreen ();
     died = false;
     do
-    {
+    {   //crashing in here somewhere
         if (!loadedgame)
             gamestate.score = gamestate.oldscore;
         if(!died || viewsize != 21) DrawScore();
@@ -1555,19 +1556,24 @@ startplayloop:
                 Died ();
 
                 //{'-'} Doop things
-                if (!playbest) {
-                   doopAI.setGenomeFitness();  //if fitness already measured...
-
-                   doopAI.nextGenome();    //maybe move this to ex_died? i.e. dont start analysis of new genome until after respawn?
-                   while (doopAI.fitnessAlreadyMeasured())
-                         doopAI.nextGenome();
-                   
-                   killattempt = false;
-                   circletimeoutset = false;
-                   timeouttics = 0;
-                   doopAI.timeout = 150;
-                   doopAI.initRun = true;
+                doopAI.setGenomeFitness();                  //if fitness already measured...
+                doopAI.nextGenome();
+                while (doopAI.fitnessAlreadyMeasured()) {   //the best genome per species will already have been measured
+                    doopAI.nextGenome();
                 }
+
+                killattempt = false;                        //reset the variables for the next run of the game
+                circletimeoutset = false;
+                timeouttics = 0;
+                doopAI.timeout = 150;
+                doopAI.initRun = true;                      //allows the network for the next run to be built
+
+                doorsopened = 0;            //reset scoring mechanics
+                prevnumdoorsopened = 0;
+                pickups = 0;
+                prevnumpickups = 0;
+                prevkillcount = 0;
+                //memset(uniquedoors, 0, sizeof(uniquedoors));
                 //{'-'} end of Doop things
                 died = true;                    // don't "get psyched!"
 

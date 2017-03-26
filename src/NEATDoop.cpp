@@ -40,28 +40,37 @@ void NEATDoop::setGenomeFitness() {
 
     double distFromEnd = getDistance((int) player->tilex, endxp, (int) player->tiley, endyp);
     double distFromSpawn = getDistance((int) player->tilex, spawnxp, (int) player->tiley, spawnyp);
-    int sec = gamestate.TimeCount / 70;                                                                 //70 fps so divide by 70, counter intuitive I know
     int kills = gamestate.killcount;
 
-    genome->fitness = MAX_DISTANCE - distFromEnd;
-    if (sec != 0 && distFromSpawn != 0)
-       genome->fitness += (distFromSpawn / sec) * TRAVEL_REWARD;
-
-    if (kills > 0)
+    genome->fitness = (MAX_DISTANCE - distFromEnd) * 10;
+    if (distFromSpawn != 0) {
+       genome->fitness += distFromSpawn * distFromSpawn * TRAVEL_REWARD;
+    }
+    
+    if (kills > 0) 
         genome->fitness += kills * KILL_REWARD;
-    if (doorsopened > 0)
-        genome->fitness += doorsopened * DOOR_OPENED_REWARD;
+    if (accuracy > 0)
+        genome->fitness += accuracy * ACCURACY_REWARD;
     if (pickups > 0)
         genome->fitness += pickups * ITEM_PICKUP_REWARD;
     if (leveldone)
         genome->fitness += LVL_DONE_REWARD;
     
-    if (genome->fitness > Genus::maxFitness)
-        Genus::maxFitness = genome->fitness;
-    if (genome->fitness > species->topGenome.fitness)   //this is messed stuff up i think
-        species->topGenome = *genome;
     if (genome->fitness == 0)
         genome->fitness = -1;
+
+    if (killattempt) {
+        if (genome->fitness == Genus::maxFitness) {
+            Genus::maxFitness -= 500;
+        }
+        genome->fitness -= 500;
+    }
+
+    if (genome->fitness > Genus::maxFitness)
+        Genus::maxFitness = genome->fitness;
+
+    if (genome->fitness > species->topGenome.fitness)
+        species->topGenome = *genome;
 }
 
 int NEATDoop::getDistance(int x1, int x2, int y1, int y2) {
@@ -92,7 +101,9 @@ bool NEATDoop::fitnessAlreadyMeasured() {
 =================================
  */
 void NEATDoop::initialiseGenus() {
-    srand(1488900454);
+    int timer = time(NULL);
+    std::cout << timer << std::endl;
+    srand(1490349215);  //1488900454 or 1489693580
 
     for (int i = 0; i < POPULATION; i++) {  //initial population
         Genome basic;
@@ -107,16 +118,6 @@ void NEATDoop::initialiseGenus() {
     initialiseRun();
 }
 
-void NEATDoop::playBest() {
-    Genus::addToSpecies(Genus::best);
-    
-    Genus::currGenome = 0;
-    Genus::currSpecies = 0;
-    Genus::currSpeciesItr = Genus::species.begin();
-    Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
-
-    initialiseRun();
-}
 /*
 =================================
 =
@@ -133,7 +134,7 @@ void NEATDoop::initialiseRun() {
     Genome* genome = &(*Genus::currGenomeItr);
     genome->generateNetwork();
 
-    if (!initRun)
+    //if (!initRun)
        evaluateCurrent();
     initRun = false;
 }
@@ -143,7 +144,7 @@ void NEATDoop::initialiseRun() {
 =
 = {'-'} evaluateCurrent
 =
-= Evaluate the current Genome of a Species with the inputs (what Doop can see at this point in time),
+= Evaluate the current Genome of a Species with the gameinputs (what Doop can see at this point in time),
 = receive what buttons the AI thinks should be pressed and pass these controls to the game.
 =
 =================================
@@ -151,7 +152,7 @@ void NEATDoop::initialiseRun() {
 void NEATDoop::evaluateCurrent() {
     Genome* genome = &(*Genus::currGenomeItr);
 
-    bool *controls = genome->evaluateNetwork(inputs);
+    bool *controls = genome->evaluateNetwork(gameinputs);
     setUpController(controls);
 }
 
@@ -169,26 +170,17 @@ void NEATDoop::setUpController(bool* controls) {
     int i;
     bool *control;
 
-    for (control = &controls[0], i = 0; control != &controls[9]; control++, i++) {
+    for (control = &controls[0], i = 0; control != &controls[8]; control++, i++) {
         if ((int) *control) {   //If network says push a button
             switch (i) {        //Find what button to press
                 case FORWARD:
-                    Keyboard[dirscan[di_north]] = true;  // dirscan[bt_..] is an index into Keyboard arr
-                    break;
-                case BACK:
-                    Keyboard[dirscan[di_south]] = false;
+                    Keyboard[dirscan[di_north]] = true;  // dirscan[di_..] is an index into Keyboard arr
                     break;
                 case TURN_LEFT:
-                    if (!controls[TURN_RIGHT])
-                        Keyboard[dirscan[di_west]] = true;
-                    else
-                        Keyboard[dirscan[di_west]] = false;
+                    Keyboard[dirscan[di_west]] = true;
                     break;
                 case TURN_RIGHT:
-                    if (!controls[TURN_LEFT])
-                        Keyboard[dirscan[di_east]] = true;
-                    else
-                        Keyboard[dirscan[di_east]] = false;
+                    Keyboard[dirscan[di_east]] = true;
                     break;
                 case SHOOT:
                     buttonstate[bt_attack] = true;
@@ -212,22 +204,37 @@ void NEATDoop::setUpController(bool* controls) {
                     break;
             }
         } else
-            buttonstate[i] = false;    //all other controls we don't care about set to false, i.e. pausing the game
+            buttonstate[i] = false;                                 //all controls not pressed set to false
+    }
+    if (Keyboard[dirscan[di_west]] && Keyboard[dirscan[di_east]]) { //dont let it turn left and right at the same time
+        Keyboard[dirscan[di_west]] = false;
+        Keyboard[dirscan[di_east]] = false;
     }
 
-    if (controls[FORWARD] &&
-            (controls[TURN_LEFT] || controls[TURN_RIGHT])) {
+    if (Keyboard[dirscan[di_north]] &&
+            (Keyboard[dirscan[di_east]] || Keyboard[dirscan[di_west]])) {
             if (!circletimeoutset) {
                 circletimeoutset = true;
             }
+    } else {
+        circletimeoutset = false;
+        timeouttics = 0;
     }
     
-    if (circletimeoutset && timeouttics >= 100)
+    if (circletimeoutset && timeouttics >= 500)
        killattempt = true;
 
     delete[] controls;   //Free the memory that was allocated
 }
 
+void printGenus() {
+    std::list<Species>::iterator spec;
+
+    std::cout << "Num Spec: " << Genus::species.size() << std::endl;
+    for (spec = Genus::species.begin(); spec != Genus::species.end(); spec++) {
+        std::cout << "Num genoms: " << spec->genomes.size() << std::endl;
+    }   
+}
 /*
 =================================
 =
@@ -248,11 +255,18 @@ void NEATDoop::nextGenome() {
         Genus::currSpecies++;
 
         if (Genus::currSpeciesItr == Genus::species.end()) {
-            std::cout << "gen: " << Genus::generation << std::endl;
+            //if (Genus::generation % 10 == 0) {
+            std::cout << "Save best geome" << std::endl;
             saveBestGenome();
+            std::cout << "done save best geome" << std::endl;
+            //}
+            std::cout << "Gen: " << Genus::generation << std::endl;
             Genus::newGeneration();
+            std::cout << "New Gen done" << std::endl;
             Genus::currSpecies = 0;
             Genus::currSpeciesItr = Genus::species.begin();
+
+            //printGenus();
         }
         Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
         Genus::currGenome = 0;
@@ -261,6 +275,7 @@ void NEATDoop::nextGenome() {
 
 void NEATDoop::saveBestGenome() {
     std::list<Species>::iterator speciesItr;
+    int i = 0;
     /*char buffer[32];
     snprintf(buffer, sizeof(char) * 32, "gen_%i.txt", Genus::generation);
 
@@ -269,84 +284,17 @@ void NEATDoop::saveBestGenome() {
     std::ostream genomefile(&fb);*/
 
     Genome best;
-    best.fitness = -2;  //TODO: consider refactoring if penalties added to scoring func
+    best.fitness = -2;
     for (speciesItr = Genus::species.begin(); speciesItr != Genus::species.end(); speciesItr++) {
-        if (speciesItr->topGenome.fitness > best.fitness)
+        if (speciesItr->topGenome.fitness > best.fitness) {
             best = speciesItr->topGenome;
+        }
     }
     //genomefile << best.backup();
     std::cout << best.backupnew() << std::endl;
     //fb.close();
 }
 
-template<typename Out> void split(const std::string &s, char delim, Out result) {
-    std::stringstream ss;
-    ss.str(s);
-    std::string item;
-    while (std::getline(ss, item, delim)) {
-        *(result++) = item;
-    }
-}
-
-std::list<std::string> split(const std::string &s, char delim) {
-    std::list<std::string> elems;
-    split(s, delim, std::back_inserter(elems));
-    return elems;
-}
-
 void NEATDoop::readInGenome() {
-    std::ifstream input;
-    std::string filename;
 
-    std::cout << "Enter the file name: ";
-    std::cin >> filename;
-    if (filename == "none") {
-        playbest = false;
-        return;
-    }
-    playbest = true;
-    input.open(filename.c_str(), std::ifstream::binary);
-    
-    while(!input.is_open()) {
-        input.clear();
-        std::cout << "Incorrect filename, please enter again: ";
-        std::cin >> filename;
-        
-        input.open(filename.c_str(), std::ifstream::binary);
-    }
-
-    std::string line;
-    int idx = 0;
-    
-    input >> Genus::best.fitness;
-    input >> Genus::best.globalRank;
-    input >> Genus::best.maxNeuron;
-    input >> line;
-    std::cout << Genus::best.fitness << std::endl;
-    
-    std::cout << Genus::best.maxNeuron << std::endl;
-    std::cout << Genus::best.globalRank << std::endl;
-    std::cout << line << std::endl;
-    //Sleep(2000);
-    std::list<std::string> mutationRates = split(line, ',');
-
-    for (std::list<std::string>::iterator it = mutationRates.begin(); it != mutationRates.end(); it++)
-        Genus::best.mutationRates[idx++] = std::atof(it->c_str());
-    Gene newGene;
-    std::list<Gene> genes;
-    while (input >> line) {
-        if (!line.empty()) {
-            std::list<std::string> geneLine = split(line, ',');
-            std::list<std::string>::iterator it = geneLine.begin();
-
-            //Gene newGene;
-            newGene.input = (int) std::atof((it++)->c_str());
-            newGene.output = (int) std::atof((it++)->c_str());
-            newGene.enabled = (bool) std::atof((it++)->c_str());
-            newGene.innovation = (int) std::atof((it++)->c_str());
-            newGene.weight = std::atof((it)->c_str());
-            genes.push_back(newGene);
-        }
-    }
-    Genus::best.addGenesToSelf(genes);
 }
