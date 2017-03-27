@@ -14,13 +14,10 @@
     <list default="true" id="f3627d11-ecaa-4711-8dd5-1016497df221" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis Report/Learning-to-Play-Wolfenstein-thesis.pdf" afterPath="$PROJECT_DIR$/Thesis Report/Learning-to-Play-Wolfenstein-thesis.pdf" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis Report/Learning-to-Play-Wolfenstein-thesis.synctex.gz" afterPath="$PROJECT_DIR$/Thesis Report/Learning-to-Play-Wolfenstein-thesis.synctex.gz" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis Report/Learning-to-Play-Wolfenstein-thesis.aux" afterPath="$PROJECT_DIR$/Thesis Report/Learning-to-Play-Wolfenstein-thesis.aux" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis Report/Learning-to-Play-Wolfenstein-thesis.log" afterPath="$PROJECT_DIR$/Thesis Report/Learning-to-Play-Wolfenstein-thesis.log" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis Report/Learning-to-Play-Wolfenstein-thesis.tex" afterPath="$PROJECT_DIR$/Thesis Report/Learning-to-Play-Wolfenstein-thesis.tex" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis Report/Learning-to-Play-Wolfenstein-thesis.toc" afterPath="$PROJECT_DIR$/Thesis Report/Learning-to-Play-Wolfenstein-thesis.toc" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/wl_draw.cpp" afterPath="$PROJECT_DIR$/src/wl_draw.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/wl_game.cpp" afterPath="$PROJECT_DIR$/src/wl_game.cpp" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -49,7 +46,7 @@
       <file leaf-file-name="wl_game.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/wl_game.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="331">
+            <state relative-caret-position="-506">
               <caret line="55" column="2" lean-forward="false" selection-start-line="55" selection-start-column="2" selection-end-line="55" selection-end-column="2" />
               <folding />
             </state>
@@ -493,16 +490,16 @@
       <workItem from="1489170900473" duration="7740000" />
       <workItem from="1489378431376" duration="686000" />
       <workItem from="1490543966173" duration="6922000" />
-      <workItem from="1490645821291" duration="3667000" />
+      <workItem from="1490645821291" duration="4872000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="147052000" />
+    <option name="totallyTimeSpent" value="148257000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-2" y="0" width="3204" height="1750" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -912,7 +909,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/wl_game.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
+        <state relative-caret-position="-506">
           <caret line="55" column="2" lean-forward="false" selection-start-line="55" selection-start-column="2" selection-end-line="55" selection-end-column="2" />
           <folding />
         </state>

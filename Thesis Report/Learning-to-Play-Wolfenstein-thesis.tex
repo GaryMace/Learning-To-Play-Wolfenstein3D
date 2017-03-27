@@ -107,10 +107,16 @@ As a result of the outlined problems, Wolfenstein was chosen for this project be
 By the very nature of this project it is of high importance to be able to understand the source code of the game in order to determine what information can and cannot be used for NEATDoop's learning. This section will introduce how Wolfenstein's gameplay works and also give a brief description on some parts of the source code where attention was  focused early on. The goal of reading the source code at this stage was to understand how the Wolfenstein map is represented and how objects, such as enemies and pickups, are tracked throughout gameplay. These components will form an important base for the NEAT algorithm which is discussed after this section.
 
 \subsection{Wolfenstein's Gameplay}
+Wolfenstein is a First-Person Shooter(FPS) and the goal of the each level is to get to an elevator tile that brings the character to the next level. A player reaches the end of each level by moving through a series of rooms in the game, potentially killing enemies and picking up items such as health, ammo, treasure or new guns as it does so. 
 
+Depending on the difficulty selected, a variety of enemies will spawn in the game. These enemies will attempt to kill the player on sight. The player is equipped with a low-power pistol and a knife by default, although it is possible to pick up a sub-machine gun or a chain gun in various levels that offers a higher damage output than the pistol. 
+
+Damage is done on a distance basis. The closer you are to an enemy when you hit them, the more damage that is inflicted. This also applies to enemies, the closer they are to you the more damage they do when they hit you. 
+
+Enemies react to sound. On hearing a gunshot, an enemy will move in the direction of the gunshot. As will be seen later, this will be the cause of a substantial amount of deaths in NEATDoop's learning where it shoots randomly and attracts enemies that ultimately, kill it.
 
 \subsection{Map Representation}
-Every map in Wolfenstein is represented as a 64x64 grid. It holds \textit{Byte} values indicating the type of structure located at that (x,y) co-ordinate. If the \textit{Byte} value at a particular (x,y) co-ordinate is greater than 0, then it can either be a wall, push-wall, door or an elevator tile (which is the tile associated with the end of the current level). If the value at any (x,y) co-ordinate is 0 then it represents a tile that a player can walk on.
+Every map in Wolfenstein is represented as a 64x64 grid of tiles. It holds \textit{Byte} values indicating the type of structure located at that (x,y) co-ordinate. If the \textit{Byte} value at a particular (x,y) co-ordinate is greater than 0, then it can either be a wall, push-wall, door or an elevator tile (which is the tile associated with the end of the current level). If the value at any (x,y) co-ordinate is 0 then it represents a tile that a player can walk on.
 
 This particular information is incredibly important for determining the structural surroundings of NEATDoop during gameplay. From this \textit{2 dimensional array of bytes} we can get the spawn location in each level, the end location in each level and all wall, door and push-wall data that will be used primarily as input to the neural networks that will be described later. 
 
@@ -126,7 +132,17 @@ Items that can be picked up include things like guns, ammo, health and treasure.
 Identifying static items of interest is rather simple since each static item has a label associated with it. For instance, ammo has a \textit{bo\_clip} label associated with it so it is possible to iterate through the \textit{statobjlist} array and find items that would be considered useful for NEATDoop to pickup. 
 
 \section{NEAT Algorithm}
-NEAT stands for \textit{Neuro-Evolution of Augmenting Topologies} and is based on an paper by Kenneth Stanley and Risto Miikkulainen~\cite{NEAT:2002}. The paper demonstrates the ability for the NEAT algorithm to learn to solve problems in quicker succession than other types of topology evolving algorithms such as \textit{Topology and Weight Evolving Artificial Neural Networks (TWEANN)} algorithms. This algorithm consists of two very important Machine Learning techniques, Neural Networks and Genetic Algorithms.\\\\
+NEAT stands for \textit{Neuro-Evolution of Augmenting Topologies} and is based on an paper by Kenneth Stanley and Risto Miikkulainen~\cite{NEAT:2002}. The paper demonstrates the ability for the NEAT algorithm to solve problems in quicker succession than other types of topology evolving algorithms such as \textit{Topology and Weight Evolving Artificial Neural Networks (TWEANN)} algorithms. This algorithm consists of two very important Machine Learning techniques, Neural Networks and Genetic Algorithms.\\\\
+
+In traditional Neuroevolution techniques, a topology is chosen before any experimentation begins. This topology is normally maximally connected, meaning that every input is connected to every hidden / output unit and every hidden unit is connected to every output unit. The network is then modified by means of mutating the weights on these links using evolutionary techniques such as genetic algorithms. The goal of this type of neuroevolution is therefore to optimise the weight matrix associated with the network.
+
+The weights between Neurons are not the only aspect of a Neural Network that contribute to their behaviour. The structure of a neural network also affects its functionality. The NEAT algorithm is primarily focused on this aspect of neuroevolution. In particular, it extends and tries to improve on some popular techniques utilised by some TWEANNs. The two main ideas it introduces is the \textit{Speciation} of a population and tracking historical origins of every network using \textit{Innovation Numbers} on the networks encoding.
+
+\subsection{NEAT Encoding}
+Typical neural networks consist of Neurons (nodes) connected using Synapses (links). NEAT describes its networks using a type of direct encoding whereby a particular network is represented using a series of \textit{Genes}. Each Gene indicates two Neurons that are connected, whether or not the link is enabled, a weight and an \textit{innovation number} that is unique to each Gene. This innovation number is used to calculate similarities between networks. 
+
+\subsection{NEAT Speciation}
+
 
 \section{NEAT Neural Networks}
 Neural Networks(NN) are a Machine Learning technique that roughly simulate the behaviour of a brain. They generally consist of artificial Neurons that are connected using artificial Synapses. The synapses in a NN typically have a weight associated with them that describes how strong a connection any two neurons have with each other.
