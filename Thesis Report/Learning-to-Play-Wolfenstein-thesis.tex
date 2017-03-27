@@ -1,4 +1,4 @@
-\documentclass[]{UCD_CS_FYP_Report}
+\documentclass[]{Learning-to-Play-Wolfenstein-thesis}
 \usepackage{graphicx}
 \usepackage{hyperref}
 
@@ -22,7 +22,7 @@
 \fontsize{12pt}{21pt}{\textbf{General Information:}}\\\\
 The goal is to develop a program able to play some early stages of the first person shooter video game "Wolfenstein", by learning to associate possible actions (moving in various ways, shooting) with what is perceptible in the game at any moment. A technique that proved successful in learning to play a Mario Bros level is to be applied to the new game. An existing open-source reimplementation of Wolfenstein will need to be adapted to provide the learner with information about what it perceives, where it is, how much ammunition it has, and how much time has elapsed.\\
 
-The technique to be used for learning to play is a combination of neural network and genetic programming. Input neurons correspond to the presence of visible or measurable features (walls, enemies, power-ups, clock), and output neurons correspond to controller buttons (go left/right/forward/back, turn left/right/upward/downward, jump, shoot). By starting with a minimal network, adding random links from gameinputs to hidden nodes and onward to output nodes or perhaps other hidden nodes, and randomly adding new hidden nodes, different behaviours are obtained. By applying ideas of genetic algorithms, many individuals can be created and rated in terms of how much progress they make before dying and how soon they die. Mutation of, and crossover among, the more successful individuals of a generation leads over time to general improvement and ultimately, it is hoped, a really excellent player.\\
+The technique to be used for learning to play is a combination of neural network and genetic programming. Input neurons correspond to the presence of visible or measurable features (walls, enemies, power-ups, clock), and output neurons correspond to controller buttons (go left/right/forward/back, turn left/right/upward/downward, jump, shoot). By starting with a minimal network, adding random links from inputs to hidden nodes and onward to output nodes or perhaps other hidden nodes, and randomly adding new hidden nodes, different behaviours are obtained. By applying ideas of genetic algorithms, many individuals can be created and rated in terms of how much progress they make before dying and how soon they die. Mutation of, and crossover among, the more successful individuals of a generation leads over time to general improvement and ultimately, it is hoped, a really excellent player.\\
 
 This technique succeeded in a Mario Bros game level, using inter-neuron links that had simple weights: excitatory or inhibitory. The Wolfenstein game has several similar characteristics, being deterministic and possessing something that can be used as a measure of progress (in Mario, a combination of distance from start and time taken was used but coins gathered were ignored).\\
 
@@ -54,7 +54,11 @@ This technique succeeded in a Mario Bros game level, using inter-neuron links th
 %%% Your Abstract here
 
 \begin{abstract}
-Wolfenstein3D is a first person shooter MS-DOS game that was released in 1992. The goal of the video game is to escape Castle Wolfenstein, a Nazi prison. Its creators, ID Software, released the source port for the game in 1995 meaning it is now possible to edit the source code for our own purposes.\\\\The aim of the "Learning to Play Wolfenstein3D" project is to replace a human player with a computer that progressively learns to play Wolfenstein3D using two Artificial Intelligence concepts, Genetic Programming and Neural Networks. Henceforth, the AI bot created as a result of this project shall be dubbed Doop (A Developing Object-Orientated Program, also because I like the name Doop)\\\\Doop's learning process will be aided by a weighting function that measures the success of a particular attempt that it has made at playing the game which is a requirement for any project of this nature. By using previous attempts a new, hopefully better, attempt at playing the game will be generated. The end goal being that Doop is a fully functioning AI that is capable of learning how to play some levels of the Wolfenstein3D campaign
+Wolfenstein3D is a first person shooter MS-DOS game that was released in 1992. The goal of the video game is to escape Castle Wolfenstein, a Nazi prison. Its creators, ID Software, released the source port for the game in 1995 meaning it is now possible to edit the source code for our own purposes.
+
+The aim of the \textit{Learning to Play Wolfenstein3D} project is to replace a human player with a computer that progressively learns to play Wolfenstein3D using two Artificial Intelligence concepts, Genetic Programming and Neural Networks. These algorithms are implemented according to an algorithm called \textit{NeuroEvolution of Augmenting Topologies (NEAT)} which is based off a paper written by Kenneth Stanley and Risto Miikkulainen. Henceforth, the AI bot created as a result of this project shall be dubbed NEATDoop (A Developing Object-Orientated Program, also because I like the name NEATDoop)
+
+NEATDoop's learning process will be aided by a weighting function that measures the success of a particular attempt that it has made at playing the game which is a requirement for any project of this nature. By using previous attempts a new, hopefully better, attempt at playing the game will be generated. The end goal being that NEATDoop is a fully functioning AI that is capable of learning how to play some levels of the Wolfenstein3D campaign
 \end{abstract}
 \newpage
 
@@ -83,13 +87,43 @@ Finally I would like to thank my supervisor Prof. Arthur Cater. Over the past ye
 \chapter{Introduction}
 
 \chapter{Background Research}	% talk about what was seen in prev chapter at start
-This chapter will outline in detail the discoveries that were made whilst researching numerous relevant topics of interest to the \textit{Learning to Play Wolfenstein3D} project. The first item that will be discussed will be the game selection process; what caused Wolfenstein to be chosen over previously considered open-source games, such as Doom and Duke Nukem. However, the main topic of discussion in this chapter will be the \textit{NeuroEvolution of Augmenting Topologies(NEAT)} algorithm; what it is and why it will be of major importance to Doop's ability to learn.
+This chapter will outline in detail the discoveries that were made whilst researching numerous relevant topics of interest to the \textit{Learning to Play Wolfenstein3D} project. The first item that will be discussed will be the game selection process; what caused Wolfenstein to be chosen over previously considered open-source games, such as Doom and Duke Nukem. However, the main topic of discussion in this chapter will be the \textit{NeuroEvolution of Augmenting Topologies(NEAT)} algorithm; what it is and why it will be of major importance to NEATDoop's ability to learn.
+
 
 \section{Game Selection}
 In order for an AI to be able to learn to play Wolfenstein it will need to be able to make decisions based on what it can see at any point in time. This would not be possible for a game whose code was not open source since it would be impossible for the AI to read from the source code to determine what its surroundings are composed of.
 
+The first open source game that was considered for this project was \textit{Duke Nukem 3D}. It was released early 1996 and was developed by \textit{3D Realms}. The game was discovered having read an analysis of the games source code on a web-blog early into the specification for this project. REF[3] 
+
+Having contacted the author of the web-blog and discussed the project idea, he recommended that I do not use \textit{Duke Nukem 3D} due to its ”rotten codebase”. From inspection of an open source implementation of the source code called \textit{Chocolate Duke Nukem 3D} the authors recommendation seemed well founded. The source code itself is rather immense and is very, very sparingly documented. By comparing the game.c source file from \textit{Duke Nukem 3D} and the WL\_GAME.c source file from Wolfenstein it is now very clear that not choosing \textit{Duke Nukem 3D} was a solid decision. Both of these source files implement logic that sets up levels, constructs in game text, displays player health statistics and includes logic that is fundamental to the main game loop. WL\_GAME.c from \textit{Wolfenstein’s} source port is contains approximately 1,600 lines of code whereas game.c from \textit{Duke Nukem 3D’s} source port alone roughly contains 11,000 lines of code with no substantial documentation indicating how the source file works. REF[4] [5]
+
+\textit{The Original Doom} was then considered as it was recommended by the author of the previously mentioned web-blog. Having contacted a software developer who created an implementation of the Doom source port called \textit{AutoDoom} REF[6] he recommended that \textit{Wolfenstein 3D} be considered for this project as opposed to Doom due to the fact that Doom’s level design is a lot more complex than Wolfenstein’s. This is evident from any gameplay showcasing the games. REF[7] [8] 
+
+\textit{Doom} allows for players to move in the vertical axis. This extra dimension that a player can move in would have been a huge roadblock in NEATDoop’s ability to learn. \textit{Wolfenstein’s} map design is completely flat i.e. the player cannot move in the vertical axis. A worst case scenario for NEATDoop playing Wolfenstein is that it gets stuck in a corner or runs in a circle. Not only would this be a concern in Doom but there exists a probability that NEATDoop would get stuck behind a staircase or similar. The fitness function for Doom would also have to take into account the extra axis which would have resulted in an even more complex measure of fitness.
+
+As a result of the outlined problems, Wolfenstein was chosen for this project because the source port is well documented. As well as this the source port, whilst still relatively large, is pretty easy to navigate and understand. The source port that was chosen is actually not the original one that was written in C but an alternative version written in C++ called Wolf4SDL. The reason behind this was mainly so any code written to interact with the Wolfenstein source code could be object oriented. Further reasons will be discussed later in Chapter~\ref{Chapter3}.
+
 \section{Wolfenstein 3-D Game Mechanics}
-By the very nature of this project it is of high importance to be able to understand the source code of the game in order to determine what information can and can not be used for Doop's learning. Parts of the source where attention was mainly focused include understanding the way the map is represented, how objects, such as enemies and items that can be picked up, are tracked throughout gameplay and how the game's life-cycle works. These components will form an important base for the NEAT algorithm which is discussed after this section.
+By the very nature of this project it is of high importance to be able to understand the source code of the game in order to determine what information can and cannot be used for NEATDoop's learning. This section will introduce how Wolfenstein's gameplay works and also give a brief description on some parts of the source code where attention was  focused early on. The goal of reading the source code at this stage was to understand how the Wolfenstein map is represented and how objects, such as enemies and pickups, are tracked throughout gameplay. These components will form an important base for the NEAT algorithm which is discussed after this section.
+
+\subsection{Wolfenstein's Gameplay}
+
+
+\subsection{Map Representation}
+Every map in Wolfenstein is represented as a 64x64 grid. It holds \textit{Byte} values indicating the type of structure located at that (x,y) co-ordinate. If the \textit{Byte} value at a particular (x,y) co-ordinate is greater than 0, then it can either be a wall, push-wall, door or an elevator tile (which is the tile associated with the end of the current level). If the value at any (x,y) co-ordinate is 0 then it represents a tile that a player can walk on.
+
+This particular information is incredibly important for determining the structural surroundings of NEATDoop during gameplay. From this \textit{2 dimensional array of bytes} we can get the spawn location in each level, the end location in each level and all wall, door and push-wall data that will be used primarily as input to the neural networks that will be described later. 
+
+The \textit{elevator tile} is a particularly important tile. On this tile a button is located that, when pressed by the player, ends the current level. The co-ordinates of this tile position will be used later in the fitness function as will the spawn co-ordinates. 
+
+\subsection{Enemy/Item Representation}
+Both enemies and items that can be picked up are represented as \textit{structs} within the source code. 
+
+So called \textit{Actors}, represent enemies and the player of the game. The \textit{struct} storing their information is named \textit{objstruct} and contains information about the position of the Actor in the map, the health the Actor has, the sprite image assigned to it and references to the next and previous \textit{objstruct} etc. A list of objstructs is maintained with the name \textit{objlist} which stores all Actors currently alive on the map.
+
+Items that can be picked up include things like guns, ammo, health and treasure. These are considered to be \textit{static items} in the Wolfenstein Engine since they do not move. However, other items such as chairs, tables and statues are also considered to be static. The \textit{struct} that represents these static objects is called \textit{statstruct} and a list maintaining references to all static items currently on the map is called \textit{statobjlist}.
+
+Identifying static items of interest is rather simple since each static item has a label associated with it. For instance, ammo has a \textit{bo\_clip} label associated with it so it is possible to iterate through the \textit{statobjlist} array and find items that would be considered useful for NEATDoop to pickup. 
 
 \section{NEAT Algorithm}
 NEAT stands for \textit{Neuro-Evolution of Augmenting Topologies} and is based on an paper by Kenneth Stanley and Risto Miikkulainen~\cite{NEAT:2002}. The paper demonstrates the ability for the NEAT algorithm to learn to solve problems in quicker succession than other types of topology evolving algorithms such as \textit{Topology and Weight Evolving Artificial Neural Networks (TWEANN)} algorithms. This algorithm consists of two very important Machine Learning techniques, Neural Networks and Genetic Algorithms.\\\\
@@ -102,7 +136,7 @@ Genetic Algorithms(GA) are another type of Machine Learning technique. A typical
 %talk about what was said and how it relates to next chapter
 
 
-\chapter{Project Approach}% talk about what was seen in prev chapter at start
+\chapter{\label{Chapter3}Project Approach}% talk about what was seen in prev chapter at start
 The previous chapter introduced the game that was used for this project and outlined the NEAT algorithm, which is at the very core of this project. This chapter will introduce the source port used throughout the project, describe the methods employed in order to identify and understand the most important source files from the Wolfenstein source port and the importance of reading other adaptions of the NEAT algorithm.
 
 \section{Selecting the Source Port}
@@ -125,7 +159,7 @@ Chapter 3 focused on some of the tasks that were completed early on in the proje
 As introduced in Section~\ref{section2.5} the population for this project consists of a host of attempts at playing the game. Evaluating all of these attempts is very time and resource consuming. As such it is vital that each attempt at playing Wolfenstein is well formed. This very requirement immediately rules out TWEANN algorithms because in order to ensure diversity in the population it often randomises the topologies of the each network or attempt in the beginning. This introduces problems where it is required to search through the population and remove poorly performing members. This is very time consuming and as it turns out, avoidable.
 
 \section{Understanding the NEATDoop Neural Network}
-The previous section details why it is important for each attempt at playing Wolfenstein be optimal. This section focuses on understanding the implications of creating a minimally connection neural network for each attempt and how they grow over time. Here, it is important to note that the way the network is built and manipulated is directly affected by the fitness function used for evaluating the success of each attempt at playing Wolfenstein.
+The previous section details why it is important for each attempt at playing Wolfenstein be optimal. This section focuses on understanding the implications of creating a minimally connected neural network for each attempt and how they grow over time. Here, it is important to note that the way the network is built and manipulated is directly affected by the fitness function used for evaluating the success of each attempt at playing Wolfenstein.
 % describe the input connections and links and how the network builds specific to the game.
 
 \section{Wolfenstein \& NEAT Interaction}
@@ -148,12 +182,22 @@ In order for the AI (NEATDoop) to learn how to play Wolfenstein it is necessary 
 The terminal condition for NEATDoop is when it completes a level in Wolfenstein. This raises an interesting question though, \textit{How do we move to the next game attempt if the AI does nothing useful?} It turns out that it is possible to use a similar approach to how \textit{SethBling} handled this in his project. We can assign a timeout to every attempt and if the AI does nothing useful in that time frame it will timeout.
 
 \section{Saving NEATDoop Attempts}
+An important aspect of this project is to make it possible for a Genome to be replayed. This is considered valuable since it takes a considerable amount of time for the AI to learn to do something worth replaying. For instance, it took several hours for NEATDoop to learn to exit the first room and turn left towards the level end at normal gameplay speed. In order for a particular Genome to be replayed a representation of its network needs to be saved and reloaded. This section outlines how this is done.\\\\\\\textbf{A summary of this chapter will go here.}
+
 %talk about what was said and how it relates to next chapter
 
 \chapter{Testing/Evaluation}% talk about what was seen in prev chapter at start
-\section{Validating NEATDoop Basic Functionality}
+Chapter 5 presented the techniques used to provide NEATDoop with the necessary functionality to learn how to play Wolfenstein. This chapter will show some testing that was done on the implementation of NEAT used for this project and will also provide an extensive evaluation of NEATDoop's performance. This will be aided by providing some results that were obtained from running the software that was created as a result of combining NEATDoop with Wolfenstein's source code.
+
+\section{Validating NEAT Basic Functionality}
+In order to validate the C++ NEAT implementation for this project a number of test source files were created. These simply test each function declared in each of the NEAT algorithm source file.
+
 \section{Analysing the Fitness Function}
+The way in which NEATDoop learns heavily depends on the fitness function used to assign a score to its attempts. Various different fitness functions were experimented with in order to find the most suitable one that allows NEATDoop to learn to play Wolfenstein in the way it is expected to. The expected way for the AI to learn is to try to continually move toward the end of the level. However, there are some exceptions to this rule and they are discussed in this section.
+
 \section{The Evolution of NEATDoop}
+
+
 \section{Evaluating NEATDoop}		%Performance 
 %talk about what was said and how it relates to next chapter
 

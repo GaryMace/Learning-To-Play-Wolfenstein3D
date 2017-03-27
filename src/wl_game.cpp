@@ -52,6 +52,10 @@ void DrawPlayScreen (void);
 void LoadLatchMem (void);
 void GameLoop (void);
 
+//{'-'}     Doop end of level references
+//int endxp;
+//int endyp;
+
 /*
 =============================================================================
 
@@ -1419,6 +1423,20 @@ restartgame:
 #ifdef SPEAR
 startplayloop:
 #endif
+        bool foundEnd = false;                          // {'-'} get the end tile positions
+
+        for (int xp = 0; xp < MAPSIZE; xp++) {
+            for (int yp = 0; yp < MAPSIZE; yp++) {
+                if (tilemap[xp][yp] == ELEVATORTILE) {
+                    endxp = xp;
+                    endyp = yp;
+                    foundEnd = true;
+                    break;
+                }
+            }
+            if (foundEnd)
+                break;
+        }
         PlayLoop ();
 
 #ifdef SPEAR

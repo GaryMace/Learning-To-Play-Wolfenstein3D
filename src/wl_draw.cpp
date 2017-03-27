@@ -70,10 +70,6 @@ void    GetInputs (void);
 void    AddItemToInput (visstat *item, int idx);
 void    CheckDoorState (doorobj_t *door, int idx);
 
-//{'-'}     Doop end of level references
-int endxp;
-int endyp;
-
 //
 // wall optimization variables
 //
@@ -1105,11 +1101,8 @@ void GetInputs (void) {
                 continue;
             }
             int pos = (int) tilemap[xp][yp];
-            if (pos == ELEVATORTILE) {  //end of level tile.
+            if (pos == ELEVATORTILE)   //end of level tile.
                 gameinputs[ELEVATOR][idx] = 1;
-                endxp = xp;
-                endyp = yp;
-            }
 
             //0 if map pos is a wall or out of bounds area
             //1 if player can walk on area
