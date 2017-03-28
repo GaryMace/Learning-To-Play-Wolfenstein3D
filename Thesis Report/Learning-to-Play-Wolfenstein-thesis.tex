@@ -176,12 +176,9 @@ There are a number of implications of Speciation. Firstly, structural innovation
 Speciation is a concept that most TWEANNs do not employ, as indicated in the NEAT paper. Innovative structures in TWEANNs tend to have more connections and as such take far longer to optimise than simpler ones. The result of this is that innovative structures in TWEANNs cannot compete with simpler ones.
 
 \subsection{\label{section2.5}NEAT Genetic Algorithms}
-Genetic Algorithms(GA) are another type of Machine Learning technique. A typical GA will specify some population which will then be modified by the GA until a terminal condition is met. In the case of this project the terminal condition will ultimately be NEATDoop completing a level.
+Genetic Algorithms(GA) are a set of rules that try to describe how simulated evolution might work with an artificial population. The population consists of a set of individuals that are to be subject to these rules of evolution. The individuals are evaluated and their relative success measured according to some \textit{Fitness Function}. Depending on the implementation, a number of individuals are then moved forward to the next generation where the same rules are applied to the new modified population. This process is repeated until a terminal condition is met. In the case of this project the terminal condition will ultimately be NEATDoop completing a level.
 
-\subsubsection{Genetic Algorithms}
-Genetic Algorithms(GA) are a set of rules that try to describe how simulated evolution might work with an artificial population. The population consists of a set of individuals that are to be subject to these rules of evolution. The individuals are evaluated and their relative success measured according to some \textit{Fitness Function}. Depending on the implementation, a number of individuals are then moved forward to the next generation where the same rules are applied to the new modified population. 
-
-The GA used for NEAT is a variation of these rules, but because the population is \textit{speciated}\textbackslash sub-divided the rules are modified slightly.
+The GA used for NEAT is a variation of these standard rules, since the population is \textit{speciated}\textbackslash sub-divided the rules are altered slightly.
 \begin{enumerate}
 \item\textbf{Initialisation:} As was mentioned in Subsection\ref{subsection2.3.1} the population in the NEAT algorithm is Speciated or sub-divided so that clusters of similar Genotypes are created. This is how the population in NEAT is created. Each Genotype starts with a network that is minimally connected, meaning that there is no hidden layer initially; only an Input and Output layer.
 \item\textbf{Evaluation:} This step involves taking each Genotype, feeding it inputs in order to produce some output. The fitness or success of the Genotype is then calculated according to some fitness function which is used as a measure for comparison between Genotypes. 
@@ -190,9 +187,31 @@ NEAT uses \textit{explicit fitness sharing} between the Genotypes of a particula
 \item\textbf{Selection:} Once all the Genotypes in the population have been evaluated, niches\textbackslash species reproduce by first eliminating the lowest performing Genotypes and then the entire population is replaced by the offspring of the remaining Genotypes in each niche\textbackslash species. 
 
 In the implementation for this project, only the best Genotype per species is actually brought forward to the next generation. Since all Genotypes in a species are either equal in performance or worse than the current best performer, removing them creates a higher chance that new ones generated will perform better than the current best.
-\item\textbf{Crossover:} 
+\item\textbf{Crossover:} Producing new offspring for the next generation involves taking two parent Genotypes from the same species and combining aspects of them to produce a child. The parent Genotypes always come from the same species since the phenotypes of each are similar enough for this crossover to work properly. 
+
+If the phenotypes were not similar then too many disjoint and excess Genes would be used in the child causing the genetic history shared to become tainted.
+\item\textbf{Mutation:} In order to introduce genetic diversity within the population mutations are performed on the population. Types of mutations include:
+\begin{itemize}
+\item NEAT Phenotype modifications (Discussed in the next section)
+\item Enabling/disabling existing links in a phenotype
+\item Modifying Genotype mutation rates
+\end{itemize}
+\item\textbf{Repeat process until terminal condition met}
 \end{enumerate}
+
 \subsubsection{NEAT Mutations}
+NEAT specifies two types of phenotype mutations, \textit{Node mutations} and \textit{Link mutations}. Both of these mutations add new connection Genes to a Genotype and each new Gene is assigned a new unique Innovation Number. 
+\begin{figure}[h]
+\centering
+\fboxsep 2mm
+\framebox{
+	\includegraphics[width=14cm]{neat_mut} 
+}
+\caption{\label{fig:NEAT_innovation} Showing a comparison of two Genotypes by examining their shared genetic history i.e. their shared Genes}
+\end{figure} 
+\begin{itemize}
+\item\textbf{Link mutation}
+\end{itemize}
 %\\\\\\\textbf{A summary of this chapter will go here.}
 %talk about what was said and how it relates to next chapter
 
