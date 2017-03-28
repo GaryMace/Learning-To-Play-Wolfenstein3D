@@ -132,23 +132,56 @@ Items that can be picked up include things like guns, ammo, health and treasure.
 Identifying static items of interest is rather simple since each static item has a label associated with it. For instance, ammo has a \textit{bo\_clip} label associated with it so it is possible to iterate through the \textit{statobjlist} array and find items that would be considered useful for NEATDoop to pickup. 
 
 \section{NEAT Algorithm}
-NEAT stands for \textit{Neuro-Evolution of Augmenting Topologies} and is based on an paper by Kenneth Stanley and Risto Miikkulainen~\cite{NEAT:2002}. The paper demonstrates the ability for the NEAT algorithm to solve problems in quicker succession than other types of topology evolving algorithms such as \textit{Topology and Weight Evolving Artificial Neural Networks (TWEANN)} algorithms. This algorithm consists of two very important Machine Learning techniques, Neural Networks and Genetic Algorithms.\\\\
+NEAT stands for \textit{Neuro-Evolution of Augmenting Topologies} and is based on an paper by Kenneth Stanley and Risto Miikkulainen~\cite{NEAT:2002}. The paper demonstrates the ability for the NEAT algorithm to solve problems in quicker succession than other types of topology evolving algorithms such as \textit{Topology and Weight Evolving Artificial Neural Networks (TWEANN)} algorithms. The NEAT algorithm consists of two very important Machine Learning techniques, Neural Networks and Genetic Algorithms.\\\\
+
+			
+\subsection{NEAT Neural Networks}
+Neural Networks(NN) are a Machine Learning technique that roughly simulate the behaviour of a brain. They generally consist of artificial Neurons that are connected using artificial Synapses. The synapses in a NN typically have a weight associated with them that describes how strong a connection any two neurons have with each other.
 
 In traditional Neuroevolution techniques, a topology is chosen before any experimentation begins. This topology is normally maximally connected, meaning that every input is connected to every hidden / output unit and every hidden unit is connected to every output unit. The network is then modified by means of mutating the weights on these links using evolutionary techniques such as genetic algorithms. The goal of this type of neuroevolution is therefore to optimise the weight matrix associated with the network.
 
-The weights between Neurons are not the only aspect of a Neural Network that contribute to their behaviour. The structure of a neural network also affects its functionality. The NEAT algorithm is primarily focused on this aspect of neuroevolution. In particular, it extends and tries to improve on some popular techniques utilised by some TWEANNs. The two main ideas it introduces is the \textit{Speciation} of a population and tracking historical origins of every network using \textit{Innovation Numbers} on the networks encoding.
+The weights between Neurons are not the only aspect of a Neural Network that contribute to their behaviour. The structure of a neural network also affects its functionality. The NEAT algorithm is primarily focused on this aspect of neuroevolution. It extends and tries to improve on some popular techniques utilised by some TWEANNs. The two main ideas it introduces are the \textit{Speciation} of a population and using \textit{Innovation Numbers} on network encodings so that the historical origins of each network can be tracked. These concepts try to counter some of the common issues with typical TWEANNs.\\
 
-\subsection{NEAT Encoding}
-Typical neural networks consist of Neurons (nodes) connected using Synapses (links). NEAT describes its networks using a type of direct encoding whereby a particular network is represented using a series of \textit{Genes}. Each Gene indicates two Neurons that are connected, whether or not the link is enabled, a weight and an \textit{innovation number} that is unique to each Gene. This innovation number is used to calculate similarities between networks. 
+\subsubsection{NEAT Encoding}
+Typical neural networks consist of Neurons (nodes) connected using Synapses (links). NEAT describes its networks using a type of direct encoding whereby each network is represented using a series of \textit{Genes}. Each Gene indicates two Neurons that are connected, whether or not the link is enabled, a weight and an \textit{innovation number} that is unique to each Gene. This innovation number is used to calculate similarities between networks. 
 
-\subsection{NEAT Speciation}
+\begin{figure}[h]
+\centering
+\fboxsep 2mm
+\framebox{
+	\includegraphics[width=16cm]{encoding} 
+}
+\caption{\label{fig:NEAT_encoding} Genotype to Phenotype example mapping, where a Gene represents links between Neurons in the Network.}
+\end{figure} 
+The above diagram is taken directly from the NEAT paper and indicates what a typical genotype to phenotype mapping might look like. Notice that the innovation numbers associated with each Gene in this network are not increasing uniformly. This is an example where Genes would have have been added to another network before the last Gene in this Genome's genotype was added.
 
+\subsubsection{NEAT Speciation}
+Many problems arise when experimenting with networks that involve modifying the structure of the network as well as the weights on links in order to produce better offspring. One such problem is that, in many cases, modifying a network causes an initial decrease in genotype fitness. As a result, the topological innovation is very unlikely to make it through to the next generation where it has the potential to be optimised. 
 
-\section{NEAT Neural Networks}
-Neural Networks(NN) are a Machine Learning technique that roughly simulate the behaviour of a brain. They generally consist of artificial Neurons that are connected using artificial Synapses. The synapses in a NN typically have a weight associated with them that describes how strong a connection any two neurons have with each other.
+In order to counter the above problem the NEAT algorithm uses speciation on its population. This is done by grouping Genotypes by their Phenotypes if they share similar enough genetic history. 
 
-\section{\label{section2.5}NEAT Genetic Algorithms}
-Genetic Algorithms(GA) are another type of Machine Learning technique. A typical GA will specify some population which will then be modified by the GA until a terminal condition is met. In the case of this project the terminal condition will ultimately be Doop completing a level.\\\\\\\textbf{A summary of this chapter will go here.}
+\begin{figure}[h]
+\centering
+\fboxsep 2mm
+\framebox{
+	\includegraphics[width=14cm]{neat_innovation} 
+}
+\caption{\label{fig:NEAT_innovation} Showing a comparison of two Genotypes by examining their shared genetic history i.e. their shared Genes}
+\end{figure} 
+
+Figure 2.2 shows an example as to how comparing genetic history might work. The Genes that appear in both individuals are lined up. These Genes are referred to as \textit{Matching Genes}. Any Genes that do not match are considered to either be \textit{Disjoint} or \textit{Excess} depending on whether the mismatch appears in the middle of the comparison or at the end. This method for computing Genotype similarities will be useful later when NEAT genetic algorithms are introduced the next section.
+
+There are a number of implications of Speciation. Firstly, structural innovations have a better chance of making it through to the next generation where they can be further optimised. Secondly, it reduces the chances of a single Genome from dominating the entire population. 
+
+Speciation is a concept that most TWEANNs do not employ, as indicated in the NEAT paper. Innovative structures in TWEANNs tend to have more connections and as such take far longer to optimise than simpler ones. The result of this is that innovative structures in TWEANNs cannot compete with simpler ones.
+
+\subsection{\label{section2.5}NEAT Genetic Algorithms}
+Genetic Algorithms(GA) are another type of Machine Learning technique. A typical GA will specify some population which will then be modified by the GA until a terminal condition is met. In the case of this project the terminal condition will ultimately be NEATDoop completing a level.
+
+\subsection{Genetic Algorithms}
+Genetic Algorithms(GA) are a set of rules that try to describe how simulated evolution might work in an artificial population. The population consists of a set of individuals that 
+\subsection{NEAT Mutations}
+%\\\\\\\textbf{A summary of this chapter will go here.}
 %talk about what was said and how it relates to next chapter
 
 
