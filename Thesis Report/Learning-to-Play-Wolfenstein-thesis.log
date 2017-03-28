@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.12.22)  28 MAR 2017 15:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.12.22)  28 MAR 2017 23:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -200,23 +200,34 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 \Hy@SectionHShift=\skip43
 )
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks16
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
 (./Learning-to-Play-Wolfenstein-thesis.aux)
 \openout1 = `Learning-to-Play-Wolfenstein-thesis.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 14.
-LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 15.
+LaTeX Font Info:    ... okay on input line 15.
 
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -258,12 +269,12 @@ LaTeX Font Info:    ... okay on input line 14.
 \scratchbox=\box26
 \nofMPsegments=\count103
 \nofMParguments=\count104
-\everyMPshowfont=\toks16
+\everyMPshowfont=\toks17
 \MPscratchCnt=\count105
 \MPscratchDim=\dimen118
 \MPnumerator=\count106
 \makeMPintoPDFobject=\count107
-\everyMPtoPDFconversion=\toks17
+\everyMPtoPDFconversion=\toks18
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
@@ -280,7 +291,7 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 \AtBeginShipoutBox=\box27
-Package hyperref Info: Link coloring OFF on input line 14.
+Package hyperref Info: Link coloring OFF on input line 15.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -290,9 +301,9 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count108
 )
-LaTeX Info: Redefining \ref on input line 14.
-LaTeX Info: Redefining \pageref on input line 14.
-LaTeX Info: Redefining \nameref on input line 14.
+LaTeX Info: Redefining \ref on input line 15.
+LaTeX Info: Redefining \pageref on input line 15.
+LaTeX Info: Redefining \nameref on input line 15.
 
 (./Learning-to-Play-Wolfenstein-thesis.out)
 (./Learning-to-Play-Wolfenstein-thesis.out)
@@ -300,60 +311,63 @@ LaTeX Info: Redefining \nameref on input line 14.
 \openout3 = `Learning-to-Play-Wolfenstein-thesis.out'.
 
 
-<UCD_Logo.pdf, id=136, 196.735pt x 286.06876pt>
+<UCD_Logo.pdf, id=140, 196.735pt x 286.06876pt>
 File: UCD_Logo.pdf Graphic file (type pdf)
  <use UCD_Logo.pdf>
-Package pdftex.def Info: UCD_Logo.pdf used on input line 17.
+Package pdftex.def Info: UCD_Logo.pdf used on input line 18.
 (pdftex.def)             Requested size: 117.40549pt x 170.71652pt.
  [0
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./UCD_Logo.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 22--24
+Underfull \hbox (badness 10000) in paragraph at lines 23--25
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 22--24
+Underfull \hbox (badness 10000) in paragraph at lines 23--25
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 25--26
+Underfull \hbox (badness 10000) in paragraph at lines 26--27
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 27--28
+Underfull \hbox (badness 10000) in paragraph at lines 28--29
 
  []
 
-LaTeX Font Info:    Try loading font information for OMS+cmss on input line 31.
+LaTeX Font Info:    Try loading font information for OMS+cmss on input line 32.
 
-LaTeX Font Info:    No file OMScmss.fd. on input line 31.
+LaTeX Font Info:    No file OMScmss.fd. on input line 32.
 
 LaTeX Font Warning: Font shape `OMS/cmss/m/n' undefined
 (Font)              using `OMS/cmsy/m/n' instead
-(Font)              for symbol `textbullet' on input line 31.
+(Font)              for symbol `textbullet' on input line 32.
 
 [1
 
 ] [2]
 
 LaTeX Font Warning: Font shape `OT1/cmss/m/it' in size <12> not available
-(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 59.
+(Font)              Font shape `OT1/cmss/m/sl' tried instead on input line 60.
 
 [3
 
 ] [4
 
 ] (./Learning-to-Play-Wolfenstein-thesis.toc
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 1.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 1.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 1.
- [5
+LaTeX Font Info:    Try loading font information for U+msa on input line 1.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 1.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) [5
 
 ])
 \tf@toc=\write4
@@ -391,109 +405,131 @@ Missing character: There is no € in font cmssi12!
 Missing character: There is no ™ in font cmssi12!
 [8
 
-] [9]
-Underfull \hbox (badness 10000) in paragraph at lines 135--136
+] [9] [10]
+Underfull \hbox (badness 10000) in paragraph at lines 136--137
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 135--136
+Underfull \hbox (badness 10000) in paragraph at lines 136--137
 
  []
 
-[10]
-Underfull \hbox (badness 10000) in paragraph at lines 143--144
+<sigmoid.png, id=256, 469.755pt x 301.125pt>
+File: sigmoid.png Graphic file (type png)
+ <use sigmoid.png>
+Package pdftex.def Info: sigmoid.png used on input line 151.
+(pdftex.def)             Requested size: 170.71652pt x 109.43414pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 154--155
 
  []
 
-<encoding.png, id=253, 2244.385pt x 1084.05pt>
+[11 <./sigmoid.png>] <encoding.png, id=271, 2244.385pt x 1084.05pt>
 File: encoding.png Graphic file (type png)
- <use encoding.png>
-Package pdftex.def Info: encoding.png used on input line 153.
-(pdftex.def)             Requested size: 455.24408pt x 219.88283pt.
 
-Overfull \hbox (33.7074pt too wide) in paragraph at lines 153--154
- [][] 
- []
-
-[11 <./encoding.png>] <neat_innovation.png, id=261, 2113.8975pt x 1184.425pt>
+<use encoding.png>
+Package pdftex.def Info: encoding.png used on input line 164.
+(pdftex.def)             Requested size: 398.33858pt x 192.39127pt.
+ <neat_innovation.png, id=272, 2113.8975pt x 1184.425pt>
 File: neat_innovation.png Graphic file (type png)
 
 <use neat_innovation.png>
-Package pdftex.def Info: neat_innovation.png used on input line 168.
-(pdftex.def)             Requested size: 398.33858pt x 223.18158pt.
- [12 <./neat_innovation.png>]
-<neat_mut.PNG, id=271, 589.8286pt x 380.17032pt>
-File: neat_mut.PNG Graphic file (type png)
- <use neat_mut.PNG>
-Package pdftex.def Info: neat_mut.PNG used on input line 209.
-(pdftex.def)             Requested size: 398.33858pt x 256.74892pt.
+Package pdftex.def Info: neat_innovation.png used on input line 179.
+(pdftex.def)             Requested size: 341.43306pt x 191.30109pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[13] [14 <./neat_mut.PNG>]
+[12 <./encoding.png>] [13 <./neat_innovation.png>]
+<neat_mut.PNG, id=292, 589.8286pt x 380.17032pt>
+File: neat_mut.PNG Graphic file (type png)
+ <use neat_mut.PNG>
+Package pdftex.def Info: neat_mut.PNG used on input line 220.
+(pdftex.def)             Requested size: 398.33858pt x 256.74892pt.
+ [14 <./neat_mut.PNG>]
+
+LaTeX Warning: Command \textgreater invalid in math mode on input line 229.
+
+LaTeX Font Info:    Try loading font information for OML+cmss on input line 229
+.
+LaTeX Font Info:    No file OMLcmss.fd. on input line 229.
+
+LaTeX Font Warning: Font shape `OML/cmss/m/n' undefined
+(Font)              using `OML/cmm/m/it' instead
+(Font)              for symbol `textgreater' on input line 229.
+
+
+LaTeX Warning: Command \textgreater invalid in math mode on input line 229.
+
+
+LaTeX Warning: Command \textgreater invalid in math mode on input line 230.
+
+
+LaTeX Warning: Command \textgreater invalid in math mode on input line 230.
+
+[15]
 Chapter 3.
 
-Underfull \hbox (badness 10000) in paragraph at lines 231--232
+Underfull \hbox (badness 10000) in paragraph at lines 251--252
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 231--232
-
- []
-
-[15
-
-]
-Chapter 4.
-
-Underfull \hbox (badness 10000) in paragraph at lines 246--248
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 246--248
+Underfull \hbox (badness 10000) in paragraph at lines 251--252
 
  []
 
 [16
 
 ]
-Chapter 5.
+Chapter 4.
+
+Underfull \hbox (badness 10000) in paragraph at lines 266--268
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 266--268
+
+ []
+
 [17
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 265--266
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 265--266
-
- []
-
-[18]
-Chapter 6.
-[19
+Chapter 5.
+[18
 
 ]
-Chapter 7.
+Underfull \hbox (badness 10000) in paragraph at lines 285--286
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 285--286
+
+ []
+
+[19]
+Chapter 6.
 [20
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 296.
- [21
+Chapter 7.
+[21
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 296.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 316.
+ [22
+
+]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 316.
  (./Learning-to-Play-Wolfenstein-thesis.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 296.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 296.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 316.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 316.
 Package rerunfilecheck Info: File `Learning-to-Play-Wolfenstein-thesis.out' has
  not changed.
-(rerunfilecheck)             Checksum: B18A741422328F91ADA4544F60FDDB5F;2262.
+(rerunfilecheck)             Checksum: 4C86157C61492FBA12FEDACCE8168648;2342.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -501,27 +537,33 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 296.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 316.
  ) 
 Here is how much of TeX's memory you used:
- 5690 strings out of 493029
- 84555 string characters out of 6136233
- 177348 words of memory out of 5000000
- 9109 multiletter control sequences out of 15000+600000
- 10941 words of font info for 38 fonts, out of 8000000 for 9000
+ 6000 strings out of 493029
+ 88011 string characters out of 6136233
+ 177027 words of memory out of 5000000
+ 9395 multiletter control sequences out of 15000+600000
+ 12850 words of font info for 47 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 31i,7n,33p,1129b,364s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss17.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmssi12.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on Learning-to-Play-Wolfenstein-thesis.pdf (22 pages, 432711 byt
+ 31i,7n,33p,1129b,410s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmss12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmss17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmssbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mssi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10
+.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb>
+Output written on Learning-to-Play-Wolfenstein-thesis.pdf (23 pages, 504754 byt
 es).
 PDF statistics:
- 372 PDF objects out of 1000 (max. 8388607)
- 328 compressed objects within 4 object streams
- 74 named destinations out of 1000 (max. 500000)
- 285 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 410 PDF objects out of 1000 (max. 8388607)
+ 357 compressed objects within 4 object streams
+ 76 named destinations out of 1000 (max. 500000)
+ 298 words of extra memory for PDF output out of 10000 (max. 10000000)
 

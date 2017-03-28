@@ -5,31 +5,31 @@
 \contentsline {subsection}{\numberline {2.2.1}Wolfenstein's Gameplay}{9}{subsection.2.2.1}
 \contentsline {subsection}{\numberline {2.2.2}Map Representation}{9}{subsection.2.2.2}
 \contentsline {subsection}{\numberline {2.2.3}Enemy/Item Representation}{10}{subsection.2.2.3}
-\contentsline {section}{\numberline {2.3}NEAT Algorithm}{10}{section.2.3}
-\contentsline {subsection}{\numberline {2.3.1}NEAT Neural Networks}{10}{subsection.2.3.1}
-\contentsline {subsubsection}{NEAT Encoding}{11}{section*.5}
+\contentsline {section}{\numberline {2.3}NEAT Algorithm}{11}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}NEAT Neural Networks}{11}{subsection.2.3.1}
+\contentsline {subsubsection}{NEAT Encoding}{12}{section*.5}
 \contentsline {subsubsection}{NEAT Speciation}{12}{section*.6}
-\contentsline {subsection}{\numberline {2.3.2}NEAT Genetic Algorithms}{12}{subsection.2.3.2}
-\contentsline {subsubsection}{NEAT Mutations}{13}{section*.7}
-\contentsline {chapter}{\numberline {3}Project Approach}{15}{chapter.3}
-\contentsline {section}{\numberline {3.1}Selecting the Source Port}{15}{section.3.1}
-\contentsline {section}{\numberline {3.2}Understanding the Source Code}{15}{section.3.2}
-\contentsline {section}{\numberline {3.3}Reading other NEAT Implementations}{15}{section.3.3}
-\contentsline {chapter}{\numberline {4}Design Aspects}{16}{chapter.4}
-\contentsline {section}{\numberline {4.1}Why NEAT?}{16}{section.4.1}
-\contentsline {section}{\numberline {4.2}Understanding the NEATDoop Neural Network}{16}{section.4.2}
-\contentsline {section}{\numberline {4.3}Wolfenstein \& NEAT Interaction}{16}{section.4.3}
-\contentsline {chapter}{\numberline {5}Detailed Design and Implementation}{17}{chapter.5}
-\contentsline {section}{\numberline {5.1}Giving NEATDoop Game Vision}{17}{section.5.1}
-\contentsline {section}{\numberline {5.2}Playing Wolfenstein with NEATDoop}{17}{section.5.2}
-\contentsline {section}{\numberline {5.3}Aiding NEATDoop's Learning}{17}{section.5.3}
-\contentsline {section}{\numberline {5.4}Attempt Termination}{18}{section.5.4}
-\contentsline {section}{\numberline {5.5}Saving NEATDoop Attempts}{18}{section.5.5}
-\contentsline {chapter}{\numberline {6}Testing/Evaluation}{19}{chapter.6}
-\contentsline {section}{\numberline {6.1}Validating NEAT Basic Functionality}{19}{section.6.1}
-\contentsline {section}{\numberline {6.2}Analysing the Fitness Function}{19}{section.6.2}
-\contentsline {section}{\numberline {6.3}The Evolution of NEATDoop}{19}{section.6.3}
-\contentsline {section}{\numberline {6.4}Evaluating NEATDoop}{19}{section.6.4}
-\contentsline {chapter}{\numberline {7}Conclusions and Future Work}{20}{chapter.7}
-\contentsline {section}{\numberline {7.1}NEATDoop's Ability to Learn}{20}{section.7.1}
-\contentsline {section}{\numberline {7.2}Extending NEATDoop}{20}{section.7.2}
+\contentsline {subsection}{\numberline {2.3.2}NEAT Genetic Algorithms}{13}{subsection.2.3.2}
+\contentsline {subsection}{\numberline {2.3.3}NEAT Topological Mutations}{14}{subsection.2.3.3}
+\contentsline {chapter}{\numberline {3}Project Approach}{16}{chapter.3}
+\contentsline {section}{\numberline {3.1}Selecting the Source Port}{16}{section.3.1}
+\contentsline {section}{\numberline {3.2}Understanding the Source Code}{16}{section.3.2}
+\contentsline {section}{\numberline {3.3}Reading other NEAT Implementations}{16}{section.3.3}
+\contentsline {chapter}{\numberline {4}Design Aspects}{17}{chapter.4}
+\contentsline {section}{\numberline {4.1}Why NEAT?}{17}{section.4.1}
+\contentsline {section}{\numberline {4.2}Understanding the NEATDoop Neural Network}{17}{section.4.2}
+\contentsline {section}{\numberline {4.3}Wolfenstein \& NEAT Interaction}{17}{section.4.3}
+\contentsline {chapter}{\numberline {5}Detailed Design and Implementation}{18}{chapter.5}
+\contentsline {section}{\numberline {5.1}Giving NEATDoop Game Vision}{18}{section.5.1}
+\contentsline {section}{\numberline {5.2}Playing Wolfenstein with NEATDoop}{18}{section.5.2}
+\contentsline {section}{\numberline {5.3}Aiding NEATDoop's Learning}{18}{section.5.3}
+\contentsline {section}{\numberline {5.4}Attempt Termination}{19}{section.5.4}
+\contentsline {section}{\numberline {5.5}Saving NEATDoop Attempts}{19}{section.5.5}
+\contentsline {chapter}{\numberline {6}Testing/Evaluation}{20}{chapter.6}
+\contentsline {section}{\numberline {6.1}Validating NEAT Basic Functionality}{20}{section.6.1}
+\contentsline {section}{\numberline {6.2}Analysing the Fitness Function}{20}{section.6.2}
+\contentsline {section}{\numberline {6.3}The Evolution of NEATDoop}{20}{section.6.3}
+\contentsline {section}{\numberline {6.4}Evaluating NEATDoop}{20}{section.6.4}
+\contentsline {chapter}{\numberline {7}Conclusions and Future Work}{21}{chapter.7}
+\contentsline {section}{\numberline {7.1}NEATDoop's Ability to Learn}{21}{section.7.1}
+\contentsline {section}{\numberline {7.2}Extending NEATDoop}{21}{section.7.2}
