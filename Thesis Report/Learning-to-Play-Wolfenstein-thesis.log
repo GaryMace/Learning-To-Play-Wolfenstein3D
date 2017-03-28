@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.12.22)  28 MAR 2017 23:15
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.12.22)  28 MAR 2017 23:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -415,7 +415,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 136--137
 
  []
 
-<sigmoid.png, id=256, 469.755pt x 301.125pt>
+<sigmoid.png, id=257, 469.755pt x 301.125pt>
 File: sigmoid.png Graphic file (type png)
  <use sigmoid.png>
 Package pdftex.def Info: sigmoid.png used on input line 151.
@@ -425,13 +425,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 154--155
 
  []
 
-[11 <./sigmoid.png>] <encoding.png, id=271, 2244.385pt x 1084.05pt>
+[11 <./sigmoid.png>] <encoding.png, id=273, 2244.385pt x 1084.05pt>
 File: encoding.png Graphic file (type png)
 
 <use encoding.png>
 Package pdftex.def Info: encoding.png used on input line 164.
 (pdftex.def)             Requested size: 398.33858pt x 192.39127pt.
- <neat_innovation.png, id=272, 2113.8975pt x 1184.425pt>
+ <neat_innovation.png, id=275, 2113.8975pt x 1184.425pt>
 File: neat_innovation.png Graphic file (type png)
 
 <use neat_innovation.png>
@@ -442,7 +442,7 @@ Package pdftex.def Info: neat_innovation.png used on input line 179.
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [12 <./encoding.png>] [13 <./neat_innovation.png>]
-<neat_mut.PNG, id=292, 589.8286pt x 380.17032pt>
+<neat_mut.PNG, id=301, 589.8286pt x 380.17032pt>
 File: neat_mut.PNG Graphic file (type png)
  <use neat_mut.PNG>
 Package pdftex.def Info: neat_mut.PNG used on input line 220.
@@ -471,12 +471,12 @@ LaTeX Warning: Command \textgreater invalid in math mode on input line 230.
 [15]
 Chapter 3.
 
-Underfull \hbox (badness 10000) in paragraph at lines 251--252
+Underfull \hbox (badness 10000) in paragraph at lines 250--251
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 251--252
+Underfull \hbox (badness 10000) in paragraph at lines 250--251
 
  []
 
@@ -485,12 +485,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 251--252
 ]
 Chapter 4.
 
-Underfull \hbox (badness 10000) in paragraph at lines 266--268
+Underfull \hbox (badness 10000) in paragraph at lines 265--267
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 266--268
+Underfull \hbox (badness 10000) in paragraph at lines 265--267
 
  []
 
@@ -501,12 +501,12 @@ Chapter 5.
 [18
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 285--286
+Underfull \hbox (badness 10000) in paragraph at lines 284--285
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 285--286
+Underfull \hbox (badness 10000) in paragraph at lines 284--285
 
  []
 
@@ -519,14 +519,14 @@ Chapter 7.
 [21
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 316.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 320.
  [22
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 316.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 320.
  (./Learning-to-Play-Wolfenstein-thesis.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 316.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 316.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 320.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 320.
 Package rerunfilecheck Info: File `Learning-to-Play-Wolfenstein-thesis.out' has
  not changed.
 (rerunfilecheck)             Checksum: 4C86157C61492FBA12FEDACCE8168648;2342.
@@ -534,16 +534,13 @@ Package rerunfilecheck Info: File `Learning-to-Play-Wolfenstein-thesis.out' has
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 316.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 320.
  ) 
 Here is how much of TeX's memory you used:
- 6000 strings out of 493029
- 88011 string characters out of 6136233
- 177027 words of memory out of 5000000
- 9395 multiletter control sequences out of 15000+600000
+ 6010 strings out of 493029
+ 88174 string characters out of 6136233
+ 177201 words of memory out of 5000000
+ 9400 multiletter control sequences out of 15000+600000
  12850 words of font info for 47 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  31i,7n,33p,1129b,410s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -559,11 +556,11 @@ fonts/cm/cmss17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
 cm/cmssbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
 mssi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10
 .pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb>
-Output written on Learning-to-Play-Wolfenstein-thesis.pdf (23 pages, 504754 byt
+Output written on Learning-to-Play-Wolfenstein-thesis.pdf (23 pages, 504900 byt
 es).
 PDF statistics:
- 410 PDF objects out of 1000 (max. 8388607)
- 357 compressed objects within 4 object streams
- 76 named destinations out of 1000 (max. 500000)
+ 421 PDF objects out of 1000 (max. 8388607)
+ 368 compressed objects within 4 object streams
+ 81 named destinations out of 1000 (max. 500000)
  298 words of extra memory for PDF output out of 10000 (max. 10000000)
 
