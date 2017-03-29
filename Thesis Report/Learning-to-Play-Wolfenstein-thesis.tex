@@ -268,8 +268,24 @@ At this point it was understood that instead of polling the keyboard for control
 \item\textbf{wl\_act1.cpp:} Similar to the above source file but handles door\textbackslash push wall interactions. When the player opens a door\textbackslash push wall, functions in this source file are called. The length of time which the door will stay open for is handled by a \textit{tic} variable here.
 \end{itemize}
 \section{Reading other NEAT Implementations}
-This project was inspired by a video that was published on YouTube about a year and a half ago. In it, the author described how he had designed and implemented an AI capable of playing and completing the first level of Mario. The source that he wrote in order to accomplish this is open-source and served as an initial reference to understand the way in which the NEAT algorithm should be implemented. \\\\\\\textbf{A summary of this chapter will go here.}
+This project was inspired by a video that was published on YouTube about a year and a half ago. In it, the author described how he had designed and implemented an AI capable of playing and completing the first level of Mario. The source that he wrote in order to accomplish this is open-source and served as an initial reference to understand the way in which the NEAT algorithm should be implemented. 
 
+\subsection{MarIO}
+\textit{MarIO} is the AI that was created by author \textit{SethBling}\textbackslash \textit{Seth} as a result of him implementing the NEAT algorithm to play Mario. He wrote the NEAT algorithm in Lua as a plug-in for an emulator called \textit{BizHawk}. The implementation of the NEAT algorithm that he wrote does not strictly follow some of the rules of NEAT, but it is sufficient enough to closely follow its guidelines and produce similar results. 
+
+The implementation that was used in this project was identical to the one used here. The Lua script that was written for \textit{MarIO} was translated to C++ to be used for Wolfenstein. The main differences between the implementations being that the one used for NEATDoop is object-oriented and not a script.
+
+This was not a straight forward process. Since the version of C++ used for this project is outdated many data structures and built in functions could not be used and alternatives needed to be used. Simple things such as trying to convert a \textit{double} value to a \textit{std::string} value are not trivial in C++98. In C++11, this is an easy task. The function \textit{std::to\_string(doubleVal)} will do this converting, however this is not available in C++98.
+
+Other problems occurred when trying to implement the list of Genes that every Genotype has. In MarIO, this is a simple array of Genes. In the NEATDoop implementation, these, and other types of lists within the NEAT implementation, were represented initially as \textit{std::vectors}. It was found that this data structure would behave strangely at times and crash the game for no apparent reason so all vector usages were change to \textit{std::list} implementations. While this corrected the issue, the cost of this meant slower access time to data within the list since this data-structure is implemented as a doubly-linked list in C++ and not an array like vectors. 
+
+\subsection{NEATFlappyBird}
+\textit{NEATFlappyBird} is another implementation of NEAT that was explored in order to understand how the algorithm works. This version of NEAT was not actually used for NEATDoop's implementation directly, but the design principles for the objects were referred to since this version of NEAT was written in \textit{Java}. It was created by a French student named Alex and was found on his \textit{GitHub} from a simple search.
+
+
+%\\\\\\\textbf{A summary of this chapter will go here.}
+
+This Chapter focused heavily on the actual approach that was taken having finished in-depth background research on the NEAT algorithm and the Wolfenstein game. It includes a discussion on why the \textit{WOLF4SDL} source port was used for this project, gives a brief description on the core source files in the Wolfenstein source port and finally discusses what existing implementations of the NEAT algorithm were referenced in order to design and implement the NEAT algorithm for the \textit{Learning to Play Wolfenstein} project.
 %talk about what was said and how it relates to next chapter REFERENCE^^^
 
 \chapter{Design Aspects}% talk about what was seen in prev chapter at start
