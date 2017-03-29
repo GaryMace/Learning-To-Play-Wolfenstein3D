@@ -294,6 +294,16 @@ Chapter 3 focused on some of the tasks that were completed early on in the proje
 \section{Why NEAT?}
 As introduced in Section~\ref{section2.5} the population for this project consists of a host of attempts at playing the game. Evaluating all of these attempts is very time and resource consuming. As such it is vital that each attempt at playing Wolfenstein is well formed. This very requirement immediately rules out TWEANN algorithms because in order to ensure diversity in the population it often randomises the topologies of the each network or attempt in the beginning. This introduces problems where it is required to search through the population and remove poorly performing members. This is very time consuming and as it turns out, avoidable.
 
+\subsection{The Problem with TWEANNs}
+Whilst TWEANN solutions are in affect, very similar to the NEAT solution, they have trouble with efficiently introducing genetic diversity to their population and with protecting structural innovations that are introduced as a result of mutations. Since TWEANN solutions generally create individuals with random topologies when setting up the initial population a lot of unnecessary computational time is spent trying to find Genotypes whose structural innovations are worth the trade-off of extra computational evaluation time. 
+
+It may be the case that two Genotypes have the functionality but one has a topology that is inherently more complex than the other; In which case, the TWEANN solution would have just wasted computational time for no valid reason. NEAT avoids this by starting every Genotype with the simplest topology possible, keeping structural innovations only when they provide an improvement and as a result saving otherwise wasted computational resources.
+
+Some TWEANNs attempt to protect structural innovations by adding non-functional structure to the network in the hope that the new innovation will be used at some point in the future.~\cite{GNARL} Unfortunately, in the event that no useful connections are incorporated with the new innovation it results in extra parameters being added to the search space, further reducing the performance of the Genotype.
+
+\subsection{The Effectiveness of NEAT}
+
+
 \section{Understanding the NEATDoop Neural Network}
 The previous section details why it is important for each attempt at playing Wolfenstein be optimal. This section focuses on understanding the implications of creating a minimally connected neural network for each attempt and how they grow over time. Here, it is important to note that the way the network is built and manipulated is directly affected by the fitness function used for evaluating the success of each attempt at playing Wolfenstein.
 % describe the input connections and links and how the network builds specific to the game.
@@ -358,6 +368,7 @@ The way in which NEATDoop learns heavily depends on the fitness function used to
 \bibitem{NEAT:speciation} Kenneth Stanley \& Risto Miikkulainen, \emph{'NeuroEvolution of Augmenting Topologies'}, Evolutionary Computation, vol. 10, no. 2, 2002 , p. 109.
 \bibitem{NEAT:fitshare} Kenneth Stanley \& Risto Miikkulainen, \emph{'NeuroEvolution of Augmenting Topologies'}, Evolutionary Computation, vol. 10, no. 2, 2002 , p. 110.
 \bibitem{NEAT:topmut} Kenneth Stanley \& Risto Miikkulainen, \emph{'NeuroEvolution of Augmenting Topologies'}, Evolutionary Computation, vol. 10, no. 2, 2002 , p. 107.
+\bibitem{GNARL} Gregory M. Saunders, Peter J. Angeline \& Jordan B. Pollack, \emph{'Structural and Behavioural Evolution of Recurrent Networks'}, 1994, 8 pp. 
 \end{thebibliography}
 \label{endpage}
 
