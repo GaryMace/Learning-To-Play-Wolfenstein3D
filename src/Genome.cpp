@@ -182,6 +182,9 @@ void Genome::generateNetwork() {
                 Neuron n2;
                 network.insert(std::make_pair(geneItr->input, n2));
             }
+
+            if (geneItr->input < TOTAL_INPUTS)
+                inputsused++;
         }
     }
 }

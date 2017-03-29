@@ -43,19 +43,15 @@ void NEATDoop::setGenomeFitness() {
     int kills = gamestate.killcount;
 
     genome->fitness = (MAX_DISTANCE - distFromEnd) * 10;
-    if (distFromSpawn != 0) {
-       genome->fitness += distFromSpawn * distFromSpawn * TRAVEL_REWARD;
-    }
-    
-    if (kills > 0) 
-        genome->fitness += kills * KILL_REWARD;
-    if (accuracy > 0)
-        genome->fitness += accuracy * ACCURACY_REWARD;
-    if (pickups > 0)
-        genome->fitness += pickups * ITEM_PICKUP_REWARD;
+    genome->fitness += distFromSpawn * distFromSpawn * TRAVEL_REWARD;
+    genome->fitness += pickups * ITEM_PICKUP_REWARD;
+    genome->fitness += accuracy * ACCURACY_REWARD;
+    genome->fitness += kills * KILL_REWARD;
+    genome->fitness += inputsused;
+
     if (leveldone)
         genome->fitness += LVL_DONE_REWARD;
-    
+
     if (genome->fitness == 0)
         genome->fitness = -1;
 

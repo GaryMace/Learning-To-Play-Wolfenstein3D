@@ -969,6 +969,7 @@ extern int          spawnyp;                                //Spawn y position i
 extern int          prevxp;                                 //AI previous x position last frame
 extern int          prevyp;                                 //AI previous y position last frame
 
+extern int          inputsused;
 extern double       accuracy;
 extern int          shotstaken;
 extern int          shotsontarget;
@@ -1213,16 +1214,18 @@ extern  unsigned screenloc[3];
 
 extern  boolean fizzlein, fpscounter;
 
-extern  fixed   viewx,viewy;                    // the focal point
+extern  fixed   viewx,viewy;                            // the focal point
 extern  fixed   viewsin,viewcos;
 
 void    ThreeDRefresh (void);
 void    CalcTics (void);
 
-// {'-'} These are Doop defined functions for this source file
+// {'-'} These are NEATDoop defined functions for this source file
 void    GetInputs (void);
-void    AddItemToInput (visstat *item, int idx);    //       Doop definition methods
+void    CheckWallType (int xp, int yp, int idx);
+void    AddItemToInput (visstat *item, int idx);        // NEATDoop definition methods
 void    CheckDoorState(doorobj_t *door, int idx);
+
 typedef struct
 {
     word leftpix,rightpix;

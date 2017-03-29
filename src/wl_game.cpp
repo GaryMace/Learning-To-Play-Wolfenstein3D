@@ -1580,18 +1580,24 @@ startplayloop:
                     doopAI.nextGenome();
                 }
 
-                killattempt = false;                        //reset the variables for the next run of the game
-                circletimeoutset = false;
-                timeouttics = 0;
-                doopAI.timeout = 150;
+                circletimeoutset = false;                   //reset bool indicating AI is running in circles
                 doopAI.initRun = true;                      //allows the network for the next run to be built
+                doopAI.timeout = 150;                       //reset timeout of AI
+                killattempt = false;                        //reset the variables for the next run of the game
+                timeouttics = 0;                            //reset circle timout (if the AI died because it ran in circles too long)
 
-                doorsopened = 0;            //reset scoring mechanics
+                //reset scoring mechanics
                 prevnumdoorsopened = 0;
-                pickups = 0;
                 prevnumpickups = 0;
                 prevkillcount = 0;
-                //memset(uniquedoors, 0, sizeof(uniquedoors));
+                shotsontarget = 0;
+                doorsopened = 0;
+                shotstaken = 0;
+                inputsused = 0;                             //reset inputs used from network
+                accuracy = 0;
+                pickups = 0;
+
+                memset(uniquedoors, 0, sizeof(uniquedoors));
                 //{'-'} end of Doop things
                 died = true;                    // don't "get psyched!"
 

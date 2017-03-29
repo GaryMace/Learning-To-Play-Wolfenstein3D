@@ -241,11 +241,32 @@ The previous chapter introduced the game that was used for this project and outl
 \section{Selecting the Source Port}
 Wolfenstein 3-D was originally written in a combination of the C and Assembly languages. Very early on in this project it was desired to find another adaption of the Wolfenstein source so that integrating the NEAT algorithm into the source code would not involve writing in either of these languages. This was primarily because the NEAT algorithm is much easier to understand if it is implemented in an Object-Oriented language such as C++. As such, a source port implemented in C++ was sought after. 
 
+Initially the original source port was used. This involved using a compiler known as \textit{Borland C++ v3.1}, which is an old, outdated piece of software, in order to compile to source code. The \textit{Borland} compiler is a 16-bit compiler requiring it to be used within \textit{DosBox}, since it is not possible to run the compiler natively on a 64-bit machine. It was decided eventually that this means of compiling and executing the source code was not ideal and so alternatives were considered.
+
+Since it was desired that a C++ implementation of the source port be used, \textit{WOLF4SDL} was a promising candidate. This particular source port is essentially the same as the original source port but it is commented more generously and allows the possibility for an object oriented language. Compiling the source code was still not ideal with this source port, as it requires the use of an old version of C++, but it at least can run natively in a 64-bit Windows environment.  
 \section{\label{section3.2}Understanding the Source Code}
 Once the \textit{WOLF4SDL} source port was selected for this project the core source files needed to be identified. This was a troublesome task. No verbose documentation for the source code exists online and even though the \textit{WOLF4SDL} source port is essentially identical to the original source, only that it is written in C++, no in-depth documentation exists even for the original source. 
 
-Understanding the source code involved reading through it and making sense of it that way.
+Understanding the source code involved reading through certain source files that were considered relevant. \textit{wl\_main} was first explored. It seemed a natural starting point since it contains the main game loop for the game and was assumed that any other immediately important source files would be referenced from here. In order to quickly visualise the source files that were directly referenced by \textit{wl\_main} a program known as \textit{Doxygen} was used to model dependencies between the C++ source files of Wolfenstein.  
 
+Sure enough, this was predominately how the rest of the important source files were found. Below, a list is provided describing some of these source files. These source files are considered important because they either contain necessary information for NEATDoop to utilise or because they tie directly in with the life-cycle of the game and were modified so that NEATDoop could take the place of a human player. 
+\begin{itemize}
+\item\textbf{wl\_def.h:} This is a sort of \textit{god source file}. ID (Wolfenstein's authors) designed this source file to contain function, variable and macro definitions for use by all other source files. This source file is where a lot of NEATDoop variables are defined. This makes it easy for both the NEAT source files and the existing Wolfenstein source files to access them (since all relevant Wolfenstein source files include wl\_def).
+\item\textbf{wl\_main.cpp:} This source file contains the main loop for the game. It checks command line arguments that were set for the game, such as \textit{--goobers} which is used to activate debug mode. This command is used to easily switch to different levels in each Stage so that the AI can attempt to play them. This is because the main menu does not allow selecting individual levels within each stage. 
+
+The main use of this source file will be to set up the NEAT population at the start of the main game loop, which will be talked about later in Chapter \ref{Chapter5}.
+\item\textbf{wl\_draw.cpp:} As is pretty obvious from the source files name, this source file draws what is visible on the screen. It scans in an area around the players current location searching for enemies, pickups, walls, doors etc. Once it locates all of the items that the player can see it uses ray-casting in order to display the frame. 
+
+In order to give the \textit{illusion} that the game is 3D it scales sprites for walls, enemies and pickups the further away the object is from the players current location. The functiion \textit{AsmRefresh()} implements this logic.
+
+It was not necessary for this project to exact way in which the code works for this source file. Once it was discovered that the function \textit{DrawScaleds()} finds all visible items in close proximity to the player it was just a matter of incorporating the NEATDoop logic into it.
+\item\textbf{wl\_play.cpp:} While \textit{wl\_main} contains the main game loop, this source file contains a loop that is called repeatedly during the actual playing of a single level within the game. While it does this, it polls the keyboard for inputs every frame, checks the state of the player (is he dead, has he finished the level) and updates the graphical display by making calls to \textit{AsmRefresh()} from \textit{wl\_draw.cpp}.
+
+At this point it was understood that instead of polling the keyboard for controls, it would be possible to set the keyboard buttons (which maintain a true or false value) to the boolean values outputted by the Genotype's Phenotype that was currently playing the game.
+\item\textbf{wl\_game.cpp:} If the state of the player changes during an iteration of the \textit{PlayLoop} in the \textit{wl\_play} source file, the loop exits and returns to this source file. The logic here then switches on the player state to see what logic is to be executed. In the case that the player died, the player state is set to \textit{ex\_died}. The \textit{wl\_game} source file then handles this case, amongst others in a function called \textit{GameLoop()}. This is really all that is necessary to understand in this source file. 
+\item\textbf{wl\_agent.cpp:} When the player picks an item up, such as a new gun or ammo, functions in this source file are called. These functions add the ammo to the player ammo pool etc. 
+\item\textbf{wl\_act1.cpp:} Similar to the above source file. When the player opens a doors functions in this source file are called. The length of time which the door stays open for is handled here in related to a \textit{tic} variable. 
+\end{itemize}
 \section{Reading other NEAT Implementations}
 This project was inspired by a video that was published on YouTube about a year and a half ago. In it, the author described how he had designed and implemented an AI capable of playing and completing the first level of Mario. The source that he wrote in order to accomplish this is open-source and served as an initial reference to understand the way in which the NEAT algorithm should be implemented. \\\\\\\textbf{A summary of this chapter will go here.}
 
@@ -265,12 +286,19 @@ The previous section details why it is important for each attempt at playing Wol
 Now that a comprehensive description of the NEAT algorithm has been given the next step is to understand its interaction with the Wolfenstein gameplay. This will be the focus of this section. \\\\\\\textbf{A summary of this chapter will go here.}
 %talk about what was said and how it relates to next chapter
 
-\chapter{Detailed Design and Implementation}% talk about what was seen in prev chapter at start
+\chapter{\label{Chapter5}Detailed Design and Implementation}% talk about what was seen in prev chapter at start
 Chapter 4 gave a high level description for some of the design aspects of the \textit{Learning to Play Wolfenstein} project. These aspects included the reasoning behind the use of the NEAT algorithm and the interaction between Wolfenstein's gameplay and the actual NEAT algorithm. The main focus of this chapter is to describe how NEATDoop interacts with components of the source code of Wolfenstein and how, as a result of this interaction, it is able to identify objects during gameplay and make decisions based on what it can see. This will also lead to a discussion on how NEATDoop's learning process is aided by assigning every attempt with a measure of success and also how an attempt at playing the game is able to be replayed. 
 
 \section{Giving NEATDoop Game Vision}
 In order for NEATDoop to make decisions during gameplay it needs to be aware of its surroundings during gameplay. In order to do this it is necessary to identify how and where objects in the game are represented. As was mentioned in Section~\ref{section3.2} there are \textit{structs} in the Wolfenstein source that describe enemies and pick-ups and \textit{arrays} that represent walls, doors and walkable space. By accessing these data structures it is possible to provide NEATDoop with so called \textit{Game Vision}.
 
+\begin{itemize}
+\item\textbf{wl\_play.cpp:} This source file was subject to a lot of modifications in order for NEATDoop to function properly. The last function in the source file, \textit{PlayLoop()} is repeatedly called during gameplay so this is where the status of the AI is continually checked so as to ensure it is behaving correctly in any given frame of gameplay. 
+
+There is a timeout associated with NEATDoop, if it does nothing useful in a certain period of time, the Genotype is timed out and the next Genotype attempts to play the level from the beginning. It is in the \textit{PlayLoop()} function that this timeout is decremented and checked continually. 
+
+This source file is also where the inputs from the game are sent to the current Genotypes Phenotype for analysis. Straight after this call, the controller for the game is called and the button outputs produced by the Genotype's Phenotype are activated by the controller.
+\end{itemize}
 \section{Playing Wolfenstein with NEATDoop}	% dont forget to mention game speed up
 One of the main reasons for using NEAT is its efficiency. Because the every Genome starts with a simple network (only has an Input and Output layer) it is not necessary to weed out poorly performing individuals. However, this does not mean that the learning process is swift. The AI that was created by \textit{SethBling}, in his version of this project for Mario, took 24 hours of continuous learning to complete the first level. He programmed his AI to play the game at normal speed which considerably slows down the learning process. Since Wolfenstein's gameplay is considerably more complex than Mario's it was deemed necessary to try and speed up the gameplay to hasten the learning process.
 

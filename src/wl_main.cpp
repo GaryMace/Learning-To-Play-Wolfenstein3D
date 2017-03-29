@@ -66,6 +66,7 @@ bool circletimeoutset = false;
 int timeouttics = 0;
 
 int frames = 0;
+int inputsused = 0;
 /*
 =============================================================================
 
