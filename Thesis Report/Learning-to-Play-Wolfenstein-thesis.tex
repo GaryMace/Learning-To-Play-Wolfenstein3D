@@ -321,7 +321,19 @@ The fitness function can easily bias the way future Genotypes are built. By rewa
 % describe the input connections and links and how the network builds specific to the game.
 
 \section{Wolfenstein \& NEAT Interaction}
-Now that a comprehensive description of the NEAT algorithm has been given the next step is to understand its interaction with the Wolfenstein gameplay. This will be the focus of this section. \\\\\\\textbf{A summary of this chapter will go here.}
+Now that a comprehensive description of the NEAT algorithm has been given the next step is to understand its interaction with the Wolfenstein gameplay. This will be the focus of this section. 
+
+Fig x.x above displays a UML diagram showing the interaction between the NEATDoop and some components of the Wolfenstein source, in particular, the core game loops. 
+
+\textit{wl\_def.h} creates an instance of the NEATDoop object. Since this source file is included by most Wolfenstein source files, they have access to the NEATDoop object.
+
+Circular dependencies between \textit{Genome.h, NEATDoop.h} and \textit{wl\_def.h} were avoided by moving some constant definitions to a new source file, \textit{Def.h}.
+
+Source file \textit{Genus.h} is identical to the \textit{Pool} defined in the MarIO project. It consists of a collection of \textit{Species}.
+
+Neurons have a list of \textit{Genes}, which are all the Genes whose out-neurons connect to current Neuron.
+
+In this section, high level definitions were given for some of the essential design aspects of the \textit{Learning to Play Wolfenstein} project. These included the design principles behind using the NEAT algorithm instead of other types of Topological altering algorithms, how NEATDoop's Neural Network evolves and the source interaction between the NEAT algorithms and the main Wolfenstein source files. The next Chapter, Detailed Design and Implementation will give a more technical description as to how several components of NEATDoop were implemented. 
 %talk about what was said and how it relates to next chapter
 
 \chapter{\label{Chapter5}Detailed Design and Implementation}% talk about what was seen in prev chapter at start
