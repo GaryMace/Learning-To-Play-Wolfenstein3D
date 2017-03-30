@@ -957,7 +957,7 @@ void DrawScaleds (void)
             doop_statptr->flags = statptr->flags;
             doop_statptr->itemnumber = statptr->itemnumber;
 
-            if (doop_statptr < &doop_visstat[MAXSTATS - 1]) {    // {'-'} dont fall off the edge
+            if (doop_statptr < &doop_visstat[MAXVISABLE - 1]) {    // {'-'} dont fall off the edge
                 doop_statptr++;
                 doop_laststatptr = doop_statptr;
             }
@@ -1090,32 +1090,32 @@ void DrawScaleds (void)
 =================================
  */
 void GetInputs (void) {
-    int idx = 0;    //index into input array
+    int idx = 0;                                                                                //index into input array
 
     for (int row = -2; row < 3; row++) {
         for (int col = -2; col < 3; col++) {
-            int xp = (int) player->tilex + row;     //x position
-            int yp = (int) player->tiley + col;     //y position
+            int xp = (int) player->tilex + row;                                                 //x position
+            int yp = (int) player->tiley + col;                                                 //y position
             if ((xp < 0 || xp > MAPSIZE) || (yp < 0 || yp > MAPSIZE)) {
-                gameinputs[WALLS][idx] = 1; //Map position out of bounds, just make it a 0 input
+                gameinputs[WALLS][idx] = 1;                                                     //Map position out of bounds, just make it a 0 input
                 gameinputs[WALK_SPACE][idx++] = 0;
                 continue;
             }
             int pos = (int) tilemap[xp][yp];
-            if (pos == ELEVATORTILE) {  //end of level tile.
+            if (pos == ELEVATORTILE) {                                                          //end of level tile.
                 gameinputs[ELEVATOR][idx] = 1;
             }
 
             CheckWallType(xp, yp, idx);
 
             for (visactor *visact = &doop_vislist[0]; visact != doop_lastactptr; visact++) {    //for each enemy nearby (vis for visible)
-                if ((int) visact->tilex == xp && (int) visact->tiley == yp) {    //There's an enemy on a position in a 5x5 grid around player
+                if ((int) visact->tilex == xp && (int) visact->tiley == yp) {                   //There's an enemy on a position in a 5x5 grid around player
                     gameinputs[ENEMYS][idx] = 1;
                     break;
                 }
             }
             for (visstat *visitem = &doop_visstat[0]; visitem != doop_laststatptr; visitem++) { //for each static (vis for visible)
-                if ((int) visitem->tilex == xp && (int) visitem->tiley == yp) { //Static item
+                if ((int) visitem->tilex == xp && (int) visitem->tiley == yp) {                 //Static item
                     AddItemToInput(visitem, idx);
                     break;
                 }
@@ -1160,18 +1160,17 @@ void CheckWallType (int xp, int yp, int idx) {
     //0 if map pos is a wall or out of bounds area
     //1 if player can walk on area
     if (pos > 0) {
-        gameinputs[WALK_SPACE][idx] = 0;
-        gameinputs[WALLS][idx] = 1;
+        if (*(mapsegs[1]+(yp<<mapshift)+xp) == PUSHABLETILE) {  //Pushable wall
+            gameinputs[PUSH_WALLS][idx] = 1;
+            gameinputs[WALK_SPACE][idx] = 0;
+            gameinputs[WALLS][idx] = 0;
+        } else {
+            gameinputs[WALK_SPACE][idx] = 0;
+            gameinputs[WALLS][idx] = 1;
+        }
     } else {
         gameinputs[WALK_SPACE][idx] = 1;
         gameinputs[WALLS][idx] = 0;
-    }
-
-    if (*(mapsegs[1]+(yp<<mapshift)+xp) == PUSHABLETILE) {  //Pushable wall
-        gameinputs[PUSH_WALLS][idx] = 1;
-        gameinputs[WALK_SPACE][idx] = 0;
-        gameinputs[WALLS][idx] = 0;
-        return;
     }
 }
 

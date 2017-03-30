@@ -210,7 +210,7 @@ If the phenotypes were not similar then too many disjoint and excess Genes would
 \item\textbf{Repeat process until terminal condition met}
 \end{enumerate}
 
-\subsection{NEAT Topological Mutations}
+\subsection{\label{subsection2.3.3}NEAT Topological Mutations}
 NEAT specifies two types of phenotype mutations, \textit{Node mutations} and \textit{Link mutations}. Both of these mutations add new connection Genes to a Genotype and each new Gene is assigned a new unique Innovation Number. ~\cite{NEAT:topmut}
 \begin{figure}[h]
 \centering
@@ -297,15 +297,27 @@ As introduced in Section~\ref{section2.5} the population for this project consis
 \subsection{The Problem with TWEANNs}
 Whilst TWEANN solutions are in affect, very similar to the NEAT solution, they have trouble with efficiently introducing genetic diversity to their population and with protecting structural innovations that are introduced as a result of mutations. Since TWEANN solutions generally create individuals with random topologies when setting up the initial population a lot of unnecessary computational time is spent trying to find Genotypes whose structural innovations are worth the trade-off of extra computational evaluation time. 
 
-It may be the case that two Genotypes have the functionality but one has a topology that is inherently more complex than the other; In which case, the TWEANN solution would have just wasted computational time for no valid reason. NEAT avoids this by starting every Genotype with the simplest topology possible, keeping structural innovations only when they provide an improvement and as a result saving otherwise wasted computational resources.
+It may be the case that two Genotypes have the functionality but one has a topology that is inherently more complex than the other; In which case, the TWEANN solution would have just wasted computational time for no valid reason. NEAT avoids this by starting every Genotype with the simplest topology possible, keeping structural innovations only when they provide an improvement. This has the affect of reducing the number of parameters in each topology that need to be explored in order to produce an output from the Genotype. 
 
 Some TWEANNs attempt to protect structural innovations by adding non-functional structure to the network in the hope that the new innovation will be used at some point in the future.~\cite{GNARL} Unfortunately, in the event that no useful connections are incorporated with the new innovation it results in extra parameters being added to the search space, further reducing the performance of the Genotype.
 
 \subsection{The Effectiveness of NEAT}
+NEAT is particularly attractive in a scenario where efficient learning of a complex input space is required. If this was important for Seth's \textit{MarIO} project then it is even more important for this project since the gameplay of Wolfenstein is much more complicated. As will be seen in Chapter \ref{Chapter6} a significant amount of time is necessary for NEATDoop to learn even the simplest of game mechanics in Wolfenstein. 
 
-
+Run-time is main reason why NEAT was selected. Since NEAT avoids many problems that TWEANNs have it runs much faster. Seth, the author of \textit{MarIO}, had to let the AI learn for twenty-four hours before it was able to complete the first level of Mario. Since Wolfenstein's gameplay is more complex than Mario's, it is not unreasonable to assume that it would take longer than this in order for the AI to learn a substantial portion of gameplay for a single level. Had TWEANNs been used instead of NEAT the training duration would have to be much longer. 
 \section{Understanding the NEATDoop Neural Network}
 The previous section details why it is important for each attempt at playing Wolfenstein be optimal. This section focuses on understanding the implications of creating a minimally connected neural network for each attempt and how they grow over time. Here, it is important to note that the way the network is built and manipulated is directly affected by the fitness function used for evaluating the success of each attempt at playing Wolfenstein.
+
+As was outlined in Sub-section \ref{subsection2.3.3}, NEAT mutates the topologies of Genotypes using two types of mutations. There are a few ways these can effect NEATDoop's Genotypes:
+\begin{itemize}
+\item The inputs for this project are represented as eleven 5x5 matrices representing the space around the player. Each of these matrices represents a specific thing that NEATDoop can see i.e Enemies, ammo, health. Node mutations can cause a previously unused input to be utilised. This will attach a Neuron to a cell in one of the eleven matrices. Depending on whether the Neuron link is enabled or disabled, when the cell reads a positive value the Neuron is activated. 
+\item It can cause previously used inputs to be deactivated. This simply happens when the Gene that links the Input Neuron to some other Neuron in the Phenotype is disabled.
+\item Phenotype behaviour can either be very simple or rather complex. Consider, for example, a scenario as depicted in Fig.xx. In the first Phenotype, the input Neuron is connected directly to the output layer. When this input Neuron is activated the output Neuron is also activated. This behaviour is predominantly seen in early stages of training since each Phenotype initially only consists of input and output layers. 
+
+The second Phenotype depicts a network that might be seen after some amount of training. In this case, even if the input Neuron is activated it will more than likely not cause the output Neuron to be activated because the path to it is obscured by several hidden Neurons. 
+\end{itemize}
+
+The fitness function can easily bias the way future Genotypes are built. By rewarding NEATDoop for specific things, the Phenotypes will be built in such a way that complements the behaviour which merit the highest fitness. This exact behaviour was seen in early testing where NEATDoop was allowed to keep playing Wolfenstein so long as it kept moving. It biased some of the Genotypes to just keep running in a circle, forever. 
 % describe the input connections and links and how the network builds specific to the game.
 
 \section{Wolfenstein \& NEAT Interaction}
@@ -339,7 +351,7 @@ An important aspect of this project is to make it possible for a Genome to be re
 
 %talk about what was said and how it relates to next chapter
 
-\chapter{Testing/Evaluation}% talk about what was seen in prev chapter at start
+\chapter{\label{Chapter6}Testing/Evaluation}% talk about what was seen in prev chapter at start
 Chapter 5 presented the techniques used to provide NEATDoop with the necessary functionality to learn how to play Wolfenstein. This chapter will show some testing that was done on the implementation of NEAT used for this project and will also provide an extensive evaluation of NEATDoop's performance. This will be aided by providing some results that were obtained from running the software that was created as a result of combining NEATDoop with Wolfenstein's source code.
 
 \section{Validating NEAT Basic Functionality}

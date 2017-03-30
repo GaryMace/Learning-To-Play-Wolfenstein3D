@@ -44,12 +44,12 @@ extern byte signon[];
 //{'-'} provide the extern definitions of doop variables
 NEATDoop doopAI;
 
-visactor doop_vislist[MAXACTORS];
+visactor doop_vislist[MAXVIS];
 visactor *doop_visptr;
 visactor *doop_lastactptr;
 int doop_actsvis;
 
-visstat doop_visstat[MAXSTATS];
+visstat doop_visstat[MAXVIS];
 visstat *doop_statptr;
 visstat *doop_laststatptr;
 int doop_statsvis;

@@ -255,6 +255,7 @@ void Quit(const char *errorStr, ...);
 #define WEAPON3 7
 #define WEAPON4 8
 
+#define MAXVIS 250
 #define MAX_DISTANCE 125
 #define KILL_REWARD 50
 #define TRAVEL_REWARD 10
@@ -948,11 +949,11 @@ typedef struct visstatstruct {
 
 extern NEATDoop     doopAI;                                 //The game AI
 
-extern visactor     doop_vislist[MAXACTORS];                //visible actor list for this frame
+extern visactor     doop_vislist[MAXVIS];                   //visible actor list for this frame
 extern visactor     *doop_lastactptr;                       //pointer to last item in doop_vislist
 extern visactor     *doop_visptr;                           //pointer to current item of interest in doop_vislist
 
-extern visstat      doop_visstat[MAXSTATS];                 //visible pickups list for this frame
+extern visstat      doop_visstat[MAXVIS];                   //visible pickups list for this frame
 extern visstat      *doop_laststatptr;                      //pointer to last item in doop_visstat
 extern visstat      *doop_statptr;                          //pointer to current item of interest in doop_visstat
 
