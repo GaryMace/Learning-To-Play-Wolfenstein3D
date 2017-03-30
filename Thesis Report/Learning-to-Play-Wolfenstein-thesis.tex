@@ -216,7 +216,7 @@ NEAT specifies two types of phenotype mutations, \textit{Node mutations} and \te
 \centering
 \fboxsep 2mm
 \framebox{
-	\includegraphics[width=14cm]{neat_mut} 
+	\includegraphics[width=12cm]{neat_mut} 
 }
 \caption{\label{fig:NEAT_mutations} Shows network phenotypes before and after NEAT Link and Node mutations.}
 \end{figure} 
@@ -342,6 +342,15 @@ Chapter 4 gave a high level description for some of the design aspects of the \t
 \section{Giving NEATDoop Game Vision}
 In order for NEATDoop to make decisions during gameplay it needs to be aware of its surroundings during gameplay. In order to do this it is necessary to identify how and where objects in the game are represented. As was mentioned in Section~\ref{section3.2} there are \textit{structs} in the Wolfenstein source that describe enemies and pick-ups and \textit{arrays} that represent walls, doors and walkable space. By accessing these data structures it is possible to provide NEATDoop with so called \textit{Game Vision}.
 
+There is a special struct pointer in the Wolfenstein source that contains information about the player. This pointer is used in the \textit{wl\_draw.cpp} source file in order to identify Genotype inputs. Specifically, a special function called \textit{GetInputs()}, which was made specifically for this project, is called and uses the player location in order to scan an area around the their position and identify important information. 
+
+Depending on what lies in the tiles surrounding the player, specific cells in specific arrays are set to 1 which indicates something is there(otherwise they remain 0). Recall that the network inputs are eleven 5x5 grids. Below is a small example as to how some of the arrays of the input might be set for the given tile map. This simulates something similar to how the inputs are actually set within the game, frame by frame.
+
+The above is a simple example. The way certain inputs are set can change during gameplay. For instance, when a door is spotted the cell associated with the doors position in the door array is set to 1. However, when the player opens the door that same cell is set to 0 and the same position in the \textit{walk-space} array is set to 1. This indicates that for the duration of time where the door is open, the character can move through it. Similarly, when items such as ammo are picked up the cell associated with that position gets set to 0, indicating that the item was picked up and no longer exists on the map.
+
+\section{Playing Wolfenstein with NEATDoop}	% dont forget to mention game speed up
+One of the main reasons for using NEAT is its efficiency. Because every Genotype starts with a simple network (only has an Input and Output layer) it is not necessary to weed out poorly performing individuals. However, this does not mean that the learning process is swift. The AI that was created by \textit{SethBling}, in his version of this project for Mario, took 24 hours of continuous learning to complete the first level. He programmed his AI to play the game at normal speed which considerably slows down the learning process. Since Wolfenstein's gameplay is considerably more complex than Mario's it was deemed necessary to try and speed up the gameplay to hasten the learning process.
+
 \begin{itemize}
 \item\textbf{wl\_play.cpp:} This source file was subject to a lot of modifications in order for NEATDoop to function properly. The last function in the source file, \textit{PlayLoop()} is repeatedly called during gameplay so this is where the status of the AI is continually checked so as to ensure it is behaving correctly in any given frame of gameplay. 
 
@@ -349,9 +358,6 @@ There is a timeout associated with NEATDoop, if it does nothing useful in a cert
 
 This source file is also where the inputs from the game are sent to the current Genotypes Phenotype for analysis. Straight after this call, the controller for the game is called and the button outputs produced by the Genotype's Phenotype are activated by the controller.
 \end{itemize}
-\section{Playing Wolfenstein with NEATDoop}	% dont forget to mention game speed up
-One of the main reasons for using NEAT is its efficiency. Because the every Genome starts with a simple network (only has an Input and Output layer) it is not necessary to weed out poorly performing individuals. However, this does not mean that the learning process is swift. The AI that was created by \textit{SethBling}, in his version of this project for Mario, took 24 hours of continuous learning to complete the first level. He programmed his AI to play the game at normal speed which considerably slows down the learning process. Since Wolfenstein's gameplay is considerably more complex than Mario's it was deemed necessary to try and speed up the gameplay to hasten the learning process.
-
 \section{Aiding NEATDoop's Learning}
 In order for the AI (NEATDoop) to learn how to play Wolfenstein it is necessary for each attempt at playing the game to be assigned some sort of score that denotes the success of that attempt. This is done using a fitness function which rewards the AI for specific tasks it completes during gameplay. This section is going to outline this function and show how it can bias learning.
 
