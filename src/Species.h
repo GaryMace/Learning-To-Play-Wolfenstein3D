@@ -8,14 +8,13 @@
 
 class Species {
 public:
-    std::list<Genome> genomes;
-    Genome topGenome;
-    double topFitness;
-    double averageFitness;
-    int staleness;
+    std::list<Genome> genomes;                  //Members of the current Species
+    Genome topGenome;                           //Best performer for the current Species
+    double topFitness;                          //Fitness of top performer
+    double averageFitness;                      //Average fitness of all this Species members
+    int staleness;                              //Measure of poor performance accross all indiviudals in the current Species
 
     std::string backup();
-
     Genome breedChild();
     void calculateAverageFitness();
     Genome crossover(Genome g1, Genome g2);

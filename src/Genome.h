@@ -11,8 +11,7 @@
 #include "Def.h"
 #include "wl_def.h"
 
-//used as indexes to mutationRates arr
-//TODO: is this wasteful? can't we just put it in Def.h? why does every genome get these....??
+//Used as meaningful indexes into the Mutation rates array.
 #define CONNECTIONS 0
 #define LINK 1
 #define BIAS  2
@@ -23,16 +22,16 @@
 
 class Genome {
 public:
-    double mutationRates[MUTATION_TYPES];
-    std::map<int, Neuron> network;
-    std::list<Gene> genes;
-    int maxNeuron;
-    int globalRank;
-    double fitness; //this will be set in the game loop
+    double mutationRates[MUTATION_TYPES];                               //Mutation rates for Genetic Algorithms
+    std::map<int, Neuron> network;                                      //The Phenotype of the Genome
+    std::list<Gene> genes;                                              //An encoding of this Genome's network represented as a list of Genes
+    int maxNeuron;                                                      //Max Neuron of 274 indicates no Hidden Layer, any higher and this Genome has some Hidden Neurons
+    int globalRank;                                                     //A ranking of this Genome relative to all other Genomes in Population
+    double fitness;                                                     //This will be set in the game loop
 
     Genome clone();
     std::string backup();
-    std::string backupnew();
+    std::string encode();
     static int compare(const Genome &o1, const Genome &o2);
     static int compareByPointer(const Genome *o1, const Genome *o2);
 
@@ -50,8 +49,8 @@ public:
     double weights(Genome genome);
     bool sameSpecies(Genome genome);
 
-    Genome() : maxNeuron(TOTAL_INPUTS - 1), globalRank(0), fitness(0) {  //Init Genome instance variables
-        initMutationRates();    //I'm not overly fond of this but old C++ doesn't allow array initialisations in class constructors
+    Genome() : maxNeuron(TOTAL_INPUTS - 1), globalRank(0), fitness(0) { //Init Genome instance variables
+        initMutationRates();                                            //I'm not overly fond of this but old C++ doesn't allow array initialisations in class constructors
     }
 };
 #endif  //TESTBENCH_GENOME_H

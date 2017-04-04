@@ -228,10 +228,11 @@ void Quit(const char *errorStr, ...);
 #define STARTAMMO       8
 
 // {'-'} Doop constants for input matrices
-#define INPUTS 11                // doors, walls, walk space, enemys, ammo, health, keys, guns, push walls, locked doors, elevator
-#define SEARCH_GRID 25          //5x5 grid
+#define INPUTS 11               // doors, walls, walk space, enemys, ammo, health, keys, guns, push walls, locked doors, elevator
+#define SEARCH_GRID 25          // 5x5 grid
 #define TOTAL_INPUTS 275        // INPUTS * SEARCH_GRID
 
+// {'-'} Used as meaningful indexes for the gameinputs array, see wl_draw.cpp line 1074
 #define DOORS 0
 #define WALLS 1
 #define WALK_SPACE 2
@@ -244,7 +245,7 @@ void Quit(const char *errorStr, ...);
 #define LOCKED_DOOR 9
 #define ELEVATOR 10
 
-// {'-'} Doop constants for button pressing look-ups
+// {'-'} Used as meaningful switch indexes, see NEATDoop.cpp line 163
 #define FORWARD 0
 #define TURN_RIGHT 1
 #define TURN_LEFT 2
@@ -255,6 +256,7 @@ void Quit(const char *errorStr, ...);
 #define WEAPON3 7
 #define WEAPON4 8
 
+// {'-'} Used for fitness function coefficients, see NEATDoop.cpp line 32
 #define MAXVIS 250
 #define MAX_DISTANCE 125
 #define KILL_REWARD 50
@@ -934,34 +936,37 @@ extern int mapon;
 
 =============================================================================
 */
+
+//{'-'} Keeps track of visible actors for the current frame
 typedef struct visactorstruct {
     uint32_t    flags;                                      // FL_SHOOTABLE (can i see the actor without obstructions in the way), etc
     word        tilex,tiley;                                //position in map of actor (x,y co-ords)
     short       hitpoints;                                  //Health of actor
 } visactor;
 
+//{'-'} Keeps track of visible static items for the current frame
 typedef struct visstatstruct {
-    byte      tilex,tiley;                                  //position in map of item (x,y co-ords)
-    short     shapenum;                                     // if shapenum == -1 the obj has been removed from list
+    byte      tilex,tiley;                                  //Position in map of item (x,y co-ords)
+    short     shapenum;                                     //If shapenum == -1 the obj has been removed from list
     uint32_t  flags;
     byte      itemnumber;                                   //Is the item a gun? ammo? health? etc..
-} visstat;
+} visstat;                                                 
 
 extern NEATDoop     doopAI;                                 //The game AI
 
-extern visactor     doop_vislist[MAXVIS];                   //visible actor list for this frame
-extern visactor     *doop_lastactptr;                       //pointer to last item in doop_vislist
-extern visactor     *doop_visptr;                           //pointer to current item of interest in doop_vislist
+extern visactor     doop_vislist[MAXVIS];                   //Visible actor list for this frame
+extern visactor     *doop_lastactptr;                       //Pointer to last item in doop_vislist
+extern visactor     *doop_visptr;                           //Pointer to current item of interest in doop_vislist
 
-extern visstat      doop_visstat[MAXVIS];                   //visible pickups list for this frame
-extern visstat      *doop_laststatptr;                      //pointer to last item in doop_visstat
+extern visstat      doop_visstat[MAXVIS];                   //Visible pickups list for this frame
+extern visstat      *doop_laststatptr;                      //Pointer to last item in doop_visstat
 extern visstat      *doop_statptr;                          //pointer to current item of interest in doop_visstat
 
-extern int          doop_actsvis;                           //total number of enemies visible in this frame
-extern int          doop_statsvis;                          //total number of
+extern int          doop_actsvis;                           //Total number of enemies visible in this frame
+extern int          doop_statsvis;                          //Total number of static items visible in this frame
 
-extern int          gameinputs[INPUTS][SEARCH_GRID];        // gameinputs size is [11][25]
-extern int          uniquedoors[MAXDOORS];                  // This allows extra play time to be given to AI if it opens doors
+extern int          gameinputs[INPUTS][SEARCH_GRID];        //gameinputs size is [11][25]
+extern int          uniquedoors[MAXDOORS];                  //This allows extra play time to be given to AI if it opens doors
 
 extern int          endxp;                                  //End x position in current level
 extern int          endyp;                                  //End y position in current level
@@ -970,10 +975,10 @@ extern int          spawnyp;                                //Spawn y position i
 extern int          prevxp;                                 //AI previous x position last frame
 extern int          prevyp;                                 //AI previous y position last frame
 
-extern int          inputsused;
-extern double       accuracy;
-extern int          shotstaken;
-extern int          shotsontarget;
+extern int          inputsused;                             //Network inputs used (a maxmimum of 274)
+extern double       accuracy;                               //Shotsontarget / shotstaken
+extern int          shotstaken;                             //Number shots taken by AI
+extern int          shotsontarget;                          //Number shots that hit an enemy
 extern int          pickups;                                //Current number pickups AI has in current frame
 extern int          prevnumpickups;                         //Num pickups AI had picked-up last frame
 extern int          doorsopened;                            //Current number of doors opened by AI in current frame
@@ -985,7 +990,7 @@ extern bool         circletimeoutset;                       //Is the AI pressing
 extern int          timeouttics;                            //The timeout for the AI
 extern bool         killattempt;                            //AI running in circle for too long, kill the attempt
 
-extern int          frames;                                 //The number of frames for this attempt at playing
+extern int          frames;                                 //The number of frames used by the current Genome
 /*
 =============================================================================
 

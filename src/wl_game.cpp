@@ -53,8 +53,8 @@ void LoadLatchMem (void);
 void GameLoop (void);
 
 //{'-'}     Doop end of level references
-//int endxp;
-//int endyp;
+int endxp;
+int endyp;
 
 /*
 =============================================================================
@@ -1423,7 +1423,7 @@ restartgame:
 #ifdef SPEAR
 startplayloop:
 #endif
-        bool foundEnd = false;                          // {'-'} get the end tile positions
+        bool foundEnd = false;                              //{'-'} Get the end of current level tile position, this will be used in the fitness function later
 
         for (int xp = 0; xp < MAPSIZE; xp++) {
             for (int yp = 0; yp < MAPSIZE; yp++) {
@@ -1581,7 +1581,7 @@ startplayloop:
                 }
 
                 circletimeoutset = false;                   //reset bool indicating AI is running in circles
-                doopAI.initRun = true;                      //allows the network for the next run to be built
+                doopAI.initRun = true;                      //allows the network for the next run to be built, see wl_play.cpp line 436
                 doopAI.timeout = 150;                       //reset timeout of AI
                 killattempt = false;                        //reset the variables for the next run of the game
                 timeouttics = 0;                            //reset circle timout (if the AI died because it ran in circles too long)
@@ -1597,7 +1597,7 @@ startplayloop:
                 accuracy = 0;
                 pickups = 0;
 
-                memset(uniquedoors, 0, sizeof(uniquedoors));
+                memset(uniquedoors, 0, sizeof(uniquedoors));//reset unique doors opened for next attempt at playing the game
                 //{'-'} end of Doop things
                 died = true;                    // don't "get psyched!"
 
@@ -1622,7 +1622,7 @@ startplayloop:
                 return;
 
             case ex_victorious:
-                leveldone = true;                   //{'-'} so we can award a whopper score
+                leveldone = true;                           //{'-'} so we can award a whopper score to the AI that just won!!
                 doopAI.setGenomeFitness();
 
                 if(viewsize == 21) DrawPlayScreen();

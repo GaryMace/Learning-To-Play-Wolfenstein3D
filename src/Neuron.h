@@ -9,8 +9,8 @@
 
 class Neuron {
 public:
-    double value;
-    std::list<Gene> inputs;
+    double value;				//Value on neuron, if > 0 then it is considered activated
+    std::list<Gene> inputs;		//Gene's whose out-neurons connect to this Neuron
 
     std::string backup();
     static double sigmoid(double x);

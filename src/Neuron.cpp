@@ -5,7 +5,15 @@
 #include <cmath>
 #include <sstream>
 
-
+/*
+=================================
+=
+= {'-'} Neuron::backup
+=
+= Outputs a json inspired string representation of a Neuron.
+=
+=================================
+ */
 std::string Neuron::backup() {
     std::list<Gene>::iterator geneItr;
     std::string out = "\n\t\t\t\t\t\t\tNeuron{";
@@ -22,6 +30,15 @@ std::string Neuron::backup() {
     return out;
 }
 
-double Neuron::sigmoid(double x) {      //can this even be 0?
+/*
+=================================
+=
+= {'-'} Neuron::sigmoid
+=
+= return sigmoid of the given x value, static function
+=
+=================================
+ */
+double Neuron::sigmoid(double x) {
     return 2.0 / (1.0 + std::exp(-4.9 * x)) - 1.0;
 }

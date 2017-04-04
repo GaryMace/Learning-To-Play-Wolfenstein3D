@@ -15,7 +15,7 @@
 =
 = {'-'} Genome::backup
 =
-= Outputs a json style string representation of a genome.
+= Outputs a json inspired string representation of a Genome.
 =
 =================================
  */
@@ -45,8 +45,8 @@ std::string Genome::backup() {
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++)
         out += geneItr->backup() + ",";
     out = out.substr(0, out.length() - 1);  //Remove last ","
+
     out += "\n\t\t\t\t\t},";
-    std::cout << "ne size" << network.size() << std::endl;
     out += "\n\t\t\t\t\tnetwork={";
     for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
         str = static_cast<std::ostringstream*>(&(std::ostringstream() << it->first))->str();
@@ -60,7 +60,7 @@ std::string Genome::backup() {
     return out;
 }
 
-std::string Genome::backupnew() {
+std::string Genome::encode() {
     std::list<Gene>::iterator geneItr;
     
     std::string out;
@@ -74,7 +74,7 @@ std::string Genome::backupnew() {
 
     out += "\n";
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++)
-        out += geneItr->backupnew() + "\n";
+        out += geneItr->encode() + "\n";
 
     if (!genes.empty())
         out = out.substr(0, out.length() - 2);
@@ -87,7 +87,7 @@ std::string Genome::backupnew() {
 =
 = {'-'} Genome::clone
 =
-= Returns a deep copy of the genome clone is invoked on.
+= Returns a deep copy of the Genome clone is invoked on.
 =
 =================================
  */
@@ -168,17 +168,17 @@ void Genome::generateNetwork() {
     genes.sort(Gene::compare);
 
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
-        if (geneItr->enabled) {                     //If this Gene is enabled
+        if (geneItr->enabled) {                             //If this Gene is enabled
             std::map<int, Neuron>::iterator it = network.find(geneItr->output);
-            if (it == network.end()) {              //If key gene.output doesn't exist
+            if (it == network.end()) {                      //If key gene.output doesn't exist
                 Neuron n;
                 network.insert(std::make_pair(geneItr->output, n)); //make new entry
             }
-            Neuron& n = network[geneItr->output];   //add this Gene to entry
+            Neuron& n = network[geneItr->output];            //add this Gene to entry
             n.inputs.push_back(*geneItr);
 
             std::map<int, Neuron>::iterator it2 = network.find(geneItr->input);
-            if (it2 == network.end()) {             //If key gene.input doesn't exist
+            if (it2 == network.end()) {                     //If key gene.input doesn't exist
                 Neuron n2;
                 network.insert(std::make_pair(geneItr->input, n2));
             }
@@ -194,7 +194,7 @@ void Genome::generateNetwork() {
 =
 = {'-'} Genome::evaluateNetwork
 =
-= Takes an 10x25 matrix of gameinputs and assigns its values to the corresponding Neurons in a Genome's network.
+= Takes an 11x25 matrix of gameinputs and assigns its values to the corresponding Neurons in a Genome's network.
 = Also, The value of a Neuron is assigned the sigmoid of the sum of its gameinputs and finally if the value on an
 = output Neuron is greater than 0 then the corresponding game button to that Neuron is set to be activated.
 =
@@ -207,20 +207,19 @@ bool* Genome::evaluateNetwork(int inputs[][SEARCH_GRID]) {
             network[(i * SEARCH_GRID) + j].value = inputs[i][j];    //Change input values to network
 
     for (std::map<int, Neuron>::iterator it = network.begin(); it != network.end(); it++) {
-        //Neuron& neuron = it->second;                  //Neuron& grabs the address of the value from the hashmap
         double sum = 0.0;
         for (geneItr = it->second.inputs.begin(); geneItr != it->second.inputs.end(); geneItr++) {
-            Gene incoming = *geneItr;                   //for each Gene of Neurons gameinputs
+            Gene incoming = *geneItr;                               //for each Gene of Neurons gameinputs
             Neuron other = network[incoming.input];
-            sum += incoming.weight * other.value;       // Sum: input_gene * activation (1 or 0)
+            sum += incoming.weight * other.value;                   // Sum: input_gene.weight * other_neuron.activation
         }
         if (!it->second.inputs.empty()) 
-            it->second.value = Neuron::sigmoid(sum);    //which is needed for this step! i.e. in-place map edit
+            it->second.value = Neuron::sigmoid(sum);                //Gets the activation for the current_neuron
     }
 
-    bool *outputs = new bool[OUTPUTS];
+    bool *outputs = new bool[OUTPUTS];                              //Network output represented as a bool array, this is processed by NEATDoop::setUpController()
     for (int i = 0; i < OUTPUTS; i++) {
-        if (network[MAX_NODES + i].value > 0)
+        if (network[MAX_NODES + i].value > 0)                       //Button activiated
             outputs[i] = true;
         else
             outputs[i] = false;
@@ -327,9 +326,18 @@ void Genome::linkMutate(bool forceBias) {
     genes.push_back(newLink);
 }
 
+/*
+=================================
+=
+= {'-'} Genome::mutate
+=
+= Mutate the current Genome according to the rules of the NEAT algorithm
+=
+=================================
+ */
 void Genome::mutate() {
     for (int i = 0; i < MUTATION_TYPES; i++)
-        (rand() % 2 == 1) ? mutationRates[i] *= 0.95 : mutationRates[i] *= 1.05263; //TODO: validation for these values?
+        (rand() % 2 == 1) ? mutationRates[i] *= 0.95 : mutationRates[i] *= 1.05263;
 
     if (Genus::nextDouble() < mutationRates[CONNECTIONS])
         pointMutate();
@@ -371,6 +379,16 @@ void Genome::mutate() {
     }
 }
 
+/*
+=================================
+=
+= {'-'} Genome::mutateEnableDisable
+=
+= Make a list of all Genes from list with the opposite value to param 'enable' and select a random Gene
+= from the list, then flip its enabled state.
+=
+=================================
+ */
 void Genome::mutateEnableDisable(bool enable) {
     std::list<Gene>::iterator geneItr;
     std::list<Gene*>::iterator geneItr2;
@@ -394,6 +412,16 @@ void Genome::mutateEnableDisable(bool enable) {
     }
 }
 
+/*
+=================================
+=
+= {'-'} Genome::containsLink
+=
+= Checks if a Gene already exists with some in-neuron and out-neuron. If it does then
+= don't add a duplicate to the network
+=
+=================================
+ */
 bool Genome::containsLink(Gene link) {
     std::list<Gene>::iterator geneItr;
 
@@ -403,6 +431,16 @@ bool Genome::containsLink(Gene link) {
     return false;
 }
 
+/*
+=================================
+=
+= {'-'} Genome::disjoint
+=
+= Check how many disjoint Genes some other Genome has when compared to the current Genome. Crossover
+= wont be allowed to happen if Genomes are too dissimilar.
+=
+=================================
+ */
 double Genome::disjoint(Genome genome) {
     std::list<Gene>::iterator geneItr;
     std::list<Gene>::iterator geneItr2; //Gene 2 iterator
@@ -428,7 +466,15 @@ double Genome::disjoint(Genome genome) {
         return disjointGenes / max;
 }
 
-//TODO: revisit this method
+/*
+=================================
+=
+= {'-'} Genome::randomNeuron
+=
+= Gets a random neuron from the current Genomes network.
+=
+=================================
+ */
 int Genome::randomNeuron(bool nonInput) {
     std::list<Gene>::iterator geneItr;
     std::map<int, bool> neurons;
@@ -455,6 +501,16 @@ int Genome::randomNeuron(bool nonInput) {
     return 0;
 }
 
+/*
+=================================
+=
+= {'-'} Genome::weights
+=
+= Similar to disjoint, checks how similar the weights on matching genes are in two Genomes. If too
+= dissimilar then crossover won't be permitted.
+=
+=================================
+ */
 double Genome::weights(Genome genome) {
     std::list<Gene>::iterator geneItr;
     std::list<Gene>::iterator geneItr2; //Gene 2 iterator
@@ -476,6 +532,15 @@ double Genome::weights(Genome genome) {
         return sum / coincident;
 }
 
+/*
+=================================
+=
+= {'-'} Genome::sameSpecies
+=
+= Checks how similar two Genomes are.
+=
+=================================
+ */
 bool Genome::sameSpecies(Genome genome) {
     double dd = disjoint(genome) * DELTA_DISJOINT;
     double dw = weights(genome) * DELTA_WEIGHTS;

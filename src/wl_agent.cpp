@@ -55,6 +55,7 @@ int     spawnxp;
 int     spawnyp;
 int     prevxp;
 int     prevyp;
+//{'-'} end of doop defintions
 
 void    T_Player (objtype *ob);
 void    T_Attack (objtype *ob);
@@ -1206,7 +1207,7 @@ void SpawnPlayer (int tilex, int tiley, int dir)
     player->active = ac_yes;
     player->tilex = tilex;
     player->tiley = tiley;
-    spawnxp = tilex;
+    spawnxp = tilex;                //{'-'} Set the spawn poisitions for the current level
     spawnyp = tiley;
     prevxp = tilex;
     prevyp = tiley;

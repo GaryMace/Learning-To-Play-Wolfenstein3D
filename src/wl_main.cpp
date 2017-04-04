@@ -1978,10 +1978,10 @@ int main (int argc, char *argv[])
 
     InitGame();
 
-    if (!doopAI.genusSetUp) {
+    if (!doopAI.genusSetUp) {           //{'-'} Set up the learning population
         doopAI.initialiseGenus();
         doopAI.genusSetUp = true;
-        doopAI.timeout = 150;
+        doopAI.timeout = 150;           //Set time out for first attempt
     }
     DemoLoop();
 

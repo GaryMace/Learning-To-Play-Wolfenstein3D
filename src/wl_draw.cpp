@@ -886,7 +886,6 @@ typedef struct
 visobj_t vislist[MAXVISABLE];
 visobj_t *visptr,*visstep,*farthest;
 
-//WL_GAME ~line 675 is how walls are made and stored!!
 void DrawScaleds (void)
 {
     int      i,least,numvisable,height;
@@ -897,11 +896,11 @@ void DrawScaleds (void)
     objtype   *obj;
 
     visptr = &vislist[0];
-    doop_visptr = &doop_vislist[0]; //{'-'} Doop's list of enemies it can see
+    doop_visptr = &doop_vislist[0];     //{'-'} Doop's list of enemies it can see in the current frame
     doop_lastactptr = doop_visptr;
     doop_actsvis = 0;
 
-    doop_statptr = &doop_visstat[0];  //{'-'} Static objects (ammo, health, chairs) that doop can see
+    doop_statptr = &doop_visstat[0];    //{'-'} Static objects (ammo, health, chairs) that doop can see in the current frame
     doop_laststatptr = doop_statptr;
     doop_statsvis = 0;
 //
@@ -935,7 +934,7 @@ void DrawScaleds (void)
 
         if (visptr < &vislist[MAXVISABLE-1])    // don't let it overflow
         {
-            visptr->flags = (short) statptr->flags; // {'-'} fyi Flags are things that enemies drop when dead etc..
+            visptr->flags = (short) statptr->flags;                 // {'-'} fyi Flags are things that enemies drop when dead etc..
             visptr++;
         }
 
@@ -951,13 +950,13 @@ void DrawScaleds (void)
             || statptr->itemnumber == bo_chaingun
             || statptr->itemnumber == bo_fullheal) {
 
-            doop_statptr->shapenum = statptr->shapenum;
+            doop_statptr->shapenum = statptr->shapenum;             //{'-'} populate the visible actor struct defined in wl_def.h for curr frame
             doop_statptr->tilex = statptr->tilex;
             doop_statptr->tiley = statptr->tiley;
             doop_statptr->flags = statptr->flags;
             doop_statptr->itemnumber = statptr->itemnumber;
 
-            if (doop_statptr < &doop_visstat[MAXVISABLE - 1]) {    // {'-'} dont fall off the edge
+            if (doop_statptr < &doop_visstat[MAXVISABLE - 1]) {     // {'-'} dont fall off the edge
                 doop_statptr++;
                 doop_laststatptr = doop_statptr;
             }
@@ -1012,38 +1011,21 @@ void DrawScaleds (void)
             }
             obj->flags |= FL_VISABLE;
 
-            if (obj->flags & FL_SHOOTABLE) {    // {'-'} if the enemy is visible without obstructions
+            if (obj->flags & FL_SHOOTABLE) {                        // {'-'} If the enemy is visible without obstructions
                 doop_visptr->tilex = obj->tilex;
                 doop_visptr->tiley = obj->tiley;
                 doop_visptr->hitpoints = obj->hitpoints;
-                if (doop_visptr < &doop_vislist[MAXVISABLE - 1]) {  // {'-'} prevents overflow
+                if (doop_visptr < &doop_vislist[MAXVISABLE - 1]) {  // {'-'} Prevents overflow
                     doop_visptr++;                                  // {'-'} Increment the address pointed to
                     doop_lastactptr = doop_visptr;
                 }
                 doop_actsvis++;
             }
-
-            /*if (falg  == 0) {
-                for (int i = 0; i < MAPSIZE; i++) {
-                    std::cout << i << " ";
-                }
-                std::cout << std::endl;
-                for (int i = 0; i < MAPSIZE; i++) {
-                    for (int j = 0; j < MAPSIZE; j++) {
-                        if ((int)tilemap[i][j] > 0)
-                            std::cout << "  ";
-                        else
-                            std::cout << 0 << " ";
-                    }
-                    std::cout << i << std::endl;
-                }
-                falg = 1;
-            }*/
         }
         else
             obj->flags &= ~FL_VISABLE;  // ~ is a class deconstructor?
     }
-    //memset(gameinputs, 0, sizeof(gameinputs[0][0]) * TOTAL_INPUTS); //reset values of gameinputs to 0?
+    memset(gameinputs, 0, sizeof(gameinputs[0][0]) * INPUTS * SEARCH_GRID); // {'-'} Reset inputs to 0, prevents false 1's
     GetInputs();
 
 //
@@ -1090,31 +1072,31 @@ void DrawScaleds (void)
 =================================
  */
 void GetInputs (void) {
-    int idx = 0;                                                                                //index into input array
+    int idx = 0;                                                                                //Index into input array
 
     for (int row = -2; row < 3; row++) {
         for (int col = -2; col < 3; col++) {
-            int xp = (int) player->tilex + row;                                                 //x position
-            int yp = (int) player->tiley + col;                                                 //y position
+            int xp = (int) player->tilex + row;                                                 //X position
+            int yp = (int) player->tiley + col;                                                 //Y position
             if ((xp < 0 || xp > MAPSIZE) || (yp < 0 || yp > MAPSIZE)) {
                 gameinputs[WALLS][idx] = 1;                                                     //Map position out of bounds, just make it a 0 input
                 gameinputs[WALK_SPACE][idx++] = 0;
                 continue;
             }
             int pos = (int) tilemap[xp][yp];
-            if (pos == ELEVATORTILE) {                                                          //end of level tile.
+            if (pos == ELEVATORTILE) {                                                          //End of level tile.
                 gameinputs[ELEVATOR][idx] = 1;
             }
 
             CheckWallType(xp, yp, idx);
 
-            for (visactor *visact = &doop_vislist[0]; visact != doop_lastactptr; visact++) {    //for each enemy nearby (vis for visible)
+            for (visactor *visact = &doop_vislist[0]; visact != doop_lastactptr; visact++) {    //For each enemy nearby (vis for visible)
                 if ((int) visact->tilex == xp && (int) visact->tiley == yp) {                   //There's an enemy on a position in a 5x5 grid around player
                     gameinputs[ENEMYS][idx] = 1;
                     break;
                 }
             }
-            for (visstat *visitem = &doop_visstat[0]; visitem != doop_laststatptr; visitem++) { //for each static (vis for visible)
+            for (visstat *visitem = &doop_visstat[0]; visitem != doop_laststatptr; visitem++) { //For each static (vis for visible)
                 if ((int) visitem->tilex == xp && (int) visitem->tiley == yp) {                 //Static item
                     AddItemToInput(visitem, idx);
                     break;
@@ -1131,17 +1113,16 @@ void GetInputs (void) {
         }
     }
 
-    //for (int k = 0; k < INPUTS; k++) {
-    //    std::cout << "Matrix type: " << k << std::endl;
-    //    for (int i = 0; i < 5; i++) {
-    //        for (int j = 0; j < 5; j++) {
-    //            std::cout << gameinputs[k][j + (i * 5)] << " ";
-    //        }
-    //        std::cout << std::endl;
-    //    }
-    //    std::cout << std::endl;
-    //    std::cout << std::endl;
-    //}
+    /*for (int k = 0; k < INPUTS; k++) {                                                          //Prints network inputs that are currently being seen.
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                std::cout << gameinputs[k][j + (i * 5)] << " ";
+            }
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;
+        std::cout << std::endl;
+    }*/
 }
 
 /*
@@ -1149,8 +1130,8 @@ void GetInputs (void) {
 =
 = {'-'} CheckWallType
 =
-= Add the given static item (i.e can be picked up/doesn't move on map) to the appropriate partition of
-= the 2D input array.
+= Check what type of structure is located at the given x,y co-ordinate. If it's value in tilemap[x][y] is > 0
+= then it could be a wall, push wall. It the value == 0  then it is walkable space
 =
 =================================
  */
@@ -1159,16 +1140,16 @@ void CheckWallType (int xp, int yp, int idx) {
 
     //0 if map pos is a wall or out of bounds area
     //1 if player can walk on area
-    if (pos > 0) {
+    if (pos > 0) {                                              //Not 0 so could be a wall or push wall
         if (*(mapsegs[1]+(yp<<mapshift)+xp) == PUSHABLETILE) {  //Pushable wall
             gameinputs[PUSH_WALLS][idx] = 1;
             gameinputs[WALK_SPACE][idx] = 0;
             gameinputs[WALLS][idx] = 0;
-        } else {
+        } else {                                                //Else it's a wall
             gameinputs[WALK_SPACE][idx] = 0;
             gameinputs[WALLS][idx] = 1;
         }
-    } else {
+    } else {                                                    //0  in tilemap[][] indicates that a tile is walkable
         gameinputs[WALK_SPACE][idx] = 1;
         gameinputs[WALLS][idx] = 0;
     }
@@ -1190,15 +1171,15 @@ void AddItemToInput (visstat *item, int idx) {
         case bo_key2:
         case bo_key3:
         case bo_key4:
-            gameinputs[KEY][idx] = 1;       //treat all keys the same way
+            gameinputs[KEY][idx] = 1;       //Treat all keys the same way
             break;
         case bo_food:
         case bo_fullheal:
-            gameinputs[HEALTH][idx] = 1;    //treat all health pick-ups the same way
+            gameinputs[HEALTH][idx] = 1;    //Treat all health pick-ups the same way
             break;
         case bo_clip:
         case bo_clip2:
-            gameinputs[AMMO][idx] = 1;      //you get the idea
+            gameinputs[AMMO][idx] = 1;      //You get the idea
             break;
         case bo_machinegun:
         case bo_chaingun:
@@ -1226,11 +1207,11 @@ void CheckDoorState(doorobj_t *door, int idx) {
     int lock = door->lock;
     gameinputs[WALLS][idx] = 0;                                 //It is no longer to be treated as a wall
 
-    if (lock >= dr_lock1 && lock <= dr_lock4) {             //locked door
-        if (!(gamestate.keys & (1 << (lock - dr_lock1)))) { //player doesn't have the key
+    if (lock >= dr_lock1 && lock <= dr_lock4) {                 //Locked door
+        if (!(gamestate.keys & (1 << (lock - dr_lock1)))) {     //Player doesn't have the key
             gameinputs[LOCKED_DOOR][idx] = 1;
             gameinputs[DOORS][idx] = 0;
-        } else {
+        } else {                                                //Player has the key so it can be considered a regular door
             gameinputs[LOCKED_DOOR][idx] = 0;
             gameinputs[DOORS][idx] = 1;
         }
@@ -1238,7 +1219,7 @@ void CheckDoorState(doorobj_t *door, int idx) {
     }
 
     if (door->action == dr_closed || door->action == dr_closing) {
-        gameinputs[DOORS][idx] = 1;         //this position is no longer a "wall" (it's assumed to be prior to this step)
+        gameinputs[DOORS][idx] = 1;                             //This position is no longer a "wall" (it's assumed to be prior to this step)
         gameinputs[WALK_SPACE][idx] = 0;
     } else if (door->action == dr_open || door->action == dr_opening){
         gameinputs[DOORS][idx] = 0;
@@ -1304,13 +1285,13 @@ void CalcTics (void)
 // calculate tics since last refresh for adaptive timing
 //
     if (lasttimecount > (int32_t) GetTimeCount())
-        lasttimecount = GetTimeCount();    // if the game was paused a LONG time
+        lasttimecount = GetTimeCount();                 // if the game was paused a LONG time
 
-    /*uint32_t curtime = SDL_GetTicks();
+    uint32_t curtime = SDL_GetTicks();
     tics = (curtime * 7) / 100 - lasttimecount;
     if(!tics)
     {
-        // wait until end of current tic
+                                                        // wait until end of current tic
         SDL_Delay(((lasttimecount + 1) * 100) / 7 - curtime);
         tics = 1;
     }
@@ -1318,21 +1299,7 @@ void CalcTics (void)
     lasttimecount += tics;
 
     if (tics>MAXTICS)
-        tics = MAXTICS;*/
-
-    uint32_t curtime = SDL_GetTicks();
-    tics = (curtime * 70) / 100 - lasttimecount;
-    if(!tics)
-    {
-        // wait until end of current tic
-        SDL_Delay(((lasttimecount + 1) * 100) / 70 - curtime);
-        tics = 1;
-    }
-    lasttimecount += tics;
-    if (tics>MAXTICS)
         tics = MAXTICS;
-
-    //
 }
 
 

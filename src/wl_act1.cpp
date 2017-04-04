@@ -14,7 +14,7 @@
 
 statobj_t       statobjlist[MAXSTATS];
 statobj_t       *laststatobj;
-int             doorsopened = 0;
+int             doorsopened = 0;                        // {'-'} Doop variables
 int             prevnumdoorsopened = doorsopened;
 struct
 {
@@ -414,9 +414,9 @@ void OpenDoor (int door)
     else
         doorobjlist[door].action = dr_opening;  // start it opening
 
-    if (!uniquedoors[door]) {
+    if (!uniquedoors[door]) {                   //{'-'} Door that was just opened, was opened for the first time.. Give the AI extra timeout
         uniquedoors[door] = 1;
-        doorsopened++;
+        doorsopened++;              
     }
 }
 

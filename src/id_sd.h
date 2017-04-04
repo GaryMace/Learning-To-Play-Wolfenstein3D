@@ -10,7 +10,27 @@
 
 #define alOut(n,b) YM3812Write(0, n, b)
 
-#define TickBase        700      // 70Hz per tick - used as a base for timer 0, 3500 for 50 speed
+/*
+====================================
+= {'-'}
+= 
+= Changing TickBase causes the game speed to change. If you want "n" times normal gamespeed, set this to 70 * n. 
+= Note that several other parts of code need to also be changed. 
+=
+= id_sd.h:
+=   line 142: from      ((SDL_GetTicks()*7)/100)                                        to      ((SDL_GetTicks()*(7*n))/100)
+=   line 146: from      SDL_Delay(wolfticks * 100 / 7);                                 to      SDL_Delay(wolfticks * 100 / 7*n); 
+=
+= wl_draw.cpp:
+=   line 1291: from     tics = (curtime * 7) / 100 - lasttimecount;                     to      tics = (curtime * 7*n) / 100 - lasttimecount;
+=   line 1295: from     SDL_Delay(((lasttimecount + 1) * 100) / 7 - curtime);           to      SDL_Delay(((lasttimecount + 1) * 100) / 7*n - curtime);
+=
+= wl_play.cpp:
+=   line 417: from      int32_t timediff = (lasttimecount * 100) / 7 - curtime;         to      int32_t timediff = (lasttimecount * 100) / 7*n - curtime;
+=   line 422: from      lasttimecount = (curtime * 7) / 100;                            to      lasttimecount = (curtime * 7*n) / 100;
+====================================
+*/
+#define TickBase        70      // 70Hz per tick - used as a base for timer 0
 
 typedef enum
 {
@@ -119,11 +139,11 @@ extern  SMMode          MusicMode;
 extern  int             DigiMap[];
 extern  int             DigiChannel[];
 
-#define GetTimeCount()  ((SDL_GetTicks()*70)/100)   //350
+#define GetTimeCount()  ((SDL_GetTicks()*7)/100)   //350
 
 inline void Delay(int wolfticks)
 {
-    if(wolfticks>0) SDL_Delay(wolfticks * 100 / 70);    //350
+    if(wolfticks>0) SDL_Delay(wolfticks * 100 / 7);    //350
 }
 
 // Function prototypes

@@ -45,10 +45,6 @@ byte tilemap[MAPSIZE][MAPSIZE]; // wall values only
 byte spotvis[MAPSIZE][MAPSIZE];
 objtype *actorat[MAPSIZE][MAPSIZE];
 
-
-// {'-'} Doop variables
-int currFitness = 0;
-
 //
 // replacing refresh manager
 //
@@ -416,32 +412,14 @@ void PollControls (void)
     {
         // wait up to DEMOTICS Wolf tics
         uint32_t curtime = SDL_GetTicks();
-        /*lasttimecount += DEMOTICS;
+
+        lasttimecount += DEMOTICS;
         int32_t timediff = (lasttimecount * 100) / 7 - curtime;
         if(timediff > 0)
             SDL_Delay(timediff);
 
-        if(timediff < -2 * DEMOTICS)       // more than 2-times DEMOTICS behind?
+        if(timediff < -2 * DEMOTICS)                // more than 2-times DEMOTICS behind?
             lasttimecount = (curtime * 7) / 100;    // yes, set to current timecount
-
-        tics = DEMOTICS;*/  //4
-        
-        /*lasttimecount += 20;      //5 times
-        int32_t timediff = (lasttimecount * 100) / 35 - curtime;
-        if(timediff > 0)
-            SDL_Delay(timediff);
-
-        if(timediff < -2 * 20)       // more than 2-times DEMOTICS behind?
-            lasttimecount = (curtime * 35) / 100;    // yes, set to current timecount
-
-        tics = 20;*/
-        lasttimecount += DEMOTICS;       //50 times
-        int32_t timediff = (lasttimecount * 100) / 70 - curtime;
-        if(timediff > 0)
-            SDL_Delay(timediff);
-
-        if(timediff < -2 * DEMOTICS)       // more than 2-times DEMOTICS behind?
-            lasttimecount = (curtime * 70) / 100;    // yes, set to current timecount
 
         tics = DEMOTICS;
     }
@@ -454,12 +432,13 @@ void PollControls (void)
     memset (buttonstate, 0, sizeof (buttonstate));           //#problem, chuck our stuff in after and job done
 
     
+    //{'-'} initRun builds the network for the current Genome, only do this when the previous one timed out. 
     if (doopAI.initRun) {
        doopAI.initialiseRun();
     }
-    if (frames % 5 == 0) {     // was every 5 frames
+    if (frames % 5 == 0) {                      // Evaluate the current network inputs every 5 frames
         doopAI.evaluateCurrent();
-    }         //TODO: REAAAALLLLY experimental
+    } 
         
     if (demoplayback)
     {
@@ -1326,7 +1305,6 @@ void PlayLoop (void)
 
     do
     {
-        //TODO: here's where I need to do doop thing
         PollControls ();
 
 //
@@ -1385,30 +1363,28 @@ void PlayLoop (void)
         }
 
         //{'-'} Doop things
-        if (circletimeoutset)
+        if (circletimeoutset)                                       //If the AI is currently pressing forward and turn left/right increment the circle timeout counter
             timeouttics++;
 
         if ((int)player->tilex != prevxp || 
             (int)player->tiley != prevyp || 
             pickups > prevnumpickups ||
             doorsopened > prevnumdoorsopened ||
-            (int) gamestate.killcount > prevkillcount) {
+            (int) gamestate.killcount > prevkillcount) {            //This allows the AI to keep playing when it's doing something useful
             doopAI.timeout += 150;
         }
         if (doopAI.timeout > 500) 
-            doopAI.timeout = 500;       //dont let the timeout get too large..
+            doopAI.timeout = 500;                                   //Don't let the timeout get too large..
 
         if (doopAI.timeout <= 0 || killattempt || gamestate.TimeCount > 8400) {
-            playstate = ex_died;
+            playstate = ex_died;                                    //The current Genome timoed out so kill it.
         }
-          
-        prevnumpickups = pickups;
+            
+        prevnumpickups = pickups;                                   //Keep track of the previous frames variable states
         prevnumdoorsopened = doorsopened;
         prevkillcount = (int) gamestate.killcount;
-        //if (frames % 1 == 0) {
-            prevxp = (int) player->tilex;
-            prevyp = (int) player->tiley;
-        //}
+        prevxp = (int) player->tilex;
+        prevyp = (int) player->tiley;
 
         frames++;
         doopAI.timeout--;

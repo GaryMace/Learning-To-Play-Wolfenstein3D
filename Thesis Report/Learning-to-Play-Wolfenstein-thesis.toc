@@ -28,7 +28,7 @@
 \contentsline {section}{\numberline {5.2}Playing Wolfenstein with NEATDoop}{23}{section.5.2}
 \contentsline {section}{\numberline {5.3}Aiding NEATDoop's Learning}{23}{section.5.3}
 \contentsline {section}{\numberline {5.4}Attempt Termination}{23}{section.5.4}
-\contentsline {section}{\numberline {5.5}Saving NEATDoop Attempts}{23}{section.5.5}
+\contentsline {section}{\numberline {5.5}Saving NEATDoop Attempts}{24}{section.5.5}
 \contentsline {chapter}{\numberline {6}Testing/Evaluation}{25}{chapter.6}
 \contentsline {section}{\numberline {6.1}Validating NEAT Basic Functionality}{25}{section.6.1}
 \contentsline {section}{\numberline {6.2}Analysing the Fitness Function}{25}{section.6.2}

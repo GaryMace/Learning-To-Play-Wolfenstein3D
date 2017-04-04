@@ -7,6 +7,15 @@
 #include "Genus.h"
 #include <iostream>
 
+/*
+=================================
+=
+= {'-'} Species::backup
+=
+= Outputs a JSON inspired representation of a Species
+=
+=================================
+ */
 std::string Species::backup() {
     std::list<Genome>::iterator genomeItr;
     std::string out = "\n\t\tSpecies{";
@@ -29,6 +38,16 @@ std::string Species::backup() {
     return out;
 }
 
+/*
+=================================
+=
+= {'-'} Species::breedChild
+=
+= Select either two Genomes and perfrom a crossover and return the child or select one random Genome,
+= mutate it and return it.
+=
+=================================
+ */
 Genome Species::breedChild() {
     std::list<Genome>::iterator genomeItr;
     Genome child;
@@ -64,6 +83,16 @@ Genome Species::breedChild() {
     return child;
 }
 
+/*
+=================================
+=
+= {'-'} Species::calculateAverageFitness
+=
+= Simply sums the globalranks of each member of the current species and divides it by the number
+= of Genomes in the current Species.
+=
+=================================
+ */
 void Species::calculateAverageFitness() {
     std::list<Genome>::iterator genomeItr;
     double total = 0.0;
@@ -74,6 +103,15 @@ void Species::calculateAverageFitness() {
     averageFitness = total / genomes.size();
 }
 
+/*
+=================================
+=
+= {'-'} Species::crossover
+=
+= Create a new child by combining random aspects of two parents.
+=
+=================================
+ */
 Genome Species::crossover(Genome g1, Genome g2) {
     std::list<Gene>::iterator geneItr;
     std::list<Gene>::iterator geneItr2;
