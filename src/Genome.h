@@ -48,6 +48,7 @@ public:
     int randomNeuron(bool nonInput);
     double weights(Genome genome);
     bool sameSpecies(Genome genome);
+    void addGenesToSelf(std::list<Gene> ingenes);                       //Replace curr Genes with these
 
     Genome() : maxNeuron(TOTAL_INPUTS - 1), globalRank(0), fitness(0) { //Init Genome instance variables
         initMutationRates();                                            //I'm not overly fond of this but old C++ doesn't allow array initialisations in class constructors

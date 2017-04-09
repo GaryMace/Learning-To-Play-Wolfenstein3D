@@ -44,7 +44,7 @@ std::string Genome::backup() {
     out += "\n\t\t\t\t\tgenes={";
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++)
         out += geneItr->backup() + ",";
-    out = out.substr(0, out.length() - 1);  //Remove last ","
+    out = out.substr(0, out.length() - 1);      //Remove last ","
 
     out += "\n\t\t\t\t\t},";
     out += "\n\t\t\t\t\tnetwork={";
@@ -55,7 +55,7 @@ std::string Genome::backup() {
     if (!network.empty())
         out = out.substr(0, out.length() - 1);  //Remove last ","
 
-    out += "\n\t\t\t\t\t}\n\t\t\t\t}";  //close network then Genome brackets
+    out += "\n\t\t\t\t\t}\n\t\t\t\t}";          //close network then Genome brackets
 
     return out;
 }
@@ -103,6 +103,21 @@ Genome Genome::clone() {
         genome.mutationRates[i] = mutationRates[i];
 
     return genome;
+}
+
+/*
+=================================
+=
+= {'-'} Genome::addGenesToSelf
+=
+= Replace the current Genome's genes with ingenes. Used for reloading
+= an encoding from a file.
+=
+=================================
+ */
+void Genome::addGenesToSelf (std::list<Gene> ingenes) {
+     genes.clear();
+     genes = ingenes;
 }
 
 /*
@@ -443,13 +458,13 @@ bool Genome::containsLink(Gene link) {
  */
 double Genome::disjoint(Genome genome) {
     std::list<Gene>::iterator geneItr;
-    std::list<Gene>::iterator geneItr2; //Gene 2 iterator
+    std::list<Gene>::iterator geneItr2;                                                     //Gene 2 iterator
     double disjointGenes = 0.0;
     bool isDisjoint = true;
 
-    for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {          //Gene 1
+    for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {                      //Gene 1
         for (geneItr2 = genome.genes.begin(); geneItr2 != genome.genes.end(); geneItr2++) { //Gene 2
-            if (geneItr->innovation == geneItr2->innovation) {      //Is Gene 1 == Gene 2
+            if (geneItr->innovation == geneItr2->innovation) {                              //Is Gene 1 == Gene 2
                 isDisjoint = false;
                 break;
             }
@@ -481,10 +496,10 @@ int Genome::randomNeuron(bool nonInput) {
     
     if (!nonInput)
         for (int i = 0; i < TOTAL_INPUTS; i++)
-            neurons.insert(std::make_pair(i, true)); //make new entry
+            neurons.insert(std::make_pair(i, true));                                        //make new entry
 
     for (int i = 0; i < OUTPUTS; i++)
-        neurons.insert(std::make_pair(MAX_NODES + i, true)); //make new entry
+        neurons.insert(std::make_pair(MAX_NODES + i, true));                                //make new entry
 
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
         if (!nonInput || geneItr->input >= TOTAL_INPUTS)
@@ -494,7 +509,7 @@ int Genome::randomNeuron(bool nonInput) {
     }
 
     int randNeuron = rand() % (int) neurons.size();
-    for (std::map<int, bool>::iterator it = neurons.begin(); it != neurons.end(); it++)   //get random neuron in there (Not a hidden one)
+    for (std::map<int, bool>::iterator it = neurons.begin(); it != neurons.end(); it++)     //get random neuron in there (Not a hidden one)
         if (randNeuron-- == 0)
             return it->first;
     
@@ -513,20 +528,20 @@ int Genome::randomNeuron(bool nonInput) {
  */
 double Genome::weights(Genome genome) {
     std::list<Gene>::iterator geneItr;
-    std::list<Gene>::iterator geneItr2; //Gene 2 iterator
+    std::list<Gene>::iterator geneItr2;                                 //Gene 2 iterator
     double coincident = 0.0;
     double sum = 0.0;
 
     for (geneItr = genes.begin(); geneItr != genes.end(); geneItr++) {
         for (geneItr2 = genome.genes.begin(); geneItr2 != genome.genes.end(); geneItr2++) {
             if (geneItr->innovation == geneItr2->innovation) {
-                sum += std::fabs(geneItr->weight - geneItr2->weight); //std::fabs is abs() on a float, too bad it doesn't exist pre C++11
+                sum += std::fabs(geneItr->weight - geneItr2->weight);   //std::fabs is abs() on a float, too bad it doesn't exist pre C++11
                 coincident++;
                 break;
             }
         }
     }
-    if (sum == 0 && coincident == 0)    //since  0.0/0.0 in C++ is -nan ...
+    if (sum == 0 && coincident == 0)                                    //since  0.0/0.0 in C++ is -nan ...
         return 0;
     else
         return sum / coincident;

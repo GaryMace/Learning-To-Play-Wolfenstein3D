@@ -27,13 +27,13 @@ int main() {
     //for (int i = 0; i < out.size(); i++)
     //    std::cout << out[i] << " ";
     //std::cout << std::endl;
-    std::cout << "g1 network size instantiated (expected 235): " << g1.network.size() << "\n" << std::endl;
+    std::cout << "g1 network size instantiated (expected 284): " << g1.network.size() << "\n" << std::endl;
 
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::compare()" << std::endl;
     g1.fitness = 5;
     g2.fitness = 4;
-    std::cout << "Compare g1 & g2 (expected -1): " << Genome::compare(g1, g2) << "\n" << std::endl;
+    std::cout << "Compare g1 & g2 (expected 1): " << Genome::compare(g1, g2) << "\n" << std::endl;
 
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::nodeMutate()" << std::endl;
@@ -52,7 +52,7 @@ int main() {
 
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::randomNeuron()" << std::endl;
-    std::cout << "g1 random neuron: " << g1.randomNeuron(false, true) << "\n" << std::endl;
+    std::cout << "g1 random neuron (expected 91, since same rand seed used): " << g1.randomNeuron(false) << "\n" << std::endl;
 
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::pointMutate()" << std::endl;
@@ -96,8 +96,8 @@ int main() {
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genome::containsLink()" << std::endl;
     Gene testGene;
-    testGene.input = 1;
-    testGene.output = 0;
+    testGene.input = 241;
+    testGene.output = 100001;
     std::cout << "g1 contains testGene (expected 1): " << g1.containsLink(testGene) << "\n" << std::endl;
 
     std::cout << "/////////////////////////////////////////" << std::endl;
@@ -112,6 +112,6 @@ int main() {
     std::cout << "// Genome::sameSpecies()" << std::endl;
     std::cout << "g1 same species as g2 (expected 0): " << g1.sameSpecies(g2) << std::endl;
 
-    std::cout << g1.backup() << std::endl;
+    //std::cout << g1.backup() << std::endl;
     return 0;
 }

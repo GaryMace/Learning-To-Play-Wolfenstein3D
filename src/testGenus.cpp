@@ -13,7 +13,7 @@ int main() {
 
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genus::nextInnovation()" << std::endl;
-    std::cout << "Genus new Innovation (expected 9): " << Genus::newInnovation() << "\n" << std::endl;
+    std::cout << "Genus new Innovation (expected 10): " << Genus::newInnovation() << "\n" << std::endl;
 
     Species s1;
     Species s2;
@@ -24,6 +24,9 @@ int main() {
     s1.genomes.push_back(g2);
     s2.genomes.push_back(g2);
     s3.genomes.push_back(g2);
+    s1.topFitness = 100;
+    s2.staleness = 100;
+    s3.staleness =100;
     Genus::species.push_back(s1);
     Genus::species.push_back(s2);
     Genus::species.push_back(s3);
@@ -32,24 +35,8 @@ int main() {
     std::cout << "// Genus::addToSpecies()" << std::endl;
     Genome g1;
     Genus::addToSpecies(g1);
-    std::cout << "Total species increase (expected 4): " << Genus::species.size() << std::endl;
+    std::cout << "Total species increase (expected 3): " << Genus::species.size() << std::endl;
     std::cout << Genus::backup() << "\n" << std::endl;
-/*
-
-    std::cout << "/////////////////////////////////////////" << std::endl;
-    std::cout << "// Genus::initialiseGenus()" << std::endl;
-    Genus::initializeGenus();
-
-    for (int i = 0; i < Genus::species.size(); i++) {
-        Species& species = Genus::species[i];
-        for (int j = 0; j < species.genomes.size(); j++) {
-            Genome& genome = species.genomes[j];
-            genome.generateNetwork();
-        }
-    }
-
-    std::cout << Genus::backup() << "\n" << std::endl;
-*/
 
     std::cout << "/////////////////////////////////////////" << std::endl;
     std::cout << "// Genus::rankGlobally()" << std::endl;

@@ -16,6 +16,7 @@ private:
     static int innovation;                                  //Instantiating static field here would cause multiple instantiation
 
 public: 
+    static Genome best;                                     //Best Genome in population, used for replaying
     static std::list<Species> species;                      //All species in population
     static std::list<Species>::iterator currSpeciesItr;     //Maintain a ref to current species/ genome for faster access
     static std::list<Genome>::iterator currGenomeItr;

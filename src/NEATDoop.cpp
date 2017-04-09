@@ -36,8 +36,10 @@ void NEATDoop::setGenomeFitness() {
 
     genome->fitness = (MAX_DISTANCE - distFromEnd) * TRAVEL_REWARD;
     genome->fitness += distFromSpawn * distFromSpawn * TRAVEL_REWARD;
-    genome->fitness += pickups * 500;
-    genome->fitness += kills * 200;
+    genome->fitness += pickups * ITEM_PICKUP_REWARD;
+    genome->fitness += accuracy * ACCURACY_REWARD;
+    genome->fitness += kills * KILL_REWARD;
+    genome->fitness += inputsused;
 
     if (leveldone)
         genome->fitness += LVL_DONE_REWARD;
@@ -112,6 +114,27 @@ void NEATDoop::initialiseGenus() {
         basic.mutate();
         Genus::addToSpecies(basic);
     }
+    Genus::currGenome = 0;
+    Genus::currSpecies = 0;
+    Genus::currSpeciesItr = Genus::species.begin();
+    Genus::currGenomeItr = Genus::currSpeciesItr->genomes.begin();
+
+    initialiseRun();
+}
+
+/*
+=================================
+=
+= {'-'} NEATDoop::playBest
+=
+= Only adds a single Genome to the population, which was in a file the user passed
+= as input when launching the game.
+=
+=================================
+ */
+void NEATDoop::playBest() {
+    Genus::addToSpecies(Genus::best);       //Add the best Genome (from the input file)                                 
+    
     Genus::currGenome = 0;
     Genus::currSpecies = 0;
     Genus::currSpeciesItr = Genus::species.begin();
@@ -307,4 +330,89 @@ void NEATDoop::saveBestGenome() {
 
     std::cout << "Worst from Gen" << std::endl;
     std::cout << worst.encode() << std::endl;
+}
+
+/*
+=================================
+=
+= {'-'} NEATDoop::split
+=
+= Code taken from the below link. This is not my code for splitting a string..
+= http://stackoverflow.com/questions/236129/split-a-string-in-c 
+=
+=================================
+ */
+template<typename Out> void split(const std::string &s, char delim, Out result) {
+    std::stringstream ss;
+    ss.str(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        *(result++) = item;
+    }
+}
+
+std::list<std::string> split(const std::string &s, char delim) {
+    std::list<std::string> elems;
+    split(s, delim, std::back_inserter(elems));
+    return elems;
+}
+
+/*
+=================================
+=
+= {'-'} NEATDoop::readInGenome
+=
+= Ask for filename. Input wouldn't clear properly when I tried to let the user re-enter a filename
+= causing the file to be opened but the contents to be loaded incorrectly.
+= The solution used is to just exit.. Be Grand
+=
+=================================
+ */
+void NEATDoop::readInGenome() {
+    std::ifstream input;
+    std::string filename;
+
+    std::cout << "Enter the file name: ";
+    std::cin >> filename;
+
+    playbest = true;
+    input.open(filename.c_str());
+    
+    while(!input.is_open()) {
+        input.clear();
+        std::cin.clear();
+
+        std::cout << "Incorrect filename, please relaunch and try again. This window will now close...";
+        Sleep(3000);
+        exit(1);
+    }
+
+    std::string line;
+    int idx = 0;
+    
+    input >> Genus::best.fitness;                                           //read known content in
+    input >> Genus::best.globalRank;
+    input >> Genus::best.maxNeuron;
+    input >> line;
+
+    std::list<std::string> mutationRates = split(line, ',');
+    for (std::list<std::string>::iterator it = mutationRates.begin(); it != mutationRates.end(); it++)
+        Genus::best.mutationRates[idx++] = std::atof(it->c_str());
+
+    Gene newGene;
+    std::list<Gene> genes;      
+    while (input >> line) {                                                 //Keep reading in Genes while they exist
+        if (!line.empty()) {
+            std::list<std::string> geneLine = split(line, ',');
+            std::list<std::string>::iterator it = geneLine.begin();
+
+            newGene.input = (int) std::atof((it++)->c_str());
+            newGene.output = (int) std::atof((it++)->c_str());
+            newGene.enabled = (bool) std::atof((it++)->c_str());
+            newGene.innovation = (int) std::atof((it++)->c_str());
+            newGene.weight = std::atof((it)->c_str());
+            genes.push_back(newGene);
+        }
+    }
+    Genus::best.addGenesToSelf(genes);                                      //Add the genes read in to the best Genome
 }

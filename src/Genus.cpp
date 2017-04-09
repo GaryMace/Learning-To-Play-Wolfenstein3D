@@ -17,6 +17,7 @@ double Genus::maxFitness = 0.0;
 int Genus::currSpecies = 0;
 int Genus::generation = 0;
 int Genus::currGenome = 0;
+Genome Genus::best;
 
 /*
 =================================

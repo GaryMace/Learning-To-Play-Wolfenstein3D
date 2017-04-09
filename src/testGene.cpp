@@ -22,6 +22,7 @@ int main() {
     g.weight = 2.4;
     std::cout << "Gene weight (expected 2.4): " << g.weight << std::endl;
 
-    std::cout << g.backup() << std::endl;
+    std::cout << "Gene backup:\n" << g.backup() << std::endl;
+    std::cout << "Gene encoding (expected 2,3,0,0,2.4):\n" << g.encode() << std::endl;
     return 0;
 }
