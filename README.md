@@ -4,4 +4,4 @@ An ongoing implementation of the NEAT (NeuroEvolution of Augmenting Topologies) 
 
 ## Compiling
 
-You will need a legitate copy of Wolfenstein 3-D in order to run this source code. This was compiled and run with Dev-C++ 5.0 Beta 9.2 (4.9.9.2). 
+You will need a legitimate copy of Wolfenstein 3-D in order to run this source code. This was compiled and run with Dev-C++ 5.0 Beta 9.2 (4.9.9.2). 
